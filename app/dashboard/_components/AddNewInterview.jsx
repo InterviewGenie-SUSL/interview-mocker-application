@@ -11,12 +11,14 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { useRouter } from 'next/navigation';
 
 function AddNewInterview() {
   const [openDialog,setOpenDialog]=useState(false)
   const [jobPosition,setJobPosition]=useState();
   const [jobDesc,setJobDesc]=useState();
   const [jobExperience,setJobExperience]=useState();
+  const router = useRouter();
 
   const onSubmit=(e)=>{
     e.preventDefault()
