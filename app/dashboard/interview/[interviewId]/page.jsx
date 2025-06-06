@@ -45,7 +45,10 @@ function Interview({ params }) {
               <Lightbulb />
               <span>Information</span>
             </h2>
-            <h2 className="mt-3 text-yellow-600" style={{ textAlign: "justify" }}>      
+            <h2
+              className="mt-3 text-yellow-600"
+              style={{ textAlign: "justify" }}
+            >
               {process.env.NEXT_PUBLIC_INFORMATION}
             </h2>
           </div>
@@ -63,7 +66,6 @@ function Interview({ params }) {
                 facingMode: "user",
               }}
             />
-
           ) : (
             <>
               <WebcamIcon className="h-72 my-7 border rounded-lg w-full p-20 bg-secondary" />
