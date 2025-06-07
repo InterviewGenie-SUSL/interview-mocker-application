@@ -14,21 +14,24 @@ export default function Home() {
       </p>
       <div className="flex flex-col gap-4 items-center">
         <div className="flex gap-2 ">
-          <button className="mt-4 bg-[#5417d7] hover:bg-[#5417d7d2] transition-all duration-300 ease-in-out  rounded-full px-6 py-2 text-white text-lg flex items-center gap-2">
-            Get Start
-            <FaArrowRight size={18} />
+          <button className="mt-4 bg-[#5417d7] hover:bg-[#5417d7d2] hover:scale-105 active:scale-95 shadow-lg hover:shadow-[#5417d7]/50 transition-all duration-300 ease-in-out  rounded-full px-6 py-2 text-white text-lg flex items-center gap-2">
+            <span className="group-hover:translate-x-1 transition-transform">
+              Get Start
+              <FaArrowRight className="inline-block ml-2 group-hover:translate-x-1 transition-transform" size={18} />
+            </span>
           </button>
-          <button className="mt-4 bg-white text-black hover:bg-black hover:text-white transition-all duration-300 ease-in-out rounded-full px-6 py-2 text-lg flex items-center gap-2 border-1 border-gray-500">
+          <button className="mt-4 bg-white text-black hover:bg-black hover:text-white hover:scale-105 active:scale-95 shadow-md hover:shadow-black/30 transition-all duration-300 ease-in-out rounded-full px-6 py-2 text-lg flex items-center gap-2 border border-gray-300">
             Learn More
           </button>
         </div>
         <div className="flex gap-2">
-          <button className=" bg-white text-black hover:bg-black hover:text-white transition-all duration-300 ease-in-out rounded-full px-6 py-2 text-lg flex items-center gap-2 border-1 border-gray-500">
-            <FaGithub size={24} />
+          <button className="group bg-white text-black hover:bg-black hover:text-white hover:scale-105 active:scale-95 shadow-md hover:shadow-black/30 transition-all duration-300 ease-in-out rounded-full px-6 py-2 text-lg flex items-center gap-2 border border-gray-300">
+            <FaGithub className="group-hover:rotate-12 transition-transform" size={24} />
             GitHub Resource
           </button>
-          <button className=" bg-white text-black hover:bg-black hover:text-white transition-all duration-300 ease-in-out rounded-full px-6 py-2 text-lg flex items-center gap-2 border-1 border-gray-500">
-            How it works?
+          <button className="relative overflow-hidden bg-white text-black hover:bg-black hover:text-white hover:scale-105 active:scale-95 shadow-md hover:shadow-black/30 transition-all duration-300 ease-in-out rounded-full px-6 py-2 text-lg flex items-center gap-2 border border-gray-300">
+            <span className="relative z-10">How it works?</span>
+            <span className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 opacity-0 hover:opacity-10 transition-opacity"></span>
           </button>
         </div>
       </div>
