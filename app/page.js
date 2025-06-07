@@ -1,5 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { FaGithub, FaArrowRight } from "react-icons/fa";
+import {
+  SiJavascript,
+  SiPython,
+  SiReact,
+  SiTypescript,
+  SiCplusplus,
+  SiOpenjdk,  // Changed from SiJava
+  SiRust,
+  SiGoland    // Changed from SiGo
+} from "react-icons/si";
 
 export default function Home() {
   return (
@@ -12,6 +22,9 @@ export default function Home() {
       <p className=" text-lg text-gray-600 tracking-wide">
         Your AI-Powered Interview Assistant
       </p>
+
+
+
       <div className="flex flex-col gap-4 items-center">
         <div className="flex gap-2 ">
           <button className="mt-4 bg-[#5417d7] hover:bg-[#5417d7d2] hover:scale-105 active:scale-95 shadow-lg hover:shadow-[#5417d7]/50 transition-all duration-300 ease-in-out  rounded-full px-6 py-2 text-white text-lg flex items-center gap-2">
@@ -33,6 +46,53 @@ export default function Home() {
             <span className="relative z-10">How it works?</span>
             <span className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 opacity-0 hover:opacity-10 transition-opacity"></span>
           </button>
+        </div>
+      </div>
+      <div className="w-full overflow-hidden my-10">
+        <div className="flex animate-marquee h-16">
+          <div className="flex gap-8 items-center mx-4 [&>*]:text-[48px] [&>*]:transition-all [&>*]:duration-300 [&>*]:hover:scale-125 [&>*]:hover:brightness-110">
+            <SiJavascript className="text-yellow-400" />
+            <SiPython className="text-blue-500" />
+            <SiReact className="text-cyan-400" />
+            <SiTypescript className="text-blue-600" />
+            <SiCplusplus className="text-purple-600" />
+            <SiOpenjdk className="text-red-500" />
+            <SiRust className="text-orange-600" />
+            <SiGoland className="text-blue-400" />
+          </div>
+          {/* Duplicate for seamless loop */}
+          <div className="flex gap-8 items-center mx-4 [&>*]:text-[48px] [&>*]:transition-all [&>*]:duration-300 [&>*]:hover:scale-125 [&>*]:hover:brightness-110">
+            <SiJavascript className="text-yellow-400" />
+            <SiPython className="text-blue-500" />
+            <SiReact className="text-cyan-400" />
+            <SiTypescript className="text-blue-600" />
+            <SiCplusplus className="text-purple-600" />
+            <SiOpenjdk className="text-red-500" />
+            <SiRust className="text-orange-600" />
+            <SiGoland className="text-blue-400" />
+          </div>
+          {/* Duplicate for seamless loop */}
+          <div className="flex gap-8 items-center mx-4 [&>*]:text-[48px] [&>*]:transition-all [&>*]:duration-300 [&>*]:hover:scale-125 [&>*]:hover:brightness-110">
+            <SiJavascript className="text-yellow-400" />
+            <SiPython className="text-blue-500" />
+            <SiReact className="text-cyan-400" />
+            <SiTypescript className="text-blue-600" />
+            <SiCplusplus className="text-purple-600" />
+            <SiOpenjdk className="text-red-500" />
+            <SiRust className="text-orange-600" />
+            <SiGoland className="text-blue-400" />
+          </div>
+          {/* Duplicate for seamless loop */}
+          <div className="flex gap-8 items-center mx-4 [&>*]:text-[48px] [&>*]:transition-all [&>*]:duration-300 [&>*]:hover:scale-125 [&>*]:hover:brightness-110">
+            <SiJavascript className="text-yellow-400" />
+            <SiPython className="text-blue-500" />
+            <SiReact className="text-cyan-400" />
+            <SiTypescript className="text-blue-600" />
+            <SiCplusplus className="text-purple-600" />
+            <SiOpenjdk className="text-red-500" />
+            <SiRust className="text-orange-600" />
+            <SiGoland className="text-blue-400" />
+          </div>
         </div>
       </div>
     </div>
