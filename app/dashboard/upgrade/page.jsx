@@ -79,7 +79,6 @@ function UpgradePage() {
             <h3 className="text-2xl font-bold">{plan.name}</h3>
             <div className="mt-2 text-3xl font-bold">{plan.price}</div>
             <p className="text-gray-500 mt-2">{plan.description}</p>
-
             <ul className="mt-6 space-y-4">
               {plan.features.map((feature) => (
                 <li key={feature} className="flex items-center gap-2">
@@ -87,8 +86,7 @@ function UpgradePage() {
                   <span>{feature}</span>
                 </li>
               ))}
-            </ul>
-
+            </ul>{" "}
             <Button
               className={`w-full mt-8 ${
                 plan.isPopular
@@ -98,6 +96,17 @@ function UpgradePage() {
                   : ""
               }`}
               variant={plan.name === "Free" ? "outline" : "default"}
+              onClick={() => {
+                if (plan.name === "Enterprise") {
+                  // Open contact form or redirect to contact page
+                  window.location.href =
+                    "mailto:support@interviewgenie.com?subject=Enterprise Plan Inquiry";
+                } else if (plan.name !== "Free") {
+                  // Handle upgrade process
+                  // You can implement your payment flow here
+                  console.log(`Upgrading to ${plan.name} plan`);
+                }
+              }}
             >
               {plan.buttonText}
             </Button>
