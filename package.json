@@ -19,6 +19,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.43.1",
+    "framer-motion": "^12.17.1",
     "lucide-react": "^0.510.0",
     "mime": "^4.0.7",
     "next": "15.3.2",
