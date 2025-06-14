@@ -7,9 +7,10 @@ import React from "react";
 import { useState } from 'react';
 import { useEffect } from 'react';
 import QuestionsSection from "./components/QuestionsSection";
+import RecordAnswerSection from "./components/RecordAnswerSection";
 
 
-function ParentComponent() {
+function StartInterview() {
   const [mockInterviewQuestion] = useState([
     { question: "What is React?" },
     { question: "Explain useState." },
@@ -20,13 +21,32 @@ function ParentComponent() {
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
 
   return (
-    <QuestionsSection
-      mockInterviewQuestion={mockInterviewQuestion}
-      activeQuestionIndex={activeQuestionIndex}
-      setActiveQuestionIndex={setActiveQuestionIndex}
-    />
+    <div
+      style={{
+        display: "flex",
+        alignItems: "flex-start",
+        justifyContent: "center",
+        gap: "48px",
+        marginTop: "40px",
+        width: "100%",
+      }}
+    >
+      {/* Left: Questions Section */}
+      <div style={{ flex: "0 0 700px" }}>
+        <QuestionsSection
+          mockInterviewQuestion={mockInterviewQuestion}
+          activeQuestionIndex={activeQuestionIndex}
+          setActiveQuestionIndex={setActiveQuestionIndex}
+        />
+      </div>
+
+      {/* Right: Webcam Section */}
+      <div style={{ flex: "0 0 400px" }}>
+        <RecordAnswerSection />
+      </div>
+    </div>
   );
 }
 
-export default ParentComponent;
+export default StartInterview;
 

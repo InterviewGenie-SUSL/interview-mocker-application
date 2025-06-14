@@ -19,7 +19,6 @@ export default function Home() {
   const handleGetStartClick = () => {
     router.push('/dashboard');
   };
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-white">
       {/* SVG Logo */}
