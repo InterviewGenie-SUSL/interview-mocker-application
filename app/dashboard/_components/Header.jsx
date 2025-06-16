@@ -18,7 +18,7 @@ function Header() {
       <ul className="hidden gap-6 md:flex">
         <Link href="/dashboard">
           <li
-            className={`transition-all duration-300 transform hover:scale-105 hover:text-blue-700 hover:font-bold cursor-pointer
+            className={`transition-all duration-300 transform hover:scale-105 cursor-pointer hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-purple-400 hover:to-blue-600 hover:bg-gray-200 dark:hover:bg-gray-700 hover:animate-pulse
             ${path === "/dashboard" && "text-blue-700 font-bold"}
           `}
           >
@@ -27,7 +27,7 @@ function Header() {
         </Link>
         <Link href="/dashboard/questions">
           <li
-            className={`transition-all duration-300 transform hover:scale-105 hover:text-blue-700 hover:font-bold cursor-pointer
+            className={`transition-all duration-300 transform hover:scale-105 cursor-pointer hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-purple-400 hover:to-blue-600 hover:bg-gray-200 dark:hover:bg-gray-700 hover:animate-pulse
             ${path === "/dashboard/questions" && "text-blue-700 font-bold"}
           `}
           >
@@ -36,7 +36,7 @@ function Header() {
         </Link>
         <Link href="/dashboard/upgrade">
           <li
-            className={`transition-all duration-300 transform hover:scale-105 hover:text-blue-700 hover:font-bold cursor-pointer
+            className={`transition-all duration-300 transform hover:scale-105 cursor-pointer hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-purple-500 hover:to-blue-600 hover:bg-gray-200 dark:hover:bg-gray-700 hover:animate-pulse
             ${path === "/dashboard/upgrade" && "text-blue-700 font-bold"}
           `}
           >
@@ -45,7 +45,7 @@ function Header() {
         </Link>
         <Link href="/dashboard/how">
           <li
-            className={`transition-all duration-300 transform hover:scale-105 hover:text-blue-700 hover:font-bold cursor-pointer
+            className={`transition-all duration-300 transform hover:scale-105 cursor-pointer hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-purple-500 hover:to-blue-600 hover:bg-gray-200 dark:hover:bg-gray-700 hover:animate-pulse
             ${path === "/dashboard/how" && "text-blue-700 font-bold"}
           `}
           >
