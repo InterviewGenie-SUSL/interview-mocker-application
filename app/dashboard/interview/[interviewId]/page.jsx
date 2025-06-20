@@ -7,6 +7,9 @@ import { Lightbulb, WebcamIcon } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Webcam from "react-webcam";
+import dynamic from "next/dynamic";
+
+import RecordAnswerSection from "./start/components/RecordAnswerSection";
 
 function Interview({ params }) {
   const [interviewData, setInterviewData] = useState();
