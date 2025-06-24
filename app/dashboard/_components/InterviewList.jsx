@@ -127,7 +127,21 @@ const InterviewCard = ({ interview, index, onDelete }) => {
           </div>
           <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
             <Calendar className="w-4 h-4" />
-            <span>{format(new Date(interview.createdAt), "MMM dd")}</span>
+            <span>
+              {
+                (() => {
+                  // Safely format date, fallback to '-'
+                  try {
+                    if (!interview.createdAt) return "-";
+                    const date = new Date(interview.createdAt);
+                    if (isNaN(date.getTime())) return "-";
+                    return format(date, "MMM dd");
+                  } catch {
+                    return "-";
+                  }
+                })()
+              }
+            </span>
           </div>
           <div className="flex items-center gap-2 text-sm text-green-600">
             <Star className="w-4 h-4" />
