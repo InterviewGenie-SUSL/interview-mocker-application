@@ -4,11 +4,10 @@ import { MockInterview } from "@/utils/schema";
 import { eq } from "drizzle-orm";
 import { Grid } from "lucide-react";
 import React from "react";
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState } from "react";
+import { useEffect } from "react";
 import QuestionsSection from "./components/QuestionsSection";
 import RecordAnswerSection from "./components/RecordAnswerSection";
-
 
 function StartInterview() {
   const [mockInterviewQuestion] = useState([
@@ -16,7 +15,7 @@ function StartInterview() {
     { question: "Explain useState." },
     { question: "What is a component?" },
     { question: "How does useEffect work?" },
-    { question: "What is a custom hook?" }
+    { question: "What is a custom hook?" },
   ]);
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
 
@@ -49,4 +48,3 @@ function StartInterview() {
 }
 
 export default StartInterview;
-
