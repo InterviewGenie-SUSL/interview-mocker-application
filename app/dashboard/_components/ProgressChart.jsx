@@ -1,0 +1,249 @@
+"use client";
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
+import { TrendingUp, Award, Calendar, Target } from "lucide-react";
+
+const ProgressChart = ({ interviews = [] }) => {
+  // Generate mock data for charts
+  const weeklyData = [
+    { name: "Mon", interviews: 2, score: 85 },
+    { name: "Tue", interviews: 1, score: 92 },
+    { name: "Wed", interviews: 3, score: 78 },
+    { name: "Thu", interviews: 2, score: 88 },
+    { name: "Fri", interviews: 4, score: 95 },
+    { name: "Sat", interviews: 1, score: 82 },
+    { name: "Sun", interviews: 2, score: 90 },
+  ];
+
+  const skillData = [
+    { name: "Technical", value: 85, color: "#3B82F6" },
+    { name: "Behavioral", value: 92, color: "#8B5CF6" },
+    { name: "Communication", value: 78, color: "#10B981" },
+    { name: "Problem Solving", value: 88, color: "#F59E0B" },
+  ];
+
+  const monthlyProgress = [
+    { month: "Jan", completed: 12, target: 15 },
+    { month: "Feb", completed: 18, target: 20 },
+    { month: "Mar", completed: 25, target: 25 },
+    { month: "Apr", completed: 22, target: 30 },
+    { month: "May", completed: 35, target: 35 },
+    { month: "Jun", completed: 28, target: 40 },
+  ];
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  return (
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="space-y-6"
+    >
+      {/* Header */}
+      <motion.div variants={itemVariants} className="flex items-center gap-3">
+        <motion.div
+          animate={{ rotate: [0, 360] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+          className="p-2 rounded-lg bg-gradient-to-r from-green-500 to-blue-600"
+        >
+          <TrendingUp className="w-5 h-5 text-white" />
+        </motion.div>
+        <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+          Performance Analytics
+        </h3>
+      </motion.div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Weekly Performance */}
+        <motion.div
+          variants={itemVariants}
+          className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+        >
+          <div className="flex items-center gap-2 mb-6">
+            <Calendar className="w-5 h-5 text-blue-600" />
+            <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Weekly Progress
+            </h4>
+          </div>
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={weeklyData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                <XAxis dataKey="name" stroke="#6B7280" fontSize={12} />
+                <YAxis stroke="#6B7280" fontSize={12} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "white",
+                    border: "1px solid #E5E7EB",
+                    borderRadius: "8px",
+                    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="score"
+                  stroke="#3B82F6"
+                  strokeWidth={3}
+                  dot={{ fill: "#3B82F6", strokeWidth: 2, r: 4 }}
+                  activeDot={{ r: 6, stroke: "#3B82F6", strokeWidth: 2 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </motion.div>
+
+        {/* Skill Breakdown */}
+        <motion.div
+          variants={itemVariants}
+          className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+        >
+          <div className="flex items-center gap-2 mb-6">
+            <Target className="w-5 h-5 text-purple-600" />
+            <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Skill Distribution
+            </h4>
+          </div>
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={skillData}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  dataKey="value"
+                  label={({ name, value }) => `${name}: ${value}%`}
+                  labelLine={false}
+                >
+                  {skillData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </motion.div>
+
+        {/* Monthly Goals */}
+        <motion.div
+          variants={itemVariants}
+          className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+        >
+          <div className="flex items-center gap-2 mb-6">
+            <Award className="w-5 h-5 text-green-600" />
+            <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Monthly Goals
+            </h4>
+          </div>
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={monthlyProgress}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                <XAxis dataKey="month" stroke="#6B7280" fontSize={12} />
+                <YAxis stroke="#6B7280" fontSize={12} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "white",
+                    border: "1px solid #E5E7EB",
+                    borderRadius: "8px",
+                    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+                  }}
+                />
+                <Bar dataKey="completed" fill="#10B981" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="target" fill="#E5E7EB" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </motion.div>
+
+        {/* Achievement Summary */}
+        <motion.div
+          variants={itemVariants}
+          className="bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-700 rounded-2xl p-6 shadow-lg text-white"
+        >
+          <div className="flex items-center gap-2 mb-6">
+            <motion.div
+              animate={{ rotate: [0, 360] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+            >
+              <Award className="w-6 h-6" />
+            </motion.div>
+            <h4 className="text-lg font-semibold">Achievements</h4>
+          </div>
+
+          <div className="space-y-4">
+            <motion.div
+              className="flex items-center justify-between p-3 bg-white/10 rounded-lg backdrop-blur-sm"
+              whileHover={{ scale: 1.02 }}
+            >
+              <span className="text-sm">Interviews Completed</span>
+              <span className="text-xl font-bold">{interviews.length}</span>
+            </motion.div>
+
+            <motion.div
+              className="flex items-center justify-between p-3 bg-white/10 rounded-lg backdrop-blur-sm"
+              whileHover={{ scale: 1.02 }}
+            >
+              <span className="text-sm">Average Score</span>
+              <span className="text-xl font-bold">87%</span>
+            </motion.div>
+
+            <motion.div
+              className="flex items-center justify-between p-3 bg-white/10 rounded-lg backdrop-blur-sm"
+              whileHover={{ scale: 1.02 }}
+            >
+              <span className="text-sm">Best Performance</span>
+              <span className="text-xl font-bold">95%</span>
+            </motion.div>
+
+            <motion.div
+              className="flex items-center justify-between p-3 bg-white/10 rounded-lg backdrop-blur-sm"
+              whileHover={{ scale: 1.02 }}
+            >
+              <span className="text-sm">Streak Days</span>
+              <span className="text-xl font-bold">7</span>
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+};
+
+export default ProgressChart;

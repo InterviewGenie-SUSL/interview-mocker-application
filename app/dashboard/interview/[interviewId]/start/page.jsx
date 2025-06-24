@@ -4,21 +4,56 @@ import { MockInterview } from "@/utils/schema";
 import { eq } from "drizzle-orm";
 import { Grid } from "lucide-react";
 import React from "react";
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState } from "react";
+import { useEffect } from "react";
+import { useParams } from "next/navigation";
 import QuestionsSection from "./components/QuestionsSection";
 import RecordAnswerSection from "./components/RecordAnswerSection";
 
-
 function StartInterview() {
-  const [mockInterviewQuestion] = useState([
-    { question: "What is React?" },
-    { question: "Explain useState." },
-    { question: "What is a component?" },
-    { question: "How does useEffect work?" },
-    { question: "What is a custom hook?" }
-  ]);
+  const params = useParams();
+  const [mockInterviewQuestion, setMockInterviewQuestion] = useState([]);
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      setLoading(true);
+      try {
+        const result = await db
+          .select()
+          .from(MockInterview)
+          .where(eq(MockInterview.mockId, params.interviewId));
+        if (result[0]?.jsonMockResp) {
+          setMockInterviewQuestion(JSON.parse(result[0].jsonMockResp));
+        } else {
+          setMockInterviewQuestion([]);
+        }
+      } catch (e) {
+        setMockInterviewQuestion([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchQuestions();
+  }, [params.interviewId]);
+
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "60vh",
+        }}
+      >
+        <span style={{ fontSize: 24, color: "#2563eb" }}>
+          Loading questions...
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -49,4 +84,3 @@ function StartInterview() {
 }
 
 export default StartInterview;
-
