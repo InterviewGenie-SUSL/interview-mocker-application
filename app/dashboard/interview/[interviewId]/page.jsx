@@ -25,6 +25,7 @@ function Interview({ params }) {
   const [loading, setLoading] = useState(true);
   const [countdown, setCountdown] = useState(0);
   const [isReady, setIsReady] = useState(false);
+  const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
     GetInterviewDetails();
@@ -37,6 +38,14 @@ function Interview({ params }) {
         .from(MockInterview)
         .where(eq(MockInterview.mockId, resolvedParams.interviewId));
       setInterviewData(result[0]);
+      // Parse questions from jsonMockResp
+      if (result[0]?.jsonMockResp) {
+        try {
+          setQuestions(JSON.parse(result[0].jsonMockResp));
+        } catch (e) {
+          setQuestions([]);
+        }
+      }
     } catch (error) {
       console.error("Error fetching interview details:", error);
     } finally {
@@ -99,17 +108,22 @@ function Interview({ params }) {
 
   if (loading) {
     return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="flex items-center justify-center min-h-screen"
-      >
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900">
         <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="w-16 h-16 border-4 border-blue-500 rounded-full border-t-transparent"
-        />
-      </motion.div>
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex flex-col items-center"
+        >
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            className="w-16 h-16 border-4 border-blue-500 rounded-full border-t-transparent mb-6"
+          />
+          <span className="text-xl font-semibold text-blue-700 dark:text-blue-300">
+            Loading interview...
+          </span>
+        </motion.div>
+      </div>
     );
   }
 
@@ -434,6 +448,33 @@ function Interview({ params }) {
             )}
           </AnimatePresence>
         </motion.div>
+
+        {/* Render Questions Section */}
+        {questions && questions.length > 0 && (
+          <div className="mt-16 max-w-3xl mx-auto">
+            <h2 className="mb-6 text-2xl font-bold text-blue-700 dark:text-blue-300 text-center">
+              Interview Questions
+            </h2>
+            <ol className="space-y-8">
+              {questions.map((q, idx) => (
+                <li
+                  key={idx}
+                  className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700"
+                >
+                  <div className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+                    Q{idx + 1}: {q.question}
+                  </div>
+                  <div className="text-gray-700 dark:text-gray-300">
+                    <span className="font-medium text-green-700 dark:text-green-400">
+                      Answer:
+                    </span>{" "}
+                    {q.answer}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
       </div>
     </motion.div>
   );
