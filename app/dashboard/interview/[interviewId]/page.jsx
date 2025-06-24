@@ -14,11 +14,12 @@ import {
   CheckCircle,
 } from "lucide-react";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, use } from "react";
 import Webcam from "react-webcam";
 import { motion, AnimatePresence } from "framer-motion";
 
 function Interview({ params }) {
+  const resolvedParams = use(params);
   const [interviewData, setInterviewData] = useState();
   const [webCamEnabled, setWebCamEnabled] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -28,14 +29,13 @@ function Interview({ params }) {
   useEffect(() => {
     GetInterviewDetails();
   }, []);
-
   const GetInterviewDetails = async () => {
     try {
       setLoading(true);
       const result = await db
         .select()
         .from(MockInterview)
-        .where(eq(MockInterview.mockId, params.interviewId));
+        .where(eq(MockInterview.mockId, resolvedParams.interviewId));
       setInterviewData(result[0]);
     } catch (error) {
       console.error("Error fetching interview details:", error);
@@ -102,12 +102,12 @@ function Interview({ params }) {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="min-h-screen flex items-center justify-center"
+        className="flex items-center justify-center min-h-screen"
       >
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full"
+          className="w-16 h-16 border-4 border-blue-500 rounded-full border-t-transparent"
         />
       </motion.div>
     );
@@ -118,13 +118,13 @@ function Interview({ params }) {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900 py-10"
+      className="min-h-screen py-10 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900"
     >
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="px-6 mx-auto max-w-7xl">
         {/* Header Section */}
-        <motion.div variants={itemVariants} className="text-center mb-12">
+        <motion.div variants={itemVariants} className="mb-12 text-center">
           <motion.h1
-            className="text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent mb-4"
+            className="mb-4 text-5xl font-bold text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text"
             animate={{ backgroundPosition: ["0%", "100%", "0%"] }}
             transition={{ duration: 3, repeat: Infinity }}
           >
@@ -138,20 +138,20 @@ function Interview({ params }) {
           </motion.p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
           {/* Interview Details Section */}
           <motion.div variants={itemVariants} className="space-y-6">
             {/* Main Info Card */}
             <motion.div
               variants={cardVariants}
               whileHover="hover"
-              className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-200 dark:border-gray-700"
+              className="p-8 bg-white border border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700"
             >
               <div className="flex items-center gap-3 mb-6">
                 <motion.div
                   animate={{ rotate: [0, 10, -10, 0] }}
                   transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-                  className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full"
+                  className="p-3 bg-blue-100 rounded-full dark:bg-blue-900"
                 >
                   <Briefcase className="w-6 h-6 text-blue-600" />
                 </motion.div>
@@ -165,9 +165,9 @@ function Interview({ params }) {
                   whileHover={{ x: 5 }}
                   className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-xl"
                 >
-                  <User className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
+                  <User className="flex-shrink-0 w-5 h-5 mt-1 text-blue-600" />
                   <div>
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
+                    <p className="mb-1 text-sm font-medium text-gray-500 dark:text-gray-400">
                       Job Position
                     </p>
                     <p className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -180,12 +180,12 @@ function Interview({ params }) {
                   whileHover={{ x: 5 }}
                   className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-xl"
                 >
-                  <CheckCircle className="w-5 h-5 text-green-600 mt-1 flex-shrink-0" />
+                  <CheckCircle className="flex-shrink-0 w-5 h-5 mt-1 text-green-600" />
                   <div>
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
+                    <p className="mb-1 text-sm font-medium text-gray-500 dark:text-gray-400">
                       Tech Stack & Description
                     </p>
-                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                    <p className="leading-relaxed text-gray-700 dark:text-gray-300">
                       {interviewData?.jobDesc}
                     </p>
                   </div>
@@ -195,9 +195,9 @@ function Interview({ params }) {
                   whileHover={{ x: 5 }}
                   className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-xl"
                 >
-                  <Star className="w-5 h-5 text-yellow-600 mt-1 flex-shrink-0" />
+                  <Star className="flex-shrink-0 w-5 h-5 mt-1 text-yellow-600" />
                   <div>
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
+                    <p className="mb-1 text-sm font-medium text-gray-500 dark:text-gray-400">
                       Experience Level
                     </p>
                     <p className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -212,13 +212,13 @@ function Interview({ params }) {
             <motion.div
               variants={cardVariants}
               whileHover="hover"
-              className="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-2xl p-8 border-2 border-yellow-200 dark:border-yellow-700"
+              className="p-8 border-2 border-yellow-200 bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-2xl dark:border-yellow-700"
             >
               <div className="flex items-center gap-3 mb-6">
                 <motion.div
                   animate={{ scale: [1, 1.1, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
-                  className="p-3 bg-yellow-100 dark:bg-yellow-900 rounded-full"
+                  className="p-3 bg-yellow-100 rounded-full dark:bg-yellow-900"
                 >
                   <Lightbulb className="w-6 h-6 text-yellow-600" />
                 </motion.div>
@@ -232,28 +232,28 @@ function Interview({ params }) {
                   whileHover={{ x: 5 }}
                   className="flex items-center gap-2"
                 >
-                  <CheckCircle className="w-4 h-4 flex-shrink-0" />
+                  <CheckCircle className="flex-shrink-0 w-4 h-4" />
                   Enable camera and microphone for the best experience
                 </motion.p>
                 <motion.p
                   whileHover={{ x: 5 }}
                   className="flex items-center gap-2"
                 >
-                  <CheckCircle className="w-4 h-4 flex-shrink-0" />
+                  <CheckCircle className="flex-shrink-0 w-4 h-4" />
                   Find a quiet, well-lit space for your interview
                 </motion.p>
                 <motion.p
                   whileHover={{ x: 5 }}
                   className="flex items-center gap-2"
                 >
-                  <CheckCircle className="w-4 h-4 flex-shrink-0" />
+                  <CheckCircle className="flex-shrink-0 w-4 h-4" />
                   Take your time to think before answering
                 </motion.p>
                 <motion.p
                   whileHover={{ x: 5 }}
                   className="flex items-center gap-2"
                 >
-                  <CheckCircle className="w-4 h-4 flex-shrink-0" />
+                  <CheckCircle className="flex-shrink-0 w-4 h-4" />
                   Speak clearly and maintain good posture
                 </motion.p>
               </div>
@@ -265,13 +265,13 @@ function Interview({ params }) {
             <motion.div
               variants={cardVariants}
               whileHover="hover"
-              className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-200 dark:border-gray-700"
+              className="p-8 bg-white border border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700"
             >
               <div className="flex items-center gap-3 mb-6">
                 <motion.div
                   animate={{ rotate: [0, 360] }}
                   transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                  className="p-3 bg-purple-100 dark:bg-purple-900 rounded-full"
+                  className="p-3 bg-purple-100 rounded-full dark:bg-purple-900"
                 >
                   <WebcamIcon className="w-6 h-6 text-purple-600" />
                 </motion.div>
@@ -295,7 +295,7 @@ function Interview({ params }) {
                         onUserMedia={() => setWebCamEnabled(true)}
                         onUserMediaError={() => setWebCamEnabled(false)}
                         mirrored={true}
-                        className="w-full h-80 object-cover rounded-xl"
+                        className="object-cover w-full h-80 rounded-xl"
                         videoConstraints={{
                           width: 1280,
                           height: 720,
@@ -303,7 +303,7 @@ function Interview({ params }) {
                         }}
                       />
                       <motion.div
-                        className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2"
+                        className="absolute flex items-center gap-2 px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full top-4 right-4"
                         animate={{ scale: [1, 1.05, 1] }}
                         transition={{ duration: 2, repeat: Infinity }}
                       >
@@ -318,15 +318,15 @@ function Interview({ params }) {
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.8 }}
                       transition={{ duration: 0.5 }}
-                      className="flex flex-col items-center justify-center h-80 bg-gray-100 dark:bg-gray-700 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600"
+                      className="flex flex-col items-center justify-center bg-gray-100 border-2 border-gray-300 border-dashed h-80 dark:bg-gray-700 rounded-xl dark:border-gray-600"
                     >
                       <motion.div
                         animate={{ y: [0, -10, 0] }}
                         transition={{ duration: 2, repeat: Infinity }}
                       >
-                        <WebcamIcon className="w-20 h-20 text-gray-400 dark:text-gray-500 mb-4" />
+                        <WebcamIcon className="w-20 h-20 mb-4 text-gray-400 dark:text-gray-500" />
                       </motion.div>
-                      <p className="text-gray-500 dark:text-gray-400 text-center mb-6">
+                      <p className="mb-6 text-center text-gray-500 dark:text-gray-400">
                         Camera disabled. Enable for the best interview
                         experience.
                       </p>
@@ -335,7 +335,7 @@ function Interview({ params }) {
                         whileTap={{ scale: 0.95 }}
                       >
                         <Button
-                          className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg"
+                          className="px-8 py-3 font-semibold text-white shadow-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-xl"
                           onClick={() => setWebCamEnabled(true)}
                         >
                           <WebcamIcon className="w-5 h-5 mr-2" />
@@ -351,13 +351,13 @@ function Interview({ params }) {
             {/* Ready Check */}
             <motion.div
               variants={cardVariants}
-              className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-6 border-2 border-green-200 dark:border-green-700"
+              className="p-6 border-2 border-green-200 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl dark:border-green-700"
             >
               <div className="flex items-center gap-3 mb-4">
                 <motion.div
                   animate={{ rotate: [0, 360] }}
                   transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                  className="p-2 bg-green-100 dark:bg-green-900 rounded-full"
+                  className="p-2 bg-green-100 rounded-full dark:bg-green-900"
                 >
                   <Clock className="w-5 h-5 text-green-600" />
                 </motion.div>
@@ -365,7 +365,7 @@ function Interview({ params }) {
                   Ready to Start?
                 </h3>
               </div>
-              <p className="text-green-700 dark:text-green-200 text-sm mb-4">
+              <p className="mb-4 text-sm text-green-700 dark:text-green-200">
                 Make sure you're comfortable and ready to begin your interview.
               </p>
               <div className="flex items-center gap-2 text-sm">
@@ -419,10 +419,12 @@ function Interview({ params }) {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Link href={`/dashboard/interview/${params.interviewId}/start`}>
+                <Link
+                  href={`/dashboard/interview/${resolvedParams.interviewId}/start`}
+                >
                   <Button
                     size="lg"
-                    className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 hover:from-blue-700 hover:via-purple-700 hover:to-blue-800 text-white px-12 py-4 rounded-2xl text-xl font-bold shadow-2xl transform transition-all duration-300"
+                    className="px-12 py-4 text-xl font-bold text-white transition-all duration-300 transform shadow-2xl bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 hover:from-blue-700 hover:via-purple-700 hover:to-blue-800 rounded-2xl"
                     onClick={startCountdown}
                   >
                     🚀 Start Interview

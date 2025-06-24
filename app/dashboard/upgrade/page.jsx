@@ -1,17 +1,20 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
-import {
-  FaCheck,
-  FaCrown,
-  FaRocket,
-  FaStar,
-  FaUsers,
-  FaShield,
-  FaHeadset,
-  FaChartLine,
-} from "react-icons/fa";
+import * as FaIcons from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
+
+// Destructure with fallbacks
+const {
+  FaCheck = () => null,
+  FaCrown = () => null,
+  FaRocket = () => null,
+  FaStar = () => null,
+  FaUsers = () => null,
+  FaShield = () => null,
+  FaHeadset = () => null,
+  FaChartLine = () => null,
+} = FaIcons;
 
 const plans = [
   {
