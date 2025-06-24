@@ -61,6 +61,22 @@ function QuestionsSection({ mockInterviewQuestion, activeQuestionIndex, setActiv
     gap: "16px"
   };
 
+  const volumeIconStyle = {
+    cursor: "pointer",
+    width: 32,
+    height: 32,
+    minWidth: 32,
+    minHeight: 32,
+    maxWidth: 32,
+    maxHeight: 32,
+    padding: 4,
+    borderRadius: "50%",
+    background: "#e0e7ff",
+    color: "#2563eb",
+    boxShadow: "0 2px 8px rgba(37,99,235,0.08)",
+    transition: "background 0.18s, color 0.18s, box-shadow 0.18s"
+  };
+
   const noteContainerStyle = {
     border: "1px solid #93c5fd",
     borderRadius: "12px",
@@ -97,7 +113,7 @@ function QuestionsSection({ mockInterviewQuestion, activeQuestionIndex, setActiv
       <div style={mainQuestionStyle}>
         {mockInterviewQuestion[activeQuestionIndex]?.question}
         <Volume2
-          style={{ cursor: "pointer" }}
+          style={volumeIconStyle}
           aria-label="Read aloud"
           onClick={() =>
             textToSpeech(mockInterviewQuestion[activeQuestionIndex]?.question)

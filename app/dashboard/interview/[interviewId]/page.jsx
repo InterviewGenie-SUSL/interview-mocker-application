@@ -450,31 +450,7 @@ function Interview({ params }) {
         </motion.div>
 
         {/* Render Questions Section */}
-        {questions && questions.length > 0 && (
-          <div className="mt-16 max-w-3xl mx-auto">
-            <h2 className="mb-6 text-2xl font-bold text-blue-700 dark:text-blue-300 text-center">
-              Interview Questions
-            </h2>
-            <ol className="space-y-8">
-              {questions.map((q, idx) => (
-                <li
-                  key={idx}
-                  className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700"
-                >
-                  <div className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
-                    Q{idx + 1}: {q.question}
-                  </div>
-                  <div className="text-gray-700 dark:text-gray-300">
-                    <span className="font-medium text-green-700 dark:text-green-400">
-                      Answer:
-                    </span>{" "}
-                    {q.answer}
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
-        )}
+        {/* The questions list is now only shown on the start page, not here. */}
       </div>
     </motion.div>
   );
