@@ -67,6 +67,14 @@ const ProgressChart = ({ interviews = [] }) => {
     },
   };
 
+  const [showProMsg, setShowProMsg] = React.useState("");
+  // Handler for PRO badge click
+  const handleProClick = (e) => {
+    e.stopPropagation();
+    setShowProMsg("Upgrade to Pro to activate this feature!");
+    setTimeout(() => setShowProMsg(""), 2500);
+  };
+
   return (
     <motion.div
       variants={containerVariants}
@@ -92,13 +100,25 @@ const ProgressChart = ({ interviews = [] }) => {
         {/* Weekly Performance */}
         <motion.div
           variants={itemVariants}
-          className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+          className="relative bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 cursor-pointer group"
+          onClick={handleProClick}
         >
+          {showProMsg && (
+            <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/60 rounded-2xl">
+              <div className="px-6 py-4 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-xl shadow-lg text-lg font-semibold border border-yellow-400 flex items-center gap-2 animate-fade-in">
+                <BadgeCheck className="w-5 h-5 text-yellow-500" />
+                {showProMsg}
+              </div>
+            </div>
+          )}
           <div className="flex items-center gap-2 mb-6">
             <Calendar className="w-5 h-5 text-blue-600" />
             <h4 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
               Weekly Progress
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 ml-2 text-xs font-semibold rounded bg-gradient-to-r from-yellow-400 to-orange-500 text-white">
+              <span
+                className="inline-flex items-center gap-1 px-2 py-0.5 ml-2 text-xs font-semibold rounded bg-gradient-to-r from-yellow-400 to-orange-500 text-white cursor-pointer group-hover:scale-105 transition-transform"
+                title="Upgrade to Pro"
+              >
                 <BadgeCheck className="w-4 h-4" /> PRO
               </span>
             </h4>
@@ -133,13 +153,25 @@ const ProgressChart = ({ interviews = [] }) => {
         {/* Skill Breakdown */}
         <motion.div
           variants={itemVariants}
-          className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+          className="relative bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 cursor-pointer group"
+          onClick={handleProClick}
         >
+          {showProMsg && (
+            <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/60 rounded-2xl">
+              <div className="px-6 py-4 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-xl shadow-lg text-lg font-semibold border border-yellow-400 flex items-center gap-2 animate-fade-in">
+                <BadgeCheck className="w-5 h-5 text-yellow-500" />
+                {showProMsg}
+              </div>
+            </div>
+          )}
           <div className="flex items-center gap-2 mb-6">
             <Target className="w-5 h-5 text-purple-600" />
             <h4 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
               Skill Distribution
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 ml-2 text-xs font-semibold rounded bg-gradient-to-r from-yellow-400 to-orange-500 text-white">
+              <span
+                className="inline-flex items-center gap-1 px-2 py-0.5 ml-2 text-xs font-semibold rounded bg-gradient-to-r from-yellow-400 to-orange-500 text-white cursor-pointer group-hover:scale-105 transition-transform"
+                title="Upgrade to Pro"
+              >
                 <BadgeCheck className="w-4 h-4" /> PRO
               </span>
             </h4>
@@ -169,13 +201,25 @@ const ProgressChart = ({ interviews = [] }) => {
         {/* Monthly Goals */}
         <motion.div
           variants={itemVariants}
-          className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
+          className="relative bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 cursor-pointer group"
+          onClick={handleProClick}
         >
+          {showProMsg && (
+            <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/60 rounded-2xl">
+              <div className="px-6 py-4 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-xl shadow-lg text-lg font-semibold border border-yellow-400 flex items-center gap-2 animate-fade-in">
+                <BadgeCheck className="w-5 h-5 text-yellow-500" />
+                {showProMsg}
+              </div>
+            </div>
+          )}
           <div className="flex items-center gap-2 mb-6">
             <Award className="w-5 h-5 text-green-600" />
             <h4 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
               Monthly Goals
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 ml-2 text-xs font-semibold rounded bg-gradient-to-r from-yellow-400 to-orange-500 text-white">
+              <span
+                className="inline-flex items-center gap-1 px-2 py-0.5 ml-2 text-xs font-semibold rounded bg-gradient-to-r from-yellow-400 to-orange-500 text-white cursor-pointer group-hover:scale-105 transition-transform"
+                title="Upgrade to Pro"
+              >
                 <BadgeCheck className="w-4 h-4" /> PRO
               </span>
             </h4>
