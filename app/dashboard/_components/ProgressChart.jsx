@@ -15,7 +15,7 @@ import {
   Pie,
   Cell,
 } from "recharts";
-import { TrendingUp, Award, Calendar, Target } from "lucide-react";
+import { TrendingUp, Award, Calendar, Target, BadgeCheck } from "lucide-react";
 
 const ProgressChart = ({ interviews = [] }) => {
   // Generate mock data for charts
@@ -96,8 +96,11 @@ const ProgressChart = ({ interviews = [] }) => {
         >
           <div className="flex items-center gap-2 mb-6">
             <Calendar className="w-5 h-5 text-blue-600" />
-            <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h4 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
               Weekly Progress
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 ml-2 text-xs font-semibold rounded bg-gradient-to-r from-yellow-400 to-orange-500 text-white">
+                <BadgeCheck className="w-4 h-4" /> PRO
+              </span>
             </h4>
           </div>
           <div className="h-64">
@@ -134,8 +137,11 @@ const ProgressChart = ({ interviews = [] }) => {
         >
           <div className="flex items-center gap-2 mb-6">
             <Target className="w-5 h-5 text-purple-600" />
-            <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h4 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
               Skill Distribution
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 ml-2 text-xs font-semibold rounded bg-gradient-to-r from-yellow-400 to-orange-500 text-white">
+                <BadgeCheck className="w-4 h-4" /> PRO
+              </span>
             </h4>
           </div>
           <div className="h-64">
@@ -167,8 +173,11 @@ const ProgressChart = ({ interviews = [] }) => {
         >
           <div className="flex items-center gap-2 mb-6">
             <Award className="w-5 h-5 text-green-600" />
-            <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h4 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
               Monthly Goals
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 ml-2 text-xs font-semibold rounded bg-gradient-to-r from-yellow-400 to-orange-500 text-white">
+                <BadgeCheck className="w-4 h-4" /> PRO
+              </span>
             </h4>
           </div>
           <div className="h-64">
