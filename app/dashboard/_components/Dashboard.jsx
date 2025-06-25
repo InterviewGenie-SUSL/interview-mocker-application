@@ -29,7 +29,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import AddNewInterview from "./AddNewInterview";
 import InterviewList from "./InterviewList";
-import QuickActions from "./QuickActions";
 import ProgressChart from "./ProgressChart";
 import FloatingActionButton from "./FloatingActionButton";
 import Link from "next/link";
@@ -399,9 +398,6 @@ const Dashboard = () => {
               onDelete={handleDeleteInterview}
             />
           )}
-        </motion.div>        {/* Quick Actions */}
-        <motion.div variants={itemVariants}>
-          <QuickActions />
         </motion.div>        {/* Progress Chart */}
         <motion.div variants={itemVariants}>
           <ProgressChart interviews={interviewData} />
