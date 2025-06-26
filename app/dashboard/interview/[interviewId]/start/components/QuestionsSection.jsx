@@ -73,7 +73,7 @@ function QuestionsSection({ mockInterviewQuestion, activeQuestionIndex, setActiv
   };
 
   return (
-    <div style={cardStyle}>
+    <div style={sectionContainerStyle}>
       <div style={buttonContainerStyle}>
         {mockInterviewQuestion.map((question, index) => (
           <button
@@ -87,7 +87,7 @@ function QuestionsSection({ mockInterviewQuestion, activeQuestionIndex, setActiv
       </div>
       <div style={mainQuestionStyle}>
         {mockInterviewQuestion[activeQuestionIndex]?.question}
-      </h2>
+      </div>
       <div style={noteContainerStyle}>
         <div style={noteHeaderStyle}>
           <Lightbulb />

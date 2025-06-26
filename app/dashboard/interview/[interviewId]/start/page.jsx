@@ -2,29 +2,14 @@
 import { db } from "@/utils/db";
 import { MockInterview } from "@/utils/schema";
 import { eq } from "drizzle-orm";
-import { Grid } from "lucide-react";
-import React from "react";
-import { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import QuestionsSection from "./components/QuestionsSection";
 import RecordAnswerSection from "./components/RecordAnswerSection";
 
-<<<<<<< HEAD
-
-function StartInterview() {
-  const [mockInterviewQuestion] = useState([
-    { question: "What is React?" },
-    { question: "Explain useState." },
-    { question: "What is a component?" },
-    { question: "How does useEffect work?" },
-    { question: "What is a custom hook?" }
-  ]);
-=======
 function StartInterview() {
   const params = useParams();
   const [mockInterviewQuestion, setMockInterviewQuestion] = useState([]);
->>>>>>> 0c3731482112bfc2ccef9fc1e344ea31fd83183c
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   const [loading, setLoading] = useState(true);
 
@@ -96,7 +81,3 @@ function StartInterview() {
 }
 
 export default StartInterview;
-<<<<<<< HEAD
-
-=======
->>>>>>> 0c3731482112bfc2ccef9fc1e344ea31fd83183c
