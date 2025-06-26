@@ -27,45 +27,105 @@ function AddNewInterview() {
   const [jobExperience, setJobExperience] = useState("");
   const [loading, setLoading] = useState(false);
   const [jsonResponse, setJsonResponse] = useState([]);
+  const [error, setError] = useState("");
   const { user } = useUser();
   const router = useRouter();
+
+  const cleanJsonString = (str) => {
+    // Remove any markdown code block markers
+    str = str.replace(/```json\s*/g, "").replace(/```\s*/g, "");
+
+    // Find the JSON array in the string
+    const jsonMatch = str.match(/\[[\s\S]*\]/);
+    if (!jsonMatch) {
+      throw new Error("No valid JSON array found in the response");
+    }
+
+    let jsonStr = jsonMatch[0];
+
+    // Fix common JSON issues
+    jsonStr = jsonStr
+      .replace(/[\u0000-\u001F\u007F-\u009F]/g, "") // Remove control characters
+      .replace(/\n/g, "\\n") // Escape newlines
+      .replace(/\r/g, "\\r") // Escape carriage returns
+      .replace(/\t/g, "\\t") // Escape tabs
+      .replace(/\\/g, "\\\\") // Escape backslashes
+      .replace(/"/g, '\\"') // Escape quotes
+      .replace(/\\"/g, '"') // Fix over-escaped quotes
+      .replace(/"([^"]*)":/g, '"$1":') // Ensure proper key formatting
+      .replace(/:\s*"([^"]*)"([,\]\}])/g, ': "$1"$2'); // Ensure proper value formatting
+
+    return jsonStr;
+  };
+
+  const validateAndParseJson = (responseText) => {
+    try {
+      const cleanedJson = cleanJsonString(responseText);
+      const parsed = JSON.parse(cleanedJson);
+
+      // Validate the structure
+      if (!Array.isArray(parsed)) {
+        throw new Error("Response is not an array");
+      }
+
+      if (parsed.length === 0) {
+        throw new Error("Empty response array");
+      }
+
+      // Validate each question object
+      for (const item of parsed) {
+        if (!item.question || !item.answer) {
+          throw new Error("Invalid question/answer format");
+        }
+      }
+
+      return parsed;
+    } catch (error) {
+      console.error("JSON parsing error:", error);
+      throw error;
+    }
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
 
-    const inputPrompt = `Job position: ${jobPosition}, Job Description: ${jobDescription}, Years of Experience: ${jobExperience}, Depends on Job Position, Job Description and Years of Experience give us ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT} Interview question along with Answer in JSON format, Give us question and Answer field on JSON,Each question and answer should be in the format:
+    const inputPrompt = `Job position: ${jobPosition}, Job Description: ${jobDescription}, Years of Experience: ${jobExperience}. 
+
+Generate exactly ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT} interview questions with answers in valid JSON format. 
+
+Return ONLY a JSON array with this exact structure:
+[
   {
-    "question": "Your question here",
-    "answer": "Your answer here"
-  }`;
+    "question": "Your interview question here",
+    "answer": "Your detailed answer here"
+  }
+]
 
-    try {
-      const result = await chatSession.sendMessage(inputPrompt);
-      const responseText = await result.response.text();
-      console.log(
-        "🚀 ~ file: AddNewInterview.jsx:41 ~ onSubmit ~ responseText:",
-        responseText
-      );
-      const jsonMatch = responseText.match(/\[.*?\]/s);
-      if (!jsonMatch) {
-        throw new Error("No valid JSON array found in the response");
-      }
+Important: 
+- Return only valid JSON, no markdown formatting
+- No additional text or explanations
+- Ensure all strings are properly escaped
+- Each question should be relevant to the job position and experience level`;
 
-      const jsonResponsePart = jsonMatch[0];
-      console.log(
-        "🚀 ~ file: AddNewInterview.jsx:43 ~ onSubmit ~ jsonResponsePart:",
-        jsonResponsePart
-      );
+    const maxRetries = 3;
+    let attempt = 0;
 
-      if (jsonResponsePart) {
-        const mockResponse = JSON.parse(jsonResponsePart.trim());
-        console.log(
-          "🚀 ~ file: AddNewInterview.jsx:45 ~ onSubmit ~ mockResponse:",
-          mockResponse
-        );
+    while (attempt < maxRetries) {
+      try {
+        console.log(`Attempt ${attempt + 1} of ${maxRetries}`);
+
+        const result = await chatSession.sendMessage(inputPrompt);
+        const responseText = await result.response.text();
+        console.log("Raw AI response:", responseText);
+
+        const mockResponse = validateAndParseJson(responseText);
+        console.log("Parsed response:", mockResponse);
+
         setJsonResponse(mockResponse);
         const jsonString = JSON.stringify(mockResponse);
+
         const res = await db
           .insert(MockInterview)
           .values({
@@ -78,17 +138,29 @@ function AddNewInterview() {
             createdAt: moment().format("DD-MM-YYYY"),
           })
           .returning({ mockId: MockInterview.mockId });
+
         setLoading(false);
+        setOpenDialog(false);
         router.push(`dashboard/interview/${res[0]?.mockId}`);
-      } else {
-        console.error("Error: Unable to extract JSON response");
+        return; // Success, exit the retry loop
+      } catch (error) {
+        console.error(`Attempt ${attempt + 1} failed:`, error);
+        attempt++;
+
+        if (attempt >= maxRetries) {
+          setError(
+            `Failed to generate interview questions after ${maxRetries} attempts. Please try again with a more specific job description.`
+          );
+          setLoading(false);
+          return;
+        }
+
+        // Wait a bit before retrying
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
-    } catch (error) {
-      console.error("Error fetching interview questions:", error);
-    } finally {
-      setLoading(false);
     }
   };
+
   return (
     <div>
       <motion.div
@@ -161,6 +233,16 @@ function AddNewInterview() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="space-y-6"
           >
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="p-4 text-red-700 bg-red-100 border border-red-300 rounded-lg dark:bg-red-900/30 dark:text-red-400 dark:border-red-800"
+              >
+                <p className="text-sm">{error}</p>
+              </motion.div>
+            )}
+
             <div className="grid gap-6">
               {/* Job Position */}
               <motion.div
