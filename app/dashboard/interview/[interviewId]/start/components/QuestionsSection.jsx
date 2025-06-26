@@ -1,84 +1,75 @@
 import React from "react";
-import { Lightbulb, Volume2 } from "lucide-react";
+import { Lightbulb } from "lucide-react";
 
 function QuestionsSection({ mockInterviewQuestion, activeQuestionIndex, setActiveQuestionIndex }) {
-
-  const textToSpeech = (text) => {
-    if ('speechSynthesis' in window) {
-      const speech = new window.SpeechSynthesisUtterance(text);
-      window.speechSynthesis.speak(speech);
-    } else {
-      alert("Sorry, your browser does not support text-to-speech.");
-    }
+  // Fixed-width, left-aligned section
+  const sectionContainerStyle = {
+    padding: "28px 0",
+    maxWidth: "720px",
+    marginLeft: "0",
+    marginRight: "auto"
   };
 
-  const cardStyle = {
-    backgroundColor: "#fff",
+  // Flexbox with wrap and fixed width
+  const buttonContainerStyle = {
+    background: "#fff",
     border: "1px solid #e5e7eb",
     borderRadius: "18px",
     boxShadow: "0 4px 20px rgba(37,99,235,0.07)",
-    padding: "32px 32px 24px 32px",
-    width: "700px",
+    padding: "24px 24px",
     display: "flex",
-    flexDirection: "column",
-    gap: "24px"
-  };
-
-  const buttonContainerStyle = {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "16px",
+    flexWrap: "wrap", 
+    gap: "18px",
+    marginBottom: "32px",
+    width: "720px", 
     justifyContent: "flex-start",
     alignItems: "center",
-    width: "100%"
+    overflow: "visible"
   };
 
   const questionButtonStyle = (isActive) => ({
     width: "150px",
-    padding: "12px 0",
+    padding: "13px 0",
     border: "none",
     outline: "none",
     borderRadius: "9999px",
-    backgroundColor: isActive ? "#2563eb" : "#fff",
-    color: isActive ? "#fff" : "#222",
+    background: isActive ? "#7163eb" : "#f3f4f6",
+    color: isActive ? "#fff" : "#374151",
     fontWeight: isActive ? 700 : 500,
-    fontSize: "1rem",
+    fontSize: isActive ? "1.08rem" : "1rem",
     fontFamily: "'Inter', 'Segoe UI', Arial, sans-serif",
-    boxShadow: isActive
-      ? "0 2px 12px rgba(37,99,235,0.10)"
-      : "0 0 0 1px #e5e7eb inset",
-    transition: "background 0.18s, color 0.18s, font-size 0.18s",
-    cursor: "pointer"
+    letterSpacing: "0.03em",
+    textTransform: "capitalize",
+    cursor: "pointer",
+    boxShadow: isActive ? "0 2px 12px rgba(37,99,235,0.10)" : "none",
+    transition: "background 0.18s, color 0.18s, font-size 0.18s"
   });
 
   const mainQuestionStyle = {
-    fontSize: "1.12rem",
+    margin: "24px 0 0 0",
+    fontSize: "1.15rem",
     color: "#222",
     textAlign: "left",
-    margin: "0",
-    display: "flex",
-    alignItems: "center",
-    gap: "16px"
+    maxWidth: "720px"
   };
 
   const noteContainerStyle = {
     border: "1px solid #93c5fd",
     borderRadius: "12px",
-    padding: "16px",
-    backgroundColor: "#dbeafe",
-    marginTop: "0",
-    textAlign: "left",
-    display: "flex",
-    flexDirection: "column",
-    gap: "8px"
+    padding: "20px",
+    background: "#dbeafe",
+    marginTop: "24px",
+    maxWidth: "700px",
+    textAlign: "left"
   };
 
   const noteHeaderStyle = {
     display: "flex",
-    gap: "8px",
+    gap: "12px",
     alignItems: "center",
     color: "#1d4ed8",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    marginBottom: "8px"
   };
 
   return (
@@ -96,21 +87,14 @@ function QuestionsSection({ mockInterviewQuestion, activeQuestionIndex, setActiv
       </div>
       <div style={mainQuestionStyle}>
         {mockInterviewQuestion[activeQuestionIndex]?.question}
-        <Volume2
-          style={{ cursor: "pointer" }}
-          aria-label="Read aloud"
-          onClick={() =>
-            textToSpeech(mockInterviewQuestion[activeQuestionIndex]?.question)
-          }
-        />
-      </div>
+      </h2>
       <div style={noteContainerStyle}>
         <div style={noteHeaderStyle}>
           <Lightbulb />
           <strong>Note:</strong>
         </div>
-        <div style={{ color: "#1e40af", fontSize: "0.97rem" }}>
-          {process.env.NEXT_PUBLIC_QUESTION_NOTE}
+        <div>
+          {process.env.NEXT_PUBLIC_QUESTION_NOTE || "This is a sample note for the question."}
         </div>
       </div>
     </div>
