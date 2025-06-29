@@ -8,12 +8,15 @@ import {
   HelpCircle,
   Zap,
   Video,
+  Lightbulb, // <-- Add this line
 } from "lucide-react";
 import AddNewInterview from "./AddNewInterview";
+import { useRouter } from "next/navigation";
 
 const FloatingActionButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const router = useRouter();
 
   const actions = [
     {
@@ -24,21 +27,21 @@ const FloatingActionButton = () => {
     },
     {
       icon: Zap,
-      label: "Quick Practice",
+      label: "Questions",
       color: "from-yellow-500 to-orange-500",
-      onClick: () => console.log("Quick practice"),
+      onClick: () => router.push("/dashboard/questions"),
     },
     {
-      icon: Video,
-      label: "Video Review",
+      icon: Lightbulb,
+      label: "Upgrade",
       color: "from-purple-500 to-pink-500",
-      onClick: () => console.log("Video review"),
+      onClick: () => router.push("/dashboard/upgrade"),
     },
     {
-      icon: MessageCircle,
-      label: "Get Help",
+      icon: HelpCircle,
+      label: "How it Works?",
       color: "from-green-500 to-emerald-500",
-      onClick: () => console.log("Get help"),
+      onClick: () => router.push("/dashboard/how"),
     },
   ];
 
@@ -146,9 +149,7 @@ const FloatingActionButton = () => {
 
       {/* Add Interview Dialog */}
       {showAddDialog && (
-        <div className="hidden">
-          <AddNewInterview />
-        </div>
+        <AddNewInterview openDialog={showAddDialog} setOpenDialog={setShowAddDialog} />
       )}
     </>
   );

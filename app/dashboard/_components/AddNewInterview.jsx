@@ -20,8 +20,7 @@ import { useUser } from "@clerk/nextjs";
 import moment from "moment";
 import { useRouter } from "next/navigation";
 
-function AddNewInterview() {
-  const [openDialog, setOpenDialog] = useState(false);
+function AddNewInterview({ openDialog, setOpenDialog }) {
   const [jobPosition, setJobPosition] = useState("");
   const [jobDescription, setJobDescription] = useState("");
   const [jobExperience, setJobExperience] = useState("");
@@ -91,48 +90,51 @@ function AddNewInterview() {
   };
   return (
     <div>
-      <motion.div
-        className="relative cursor-pointer group"
-        onClick={() => setOpenDialog(true)}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-      >
+      {/* Only show the trigger button if not controlled by parent */}
+      {typeof openDialog === "undefined" && (
         <motion.div
-          className="absolute inset-0 transition-opacity duration-300 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 rounded-2xl blur-xl opacity-20 group-hover:opacity-30"
-          animate={{
-            scale: [1, 1.05, 1],
-            opacity: [0.2, 0.3, 0.2],
-          }}
-          transition={{ duration: 3, repeat: Infinity }}
-        />
-        <div className="relative p-8 transition-all duration-300 bg-white border-2 border-gray-300 border-dashed dark:border-gray-600 rounded-2xl dark:bg-gray-800 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-xl">
-          <div className="space-y-4 text-center">
-            <motion.div
-              className="inline-flex p-4 text-white rounded-full bg-gradient-to-r from-blue-500 to-purple-600"
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            >
-              <Plus className="w-8 h-8" />
-            </motion.div>
-            <div>
-              <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
-                Create New Interview
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400">
-                Start practicing with AI-powered mock interviews
-              </p>
+          className="relative cursor-pointer group"
+          onClick={() => setOpenDialog(true)}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <motion.div
+            className="absolute inset-0 transition-opacity duration-300 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 rounded-2xl blur-xl opacity-20 group-hover:opacity-30"
+            animate={{
+              scale: [1, 1.05, 1],
+              opacity: [0.2, 0.3, 0.2],
+            }}
+            transition={{ duration: 3, repeat: Infinity }}
+          />
+          <div className="relative p-8 transition-all duration-300 bg-white border-2 border-gray-300 border-dashed dark:border-gray-600 rounded-2xl dark:bg-gray-800 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-xl">
+            <div className="space-y-4 text-center">
+              <motion.div
+                className="inline-flex p-4 text-white rounded-full bg-gradient-to-r from-blue-500 to-purple-600"
+                animate={{ rotate: [0, 360] }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              >
+                <Plus className="w-8 h-8" />
+              </motion.div>
+              <div>
+                <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
+                  Create New Interview
+                </h2>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Start practicing with AI-powered mock interviews
+                </p>
+              </div>
+              <motion.div
+                className="flex items-center justify-center gap-2 text-sm text-blue-600 dark:text-blue-400"
+                animate={{ y: [0, -2, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>Powered by AI</span>
+              </motion.div>
             </div>
-            <motion.div
-              className="flex items-center justify-center gap-2 text-sm text-blue-600 dark:text-blue-400"
-              animate={{ y: [0, -2, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              <Sparkles className="w-4 h-4" />
-              <span>Powered by AI</span>
-            </motion.div>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      )}
 
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
