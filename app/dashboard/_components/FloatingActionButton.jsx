@@ -8,6 +8,8 @@ import {
   HelpCircle,
   Zap,
   Video,
+  Lightbulb,
+
 } from "lucide-react";
 import AddNewInterview from "./AddNewInterview";
 
@@ -16,29 +18,30 @@ const FloatingActionButton = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
 
   const actions = [
-    {
-      icon: Plus,
-      label: "New Interview",
-      color: "from-blue-500 to-blue-600",
-      onClick: () => setShowAddDialog(true),
-    },
+   
     {
       icon: Zap,
-      label: "Quick Practice",
+      label: "Questions",
       color: "from-yellow-500 to-orange-500",
-      onClick: () => console.log("Quick practice"),
+      onClick: () => {
+        window.location.href = "/dashboard/questions";
+      },
     },
     {
-      icon: Video,
-      label: "Video Review",
+      icon: Lightbulb,
+      label: "Upgrade",
       color: "from-purple-500 to-pink-500",
-      onClick: () => console.log("Video review"),
+      onClick: () => {
+        window.location.href = "/dashboard/upgrade";
+      },
     },
     {
-      icon: MessageCircle,
-      label: "Get Help",
+      icon: HelpCircle,
+      label: "How it Works?",
       color: "from-green-500 to-emerald-500",
-      onClick: () => console.log("Get help"),
+      onClick: () => {
+        window.location.href = "/dashboard/how";
+      },
     },
   ];
 
