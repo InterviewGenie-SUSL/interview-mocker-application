@@ -59,27 +59,32 @@ function AddNewInterview() {
       );
 
       if (jsonResponsePart) {
-        const mockResponse = JSON.parse(jsonResponsePart.trim());
-        console.log(
-          "🚀 ~ file: AddNewInterview.jsx:45 ~ onSubmit ~ mockResponse:",
-          mockResponse
-        );
-        setJsonResponse(mockResponse);
-        const jsonString = JSON.stringify(mockResponse);
-        const res = await db
-          .insert(MockInterview)
-          .values({
-            mockId: uuidv4(),
-            jsonMockResp: jsonString,
-            jobPosition: jobPosition,
-            jobDesc: jobDescription,
-            jobExperience: jobExperience,
-            createdby: user?.primaryEmailAddress?.emailAddress,
-            createdAt: moment().format("DD-MM-YYYY"),
-          })
-          .returning({ mockId: MockInterview.mockId });
-        setLoading(false);
-        router.push(`dashboard/interview/${res[0]?.mockId}`);
+        try {
+          const mockResponse = JSON.parse(jsonResponsePart.trim());
+          console.log(
+            "🚀 ~ file: AddNewInterview.jsx:45 ~ onSubmit ~ mockResponse:",
+            mockResponse
+          );
+          setJsonResponse(mockResponse);
+          const jsonString = JSON.stringify(mockResponse);
+          const res = await db
+            .insert(MockInterview)
+            .values({
+              mockId: uuidv4(),
+              jsonMockResp: jsonString,
+              jobPosition: jobPosition,
+              jobDesc: jobDescription,
+              jobExperience: jobExperience,
+              createdby: user?.primaryEmailAddress?.emailAddress,
+              createdAt: moment().format("DD-MM-YYYY"),
+            })
+            .returning({ mockId: MockInterview.mockId });
+          setLoading(false);
+          router.push(`dashboard/interview/${res[0]?.mockId}`);
+        } catch (parseError) {
+          console.error("JSON parsing error:", parseError, jsonResponsePart);
+          alert("Sorry, the AI response was not valid JSON. Please try again.");
+        }
       } else {
         console.error("Error: Unable to extract JSON response");
       }
