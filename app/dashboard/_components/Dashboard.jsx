@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import { db } from "@/utils/db";
 import { MockInterview } from "@/utils/schema";
 import { desc, eq } from "drizzle-orm";
@@ -35,6 +36,7 @@ import Link from "next/link";
 
 const Dashboard = () => {
   const { user } = useUser();
+  const router = useRouter();
   const [interviewData, setInterviewData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -136,6 +138,10 @@ const Dashboard = () => {
     } catch (error) {
       console.error("Error deleting interview:", error);
     }
+  };
+
+  const handleUpgradeClick = () => {
+    router.push('/upgrade');
   };
 
   const containerVariants = {
@@ -282,7 +288,11 @@ const Dashboard = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Button variant="secondary" className="bg-white/20 hover:bg-white/30 text-white border-white/30">
+                <Button 
+                  variant="secondary" 
+                  className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                  onClick={handleUpgradeClick}
+                >
                   Upgrade Plan
                 </Button>
               </motion.div>
