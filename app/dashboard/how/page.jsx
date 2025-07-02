@@ -287,19 +287,13 @@ function HowItWorksPage() {
               <div className="grid items-center grid-cols-1 gap-8 lg:grid-cols-2">
                 <div>
                   <div className="flex items-center gap-4 mb-6">
-                    <motion.div
+                    <div
                       className={`p-4 rounded-xl bg-gradient-to-br ${steps[activeStep].color}`}
-                      animate={{ rotate: [0, 360] }}
-                      transition={{
-                        duration: 8,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
                     >
                       {React.createElement(steps[activeStep].icon, {
                         className: "w-8 h-8 text-white",
                       })}
-                    </motion.div>
+                    </div>
                     <div>
                       <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
                         {steps[activeStep].title}
@@ -341,15 +335,7 @@ function HowItWorksPage() {
                       className: "w-24 h-24 text-gray-400",
                     })}
                   </motion.div>
-                  <motion.div
-                    className="absolute p-2 text-white bg-green-500 rounded-full -top-4 -right-4"
-                    animate={{ rotate: [0, 360] }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
-                  >
+                  <motion.div className="absolute p-2 text-white bg-green-500 rounded-full -top-4 -right-4">
                     <FaCheckCircle className="w-6 h-6" />
                   </motion.div>
                 </div>
@@ -373,21 +359,13 @@ function HowItWorksPage() {
                 className="p-8 bg-white border border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700"
               >
                 <div className="flex items-center gap-4 mb-6">
-                  {" "}
-                  <motion.div
+                  <div
                     className={`p-4 rounded-xl bg-gradient-to-br ${feature.color}`}
-                    animate={{ rotate: [0, 360] }}
-                    transition={{
-                      duration: 8,
-                      repeat: Infinity,
-                      ease: "linear",
-                      delay: index * 2,
-                    }}
                   >
                     {React.createElement(feature.icon, {
                       className: "w-6 h-6 text-white",
                     })}
-                  </motion.div>
+                  </div>
                   <h3 className="text-xl font-bold text-gray-900 dark:text-white">
                     {feature.title}
                   </h3>

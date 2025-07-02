@@ -283,8 +283,6 @@ function UpgradePage() {
                 {" "}
                 <motion.div
                   className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r ${plan.color} mb-4`}
-                  animate={{ rotate: [0, 360] }}
-                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                 >
                   <plan.icon className="w-8 h-8 text-white" />
                 </motion.div>
@@ -395,16 +393,7 @@ function UpgradePage() {
                   transition={{ duration: 0.3 }}
                 >
                   {" "}
-                  <motion.div
-                    className="inline-flex items-center justify-center w-16 h-16 mb-4 bg-blue-100 rounded-full dark:bg-blue-900"
-                    animate={{ rotate: [0, 360] }}
-                    transition={{
-                      duration: 8,
-                      repeat: Infinity,
-                      ease: "linear",
-                      delay: index * 2,
-                    }}
-                  >
+                  <motion.div className="inline-flex items-center justify-center w-16 h-16 mb-4 bg-blue-100 rounded-full dark:bg-blue-900">
                     <feature.icon className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                   </motion.div>
                   <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-white">
