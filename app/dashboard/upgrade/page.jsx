@@ -283,13 +283,11 @@ function UpgradePage() {
                 {/* Plan Header */}
                 <div className="mb-8 text-center">
                   {" "}
-                  <motion.div
+                  <div
                     className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r ${plan.color} mb-4`}
-                    animate={{ rotate: [0, 360] }}
-                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                   >
                     <plan.icon className="w-8 h-8 text-white" />
-                  </motion.div>
+                  </div>
                   <h3 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
                     {plan.name}
                   </h3>
@@ -397,18 +395,9 @@ function UpgradePage() {
                     transition={{ duration: 0.3 }}
                   >
                     {" "}
-                    <motion.div
-                      className="inline-flex items-center justify-center w-16 h-16 mb-4 bg-blue-100 rounded-full dark:bg-blue-900"
-                      animate={{ rotate: [0, 360] }}
-                      transition={{
-                        duration: 8,
-                        repeat: Infinity,
-                        ease: "linear",
-                        delay: index * 2,
-                      }}
-                    >
+                    <div className="inline-flex items-center justify-center w-16 h-16 mb-4 bg-blue-100 rounded-full dark:bg-blue-900">
                       <feature.icon className="w-8 h-8 text-blue-600 dark:text-blue-400" />
-                    </motion.div>
+                    </div>
                     <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-white">
                       {feature.title}
                     </h3>
@@ -491,7 +480,10 @@ function UpgradePage() {
             </p>
 
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
                   variant="outline"
                   size="lg"
@@ -506,7 +498,10 @@ function UpgradePage() {
                 </Button>
               </motion.div>
 
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
                   size="lg"
                   className="px-8 py-4 text-white shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl"

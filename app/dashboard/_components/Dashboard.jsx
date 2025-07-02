@@ -150,7 +150,7 @@ const Dashboard = () => {
   };
 
   const handleUpgradeClick = () => {
-    router.push('/upgrade');
+    router.push("/upgrade");
   };
 
   const containerVariants = {
@@ -182,8 +182,7 @@ const Dashboard = () => {
       opacity: 1,
       transition: {
         duration: 0.4,
-        ease: "easeOut)|^0.0
-        easeOut,
+        ease: "easeOut",
       },
     },
     hover: {
@@ -238,21 +237,15 @@ const Dashboard = () => {
         {/* Welcome Header */}
         <motion.div variants={itemVariants} className="space-y-4 text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <motion.div
-              animate={{ rotate: [0, 10, -10, 0] }}
-              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-            >
+            <div>
               <Sparkles className="w-8 h-8 text-yellow-500" />
-            </motion.div>
+            </div>
             <h1 className="text-5xl font-bold text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text">
               Welcome back, {user?.firstName}!
             </h1>
-            <motion.div
-              animate={{ rotate: [0, -10, 10, 0] }}
-              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-            >
+            <div>
               <Sparkles className="w-8 h-8 text-blue-500" />
-            </motion.div>
+            </div>
           </div>
           <motion.p
             variants={itemVariants}
@@ -274,7 +267,7 @@ const Dashboard = () => {
               animate={{
                 background: [
                   "linear-gradient(45deg, rgba(147, 51, 234, 0.2), rgba(37, 99, 235, 0.2), rgba(67, 56, 202, 0.2))",
-                  "linear-gradient(135deg, rgba(67, 56, 202, 0.2), rgba(147, 51, 234, 0.2), rgba(37, 99 pomag:2, 235, 0.2))",
+                  "linear-gradient(135deg, rgba(67, 56, 202, 0.2), rgba(147, 51, 234, 0.2), rgba(37, 99, 235, 0.2))",
                   "linear-gradient(225deg, rgba(37, 99, 235, 0.2), rgba(67, 56, 202, 0.2), rgba(147, 51, 234, 0.2))",
                 ],
               }}
@@ -282,13 +275,9 @@ const Dashboard = () => {
             />
             <div className="relative flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                  className="p-3 rounded-full bg-white/20 backdrop-blur-sm"
-                >
+                <div className="p-3 rounded-full bg-white/20 backdrop-blur-sm">
                   <Crown className="w-8 h-8" />
-                </motion.div>
+                </div>
                 <div>
                   <h3 className="mb-2 text-2xl font-bold">Pro Plan Active</h3>
                   <p className="text-white/80">
