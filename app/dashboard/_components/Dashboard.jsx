@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import { db } from "@/utils/db";
 import { MockInterview } from "@/utils/schema";
 import { desc, eq } from "drizzle-orm";
@@ -35,6 +36,7 @@ import Link from "next/link";
 
 const Dashboard = () => {
   const { user } = useUser();
+  const router = useRouter();
   const [interviewData, setInterviewData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -147,6 +149,10 @@ const Dashboard = () => {
     }
   };
 
+  const handleUpgradeClick = () => {
+    router.push('/upgrade');
+  };
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -176,7 +182,8 @@ const Dashboard = () => {
       opacity: 1,
       transition: {
         duration: 0.4,
-        ease: "easeOut",
+        ease: "easeOut)|^0.0
+        easeOut,
       },
     },
     hover: {
@@ -267,7 +274,7 @@ const Dashboard = () => {
               animate={{
                 background: [
                   "linear-gradient(45deg, rgba(147, 51, 234, 0.2), rgba(37, 99, 235, 0.2), rgba(67, 56, 202, 0.2))",
-                  "linear-gradient(135deg, rgba(67, 56, 202, 0.2), rgba(147, 51, 234, 0.2), rgba(37, 99, 235, 0.2))",
+                  "linear-gradient(135deg, rgba(67, 56, 202, 0.2), rgba(147, 51, 234, 0.2), rgba(37, 99 pomag:2, 235, 0.2))",
                   "linear-gradient(225deg, rgba(37, 99, 235, 0.2), rgba(67, 56, 202, 0.2), rgba(147, 51, 234, 0.2))",
                 ],
               }}
@@ -289,18 +296,14 @@ const Dashboard = () => {
                   </p>
                 </div>
               </div>
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Link href="/dashboard/upgrade">
-                  <Button
-                    variant="secondary"
-                    className="text-white bg-white/20 hover:bg-white/30 border-white/30"
-                  >
-                    Upgrade Plan
-                  </Button>
-                </Link>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="secondary"
+                  className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                  onClick={handleUpgradeClick}
+                >
+                  Upgrade Plan
+                </Button>
               </motion.div>
             </div>
           </motion.div>
@@ -356,19 +359,6 @@ const Dashboard = () => {
           >
             <AddNewInterview />
           </motion.div>
-
-          {/* Upgrade Plan Button */}
-          {/* <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Link href="/dashboard/upgrade">
-              <Button
-                size="lg"
-                className="h-12 px-8 font-semibold text-white shadow-lg bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
-              >
-                <Crown className="w-5 h-5 mr-2" />
-                Upgrade Plan
-              </Button>
-            </Link>
-          </motion.div> */}
         </motion.div>
         {/* Search and Filter */}
         <motion.div
@@ -401,7 +391,7 @@ const Dashboard = () => {
               </Button>
             </motion.div>
           </div>
-        </motion.div>{" "}
+        </motion.div>
         {/* Previous Interview Cards */}
         <motion.div variants={itemVariants}>
           <div className="flex items-center justify-between mb-6">
@@ -437,7 +427,7 @@ const Dashboard = () => {
               onDelete={handleDeleteInterview}
             />
           )}
-        </motion.div>{" "}
+        </motion.div>
         {/* Progress Chart */}
         <motion.div variants={itemVariants}>
           <ProgressChart interviews={interviewData} />

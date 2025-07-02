@@ -2,10 +2,7 @@
 import { db } from "@/utils/db";
 import { MockInterview } from "@/utils/schema";
 import { eq } from "drizzle-orm";
-import { Grid } from "lucide-react";
-import React from "react";
-import { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import QuestionsSection from "./components/QuestionsSection";
 import RecordAnswerSection from "./components/RecordAnswerSection";
