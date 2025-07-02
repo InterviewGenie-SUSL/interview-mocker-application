@@ -16,7 +16,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={() => setDarkMode(!darkMode)}
-      className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+      className="p-2 transition rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
       aria-label="Toggle dark mode"
     >
       {darkMode ? (
