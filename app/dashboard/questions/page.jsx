@@ -311,7 +311,9 @@ function QuestionsPage() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  {view === "browse" && <Brain className="w-4 h-4 inline mr-2" />}
+                  {view === "browse" && (
+                    <Brain className="w-4 h-4 inline mr-2" />
+                  )}
                   {view === "bookmarks" && (
                     <BookmarkCheck className="w-4 h-4 inline mr-2" />
                   )}
@@ -351,7 +353,9 @@ function QuestionsPage() {
                       <div className="flex gap-3">
                         <select
                           value={selectedDifficulty}
-                          onChange={(e) => setSelectedDifficulty(e.target.value)}
+                          onChange={(e) =>
+                            setSelectedDifficulty(e.target.value)
+                          }
                           className="px-4 py-4 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:border-blue-500"
                         >
                           <option value="all">All Levels</option>
@@ -403,18 +407,11 @@ function QuestionsPage() {
                         className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-200 dark:border-gray-700 cursor-pointer group"
                       >
                         <div className="flex items-center justify-between mb-6">
-                          <motion.div
+                          <div
                             className={`p-4 rounded-xl bg-gradient-to-br ${category.color}`}
-                            animate={{ rotate: [0, 360] }}
-                            transition={{
-                              duration: 8,
-                              repeat: Infinity,
-                              ease: "linear",
-                              delay: index * 2,
-                            }}
                           >
                             <category.icon className="w-8 h-8 text-white" />
-                          </motion.div>
+                          </div>
                           <motion.div
                             className="flex items-center gap-2 text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                             whileHover={{ x: 5 }}
@@ -619,12 +616,9 @@ function QuestionsPage() {
                 transition={{ duration: 0.3 }}
                 className="text-center py-16"
               >
-                <motion.div
-                  animate={{ rotate: [0, 360] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                >
+                <div>
                   <Award className="w-24 h-24 text-yellow-500 mx-auto mb-4" />
-                </motion.div>
+                </div>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
                   Track Your Progress
                 </h3>

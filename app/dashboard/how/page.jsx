@@ -214,15 +214,18 @@ function HowItWorksPage() {
               variants={itemVariants}
               className="max-w-3xl mx-auto mb-8 text-xl text-gray-600 dark:text-gray-300"
             >
-              Get started with AI-powered mock interviews in four simple steps and
-              transform your interview performance
+              Get started with AI-powered mock interviews in four simple steps
+              and transform your interview performance
             </motion.p>
 
             <motion.div
               variants={itemVariants}
               className="flex justify-center gap-4"
             >
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
                   size="lg"
                   className="px-8 py-4 text-white shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl"
@@ -233,7 +236,10 @@ function HowItWorksPage() {
                 </Button>
               </motion.div>
 
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
                   variant="outline"
                   size="lg"
@@ -289,19 +295,13 @@ function HowItWorksPage() {
                 <div className="grid items-center grid-cols-1 gap-8 lg:grid-cols-2">
                   <div>
                     <div className="flex items-center gap-4 mb-6">
-                      <motion.div
+                      <div
                         className={`p-4 rounded-xl bg-gradient-to-br ${steps[activeStep].color}`}
-                        animate={{ rotate: [0, 360] }}
-                        transition={{
-                          duration: 8,
-                          repeat: Infinity,
-                          ease: "linear",
-                        }}
                       >
                         {React.createElement(steps[activeStep].icon, {
                           className: "w-8 h-8 text-white",
                         })}
-                      </motion.div>
+                      </div>
                       <div>
                         <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
                           {steps[activeStep].title}
@@ -343,17 +343,9 @@ function HowItWorksPage() {
                         className: "w-24 h-24 text-gray-400",
                       })}
                     </motion.div>
-                    <motion.div
-                      className="absolute p-2 text-white bg-green-500 rounded-full -top-4 -right-4"
-                      animate={{ rotate: [0, 360] }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
-                    >
+                    <div className="absolute p-2 text-white bg-green-500 rounded-full -top-4 -right-4">
                       <FaCheckCircle className="w-6 h-6" />
-                    </motion.div>
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -376,20 +368,13 @@ function HowItWorksPage() {
                 >
                   <div className="flex items-center gap-4 mb-6">
                     {" "}
-                    <motion.div
+                    <div
                       className={`p-4 rounded-xl bg-gradient-to-br ${feature.color}`}
-                      animate={{ rotate: [0, 360] }}
-                      transition={{
-                        duration: 8,
-                        repeat: Infinity,
-                        ease: "linear",
-                        delay: index * 2,
-                      }}
                     >
                       {React.createElement(feature.icon, {
                         className: "w-6 h-6 text-white",
                       })}
-                    </motion.div>
+                    </div>
                     <h3 className="text-xl font-bold text-gray-900 dark:text-white">
                       {feature.title}
                     </h3>

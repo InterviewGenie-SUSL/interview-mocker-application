@@ -112,13 +112,9 @@ function AddNewInterview() {
         />
         <div className="relative p-8 transition-all duration-300 bg-white border-2 border-gray-300 border-dashed dark:border-gray-600 rounded-2xl dark:bg-gray-800 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-xl">
           <div className="space-y-4 text-center">
-            <motion.div
-              className="inline-flex p-4 text-white rounded-full bg-gradient-to-r from-blue-500 to-purple-600"
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            >
+            <div className="inline-flex p-4 text-white rounded-full bg-gradient-to-r from-blue-500 to-purple-600">
               <Plus className="w-8 h-8" />
-            </motion.div>
+            </div>
             <div>
               <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
                 Create New Interview
