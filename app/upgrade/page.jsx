@@ -116,21 +116,15 @@ const UpgradePage = () => {
           </Button>
 
           <div className="flex items-center justify-center gap-2 mb-4">
-            <motion.div
-              animate={{ rotate: [0, 10, -10, 0] }}
-              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-            >
+            <div>
               <Crown className="w-8 h-8 text-yellow-500" />
-            </motion.div>
+            </div>
             <h1 className="text-5xl font-bold text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text">
               Upgrade Your Plan
             </h1>
-            <motion.div
-              animate={{ rotate: [0, -10, 10, 0] }}
-              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-            >
+            <div>
               <Sparkles className="w-8 h-8 text-blue-500" />
-            </motion.div>
+            </div>
           </div>
           <p className="max-w-2xl mx-auto text-xl text-gray-600 dark:text-gray-300">
             Choose the perfect plan to accelerate your interview preparation

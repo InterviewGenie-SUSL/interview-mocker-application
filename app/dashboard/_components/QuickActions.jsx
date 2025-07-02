@@ -102,13 +102,9 @@ const QuickActions = () => {
         className="flex items-center justify-between"
       >
         <div className="flex items-center gap-3">
-          <motion.div
-            animate={{ rotate: [0, 360] }}
-            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-            className="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600"
-          >
+          <div className="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600">
             <Lightbulb className="w-5 h-5 text-white" />
-          </motion.div>
+          </div>
           <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
             Quick Actions
           </h3>

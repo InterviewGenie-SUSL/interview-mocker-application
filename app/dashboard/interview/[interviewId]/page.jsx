@@ -114,11 +114,7 @@ function Interview({ params }) {
           animate={{ opacity: 1 }}
           className="flex flex-col items-center"
         >
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            className="w-16 h-16 border-4 border-blue-500 rounded-full border-t-transparent mb-6"
-          />
+          <div className="w-16 h-16 border-4 border-blue-500 rounded-full border-t-transparent mb-6 animate-spin" />
           <span className="text-xl font-semibold text-blue-700 dark:text-blue-300">
             Loading interview...
           </span>
@@ -162,13 +158,9 @@ function Interview({ params }) {
               className="p-8 bg-white border border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700"
             >
               <div className="flex items-center gap-3 mb-6">
-                <motion.div
-                  animate={{ rotate: [0, 10, -10, 0] }}
-                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-                  className="p-3 bg-blue-100 rounded-full dark:bg-blue-900"
-                >
+                <div className="p-3 bg-blue-100 rounded-full dark:bg-blue-900">
                   <Briefcase className="w-6 h-6 text-blue-600" />
-                </motion.div>
+                </div>
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                   Interview Details
                 </h2>
@@ -282,13 +274,9 @@ function Interview({ params }) {
               className="p-8 bg-white border border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700"
             >
               <div className="flex items-center gap-3 mb-6">
-                <motion.div
-                  animate={{ rotate: [0, 360] }}
-                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                  className="p-3 bg-purple-100 rounded-full dark:bg-purple-900"
-                >
+                <div className="p-3 bg-purple-100 rounded-full dark:bg-purple-900">
                   <WebcamIcon className="w-6 h-6 text-purple-600" />
-                </motion.div>
+                </div>
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                   Camera Setup
                 </h2>
@@ -368,13 +356,9 @@ function Interview({ params }) {
               className="p-6 border-2 border-green-200 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl dark:border-green-700"
             >
               <div className="flex items-center gap-3 mb-4">
-                <motion.div
-                  animate={{ rotate: [0, 360] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                  className="p-2 bg-green-100 rounded-full dark:bg-green-900"
-                >
+                <div className="p-2 bg-green-100 rounded-full dark:bg-green-900">
                   <Clock className="w-5 h-5 text-green-600" />
-                </motion.div>
+                </div>
                 <h3 className="text-lg font-semibold text-green-800 dark:text-green-300">
                   Ready to Start?
                 </h3>

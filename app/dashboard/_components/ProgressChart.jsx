@@ -174,12 +174,9 @@ const ProgressChart = ({ interviews = [] }) => {
           className="bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-700 rounded-2xl p-6 shadow-lg text-white"
         >
           <div className="flex items-center gap-2 mb-6">
-            <motion.div
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-            >
+            <div>
               <Award className="w-6 h-6" />
-            </motion.div>
+            </div>
             <h4 className="text-lg font-semibold">Achievements</h4>
           </div>
 
