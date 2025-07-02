@@ -285,13 +285,10 @@ const Dashboard = () => {
                   </p>
                 </div>
               </div>
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
                   variant="secondary"
-                  className="text-white bg-white/20 hover:bg-white/30 border-white/30"
+                  className="bg-white/20 hover:bg-white/30 text-white border-white/30"
                   onClick={handleUpgradeClick}
                 >
                   Upgrade Plan
@@ -340,7 +337,10 @@ const Dashboard = () => {
           </div>
         </motion.div>
         {/* Add New Interview Button */}
-        <motion.div variants={itemVariants} className="flex justify-center">
+        <motion.div
+          variants={itemVariants}
+          className="flex justify-center gap-4"
+        >
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -380,7 +380,7 @@ const Dashboard = () => {
               </Button>
             </motion.div>
           </div>
-        </motion.div>{" "}
+        </motion.div>
         {/* Previous Interview Cards */}
         <motion.div variants={itemVariants}>
           <div className="flex items-center justify-between mb-6">
@@ -416,7 +416,7 @@ const Dashboard = () => {
               onDelete={handleDeleteInterview}
             />
           )}
-        </motion.div>{" "}
+        </motion.div>
         {/* Progress Chart */}
         <motion.div variants={itemVariants}>
           <ProgressChart interviews={interviewData} />
