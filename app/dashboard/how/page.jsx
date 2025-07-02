@@ -16,6 +16,7 @@ import {
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import FloatingActionButton from "../_components/FloatingActionButton";
 
 function HowItWorksPage() {
   const [activeStep, setActiveStep] = useState(0);
@@ -182,359 +183,362 @@ function HowItWorksPage() {
   ];
 
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-      className="min-h-screen p-8 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900"
-    >
-      <div className="mx-auto max-w-7xl">
-        {/* Hero Section */}
-        <motion.div variants={itemVariants} className="mb-16 text-center">
-          <motion.div
-            className="inline-flex items-center gap-2 px-4 py-2 mb-6 text-sm font-medium text-blue-700 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300"
-            animate={{ scale: [1, 1.05, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            <FaRocket className="w-4 h-4" />
-            Master Your Interview Skills
-          </motion.div>
-
-          <motion.h1
-            className="mb-6 text-6xl font-bold text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text"
-            animate={{ backgroundPosition: ["0%", "100%", "0%"] }}
-            transition={{ duration: 3, repeat: Infinity }}
-          >
-            How It Works
-          </motion.h1>
-
-          <motion.p
-            variants={itemVariants}
-            className="max-w-3xl mx-auto mb-8 text-xl text-gray-600 dark:text-gray-300"
-          >
-            Get started with AI-powered mock interviews in four simple steps and
-            transform your interview performance
-          </motion.p>
-
-          <motion.div
-            variants={itemVariants}
-            className="flex justify-center gap-4"
-          >
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                size="lg"
-                className="px-8 py-4 text-white shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl"
-                onClick={() => setShowDemo(true)}
-              >
-                <FaPlay className="w-5 h-5 mr-2" />
-                Watch Demo
-              </Button>
-            </motion.div>
-
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                variant="outline"
-                size="lg"
-                className="px-8 py-4 text-blue-600 border-2 border-blue-500 hover:bg-blue-50 rounded-xl"
-              >
-                Start Free Trial
-              </Button>
-            </motion.div>
-          </motion.div>
-        </motion.div>
-
-        {/* Interactive Steps */}
-        <motion.div variants={itemVariants} className="mb-16">
-          <h2 className="mb-12 text-3xl font-bold text-center text-gray-900 dark:text-white">
-            Your Journey to Interview Success
-          </h2>
-
-          {/* Step Navigator */}
-          <div className="flex justify-center mb-12">
-            <div className="flex items-center p-2 bg-white border border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
-              {steps.map((step, index) => (
-                <motion.button
-                  key={step.id}
-                  className={`flex items-center gap-3 px-6 py-4 rounded-xl transition-all duration-300 ${
-                    activeStep === index
-                      ? "bg-blue-500 text-white shadow-lg"
-                      : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  }`}
-                  onClick={() => setActiveStep(index)}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  {React.createElement(step.icon, { className: "w-5 h-5" })}
-                  <span className="hidden font-medium sm:block">
-                    Step {step.id}
-                  </span>
-                </motion.button>
-              ))}
-            </div>
-          </div>
-
-          {/* Active Step Details */}
-          <AnimatePresence mode="wait">
+    <>
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="min-h-screen p-8 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900"
+      >
+        <div className="mx-auto max-w-7xl">
+          {/* Hero Section */}
+          <motion.div variants={itemVariants} className="mb-16 text-center">
             <motion.div
-              key={activeStep}
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.3 }}
-              className="p-8 bg-white border border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700"
+              className="inline-flex items-center gap-2 px-4 py-2 mb-6 text-sm font-medium text-blue-700 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300"
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
             >
-              {" "}
-              <div className="grid items-center grid-cols-1 gap-8 lg:grid-cols-2">
-                <div>
-                  <div className="flex items-center gap-4 mb-6">
+              <FaRocket className="w-4 h-4" />
+              Master Your Interview Skills
+            </motion.div>
+
+            <motion.h1
+              className="mb-6 text-6xl font-bold text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text"
+              animate={{ backgroundPosition: ["0%", "100%", "0%"] }}
+              transition={{ duration: 3, repeat: Infinity }}
+            >
+              How It Works
+            </motion.h1>
+
+            <motion.p
+              variants={itemVariants}
+              className="max-w-3xl mx-auto mb-8 text-xl text-gray-600 dark:text-gray-300"
+            >
+              Get started with AI-powered mock interviews in four simple steps and
+              transform your interview performance
+            </motion.p>
+
+            <motion.div
+              variants={itemVariants}
+              className="flex justify-center gap-4"
+            >
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  size="lg"
+                  className="px-8 py-4 text-white shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl"
+                  onClick={() => setShowDemo(true)}
+                >
+                  <FaPlay className="w-5 h-5 mr-2" />
+                  Watch Demo
+                </Button>
+              </motion.div>
+
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="px-8 py-4 text-blue-600 border-2 border-blue-500 hover:bg-blue-50 rounded-xl"
+                >
+                  Start Free Trial
+                </Button>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+
+          {/* Interactive Steps */}
+          <motion.div variants={itemVariants} className="mb-16">
+            <h2 className="mb-12 text-3xl font-bold text-center text-gray-900 dark:text-white">
+              Your Journey to Interview Success
+            </h2>
+
+            {/* Step Navigator */}
+            <div className="flex justify-center mb-12">
+              <div className="flex items-center p-2 bg-white border border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700">
+                {steps.map((step, index) => (
+                  <motion.button
+                    key={step.id}
+                    className={`flex items-center gap-3 px-6 py-4 rounded-xl transition-all duration-300 ${
+                      activeStep === index
+                        ? "bg-blue-500 text-white shadow-lg"
+                        : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    }`}
+                    onClick={() => setActiveStep(index)}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {React.createElement(step.icon, { className: "w-5 h-5" })}
+                    <span className="hidden font-medium sm:block">
+                      Step {step.id}
+                    </span>
+                  </motion.button>
+                ))}
+              </div>
+            </div>
+
+            {/* Active Step Details */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeStep}
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
+                transition={{ duration: 0.3 }}
+                className="p-8 bg-white border border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700"
+              >
+                {" "}
+                <div className="grid items-center grid-cols-1 gap-8 lg:grid-cols-2">
+                  <div>
+                    <div className="flex items-center gap-4 mb-6">
+                      <motion.div
+                        className={`p-4 rounded-xl bg-gradient-to-br ${steps[activeStep].color}`}
+                        animate={{ rotate: [0, 360] }}
+                        transition={{
+                          duration: 8,
+                          repeat: Infinity,
+                          ease: "linear",
+                        }}
+                      >
+                        {React.createElement(steps[activeStep].icon, {
+                          className: "w-8 h-8 text-white",
+                        })}
+                      </motion.div>
+                      <div>
+                        <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                          {steps[activeStep].title}
+                        </h3>
+                        <span className="font-medium text-blue-600">
+                          Step {steps[activeStep].id} of 4
+                        </span>
+                      </div>
+                    </div>
+
+                    <p className="mb-6 text-lg leading-relaxed text-gray-600 dark:text-gray-300">
+                      {steps[activeStep].description}
+                    </p>
+
+                    <ul className="space-y-3">
+                      {steps[activeStep].details.map((detail, index) => (
+                        <motion.li
+                          key={index}
+                          className="flex items-center gap-3"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                        >
+                          <FaCheckCircle className="flex-shrink-0 w-5 h-5 text-green-500" />
+                          <span className="text-gray-700 dark:text-gray-300">
+                            {detail}
+                          </span>
+                        </motion.li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="relative">
                     <motion.div
-                      className={`p-4 rounded-xl bg-gradient-to-br ${steps[activeStep].color}`}
+                      className="flex items-center justify-center h-64 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-xl"
+                      animate={{ scale: [1, 1.02, 1] }}
+                      transition={{ duration: 3, repeat: Infinity }}
+                    >
+                      {React.createElement(steps[activeStep].icon, {
+                        className: "w-24 h-24 text-gray-400",
+                      })}
+                    </motion.div>
+                    <motion.div
+                      className="absolute p-2 text-white bg-green-500 rounded-full -top-4 -right-4"
+                      animate={{ rotate: [0, 360] }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "linear",
+                      }}
+                    >
+                      <FaCheckCircle className="w-6 h-6" />
+                    </motion.div>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
+
+          {/* Features Grid */}
+          <motion.div variants={itemVariants} className="mb-16">
+            <h2 className="mb-12 text-3xl font-bold text-center text-gray-900 dark:text-white">
+              Powerful Features to Boost Your Performance
+            </h2>
+
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+              {features.map((feature, index) => (
+                <motion.div
+                  key={index}
+                  variants={cardVariants}
+                  whileHover="hover"
+                  className="p-8 bg-white border border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700"
+                >
+                  <div className="flex items-center gap-4 mb-6">
+                    {" "}
+                    <motion.div
+                      className={`p-4 rounded-xl bg-gradient-to-br ${feature.color}`}
                       animate={{ rotate: [0, 360] }}
                       transition={{
                         duration: 8,
                         repeat: Infinity,
                         ease: "linear",
+                        delay: index * 2,
                       }}
                     >
-                      {React.createElement(steps[activeStep].icon, {
-                        className: "w-8 h-8 text-white",
+                      {React.createElement(feature.icon, {
+                        className: "w-6 h-6 text-white",
                       })}
                     </motion.div>
-                    <div>
-                      <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-                        {steps[activeStep].title}
-                      </h3>
-                      <span className="font-medium text-blue-600">
-                        Step {steps[activeStep].id} of 4
-                      </span>
-                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                      {feature.title}
+                    </h3>
                   </div>
-
-                  <p className="mb-6 text-lg leading-relaxed text-gray-600 dark:text-gray-300">
-                    {steps[activeStep].description}
+                  <p className="leading-relaxed text-gray-600 dark:text-gray-300">
+                    {feature.description}
                   </p>
-
-                  <ul className="space-y-3">
-                    {steps[activeStep].details.map((detail, index) => (
-                      <motion.li
-                        key={index}
-                        className="flex items-center gap-3"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                      >
-                        <FaCheckCircle className="flex-shrink-0 w-5 h-5 text-green-500" />
-                        <span className="text-gray-700 dark:text-gray-300">
-                          {detail}
-                        </span>
-                      </motion.li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="relative">
-                  <motion.div
-                    className="flex items-center justify-center h-64 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-xl"
-                    animate={{ scale: [1, 1.02, 1] }}
-                    transition={{ duration: 3, repeat: Infinity }}
-                  >
-                    {React.createElement(steps[activeStep].icon, {
-                      className: "w-24 h-24 text-gray-400",
-                    })}
-                  </motion.div>
-                  <motion.div
-                    className="absolute p-2 text-white bg-green-500 rounded-full -top-4 -right-4"
-                    animate={{ rotate: [0, 360] }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
-                  >
-                    <FaCheckCircle className="w-6 h-6" />
-                  </motion.div>
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </motion.div>
-
-        {/* Features Grid */}
-        <motion.div variants={itemVariants} className="mb-16">
-          <h2 className="mb-12 text-3xl font-bold text-center text-gray-900 dark:text-white">
-            Powerful Features to Boost Your Performance
-          </h2>
-
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                variants={cardVariants}
-                whileHover="hover"
-                className="p-8 bg-white border border-gray-200 shadow-xl dark:bg-gray-800 rounded-2xl dark:border-gray-700"
-              >
-                <div className="flex items-center gap-4 mb-6">
-                  {" "}
-                  <motion.div
-                    className={`p-4 rounded-xl bg-gradient-to-br ${feature.color}`}
-                    animate={{ rotate: [0, 360] }}
-                    transition={{
-                      duration: 8,
-                      repeat: Infinity,
-                      ease: "linear",
-                      delay: index * 2,
-                    }}
-                  >
-                    {React.createElement(feature.icon, {
-                      className: "w-6 h-6 text-white",
-                    })}
-                  </motion.div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                    {feature.title}
-                  </h3>
-                </div>
-                <p className="leading-relaxed text-gray-600 dark:text-gray-300">
-                  {feature.description}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Pro Tips Section */}
-        <motion.div variants={itemVariants} className="mb-16">
-          <div className="p-8 border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl dark:border-blue-700">
-            <div className="flex items-center gap-3 mb-8">
-              <motion.div
-                animate={{ scale: [1, 1.1, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="p-3 bg-blue-100 rounded-full dark:bg-blue-900"
-              >
-                <FaLightbulb className="w-6 h-6 text-blue-600" />
-              </motion.div>
-              <h2 className="text-3xl font-bold text-blue-800 dark:text-blue-300">
-                Pro Tips for Success
-              </h2>
-            </div>
-
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-              {tips.map((category, categoryIndex) => (
-                <motion.div
-                  key={categoryIndex}
-                  className="p-6 bg-white shadow-lg dark:bg-gray-800 rounded-xl"
-                  whileHover={{ y: -5 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <h3 className="mb-4 text-lg font-bold text-gray-900 dark:text-white">
-                    {category.title}
-                  </h3>
-                  <ul className="space-y-3">
-                    {category.tips.map((tip, tipIndex) => (
-                      <motion.li
-                        key={tipIndex}
-                        className="flex items-start gap-2"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{
-                          delay: (categoryIndex * 4 + tipIndex) * 0.1,
-                        }}
-                      >
-                        <FaCheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                        <span className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
-                          {tip}
-                        </span>
-                      </motion.li>
-                    ))}
-                  </ul>
                 </motion.div>
               ))}
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
 
-        {/* CTA Section */}
-        <motion.div variants={itemVariants} className="text-center">
-          <div className="p-12 text-white shadow-2xl bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 rounded-2xl">
-            <motion.h2
-              className="mb-4 text-4xl font-bold"
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              Ready to Ace Your Next Interview?
-            </motion.h2>
-            <p className="mb-8 text-xl opacity-90">
-              Join thousands of successful candidates who've improved their
-              interview skills with our platform
-            </p>
-
-            <div className="flex flex-col justify-center gap-4 sm:flex-row">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button
-                  size="lg"
-                  className="px-8 py-4 font-semibold text-blue-600 bg-white shadow-lg hover:bg-gray-100 rounded-xl"
+          {/* Pro Tips Section */}
+          <motion.div variants={itemVariants} className="mb-16">
+            <div className="p-8 border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl dark:border-blue-700">
+              <div className="flex items-center gap-3 mb-8">
+                <motion.div
+                  animate={{ scale: [1, 1.1, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="p-3 bg-blue-100 rounded-full dark:bg-blue-900"
                 >
-                  <FaRocket className="w-5 h-5 mr-2" />
-                  Start Your First Interview
-                </Button>
-              </motion.div>
+                  <FaLightbulb className="w-6 h-6 text-blue-600" />
+                </motion.div>
+                <h2 className="text-3xl font-bold text-blue-800 dark:text-blue-300">
+                  Pro Tips for Success
+                </h2>
+              </div>
 
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="px-8 py-4 font-semibold text-white border-2 border-white hover:bg-white/10 rounded-xl"
-                >
-                  <FaUsers className="w-5 h-5 mr-2" />
-                  Join Community
-                </Button>
-              </motion.div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Demo Modal */}
-        <AnimatePresence>
-          {showDemo && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
-              onClick={() => setShowDemo(false)}
-            >
-              <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.8, opacity: 0 }}
-                className="w-full max-w-2xl p-8 bg-white dark:bg-gray-800 rounded-2xl"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="text-center">
-                  <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">
-                    Demo Video Coming Soon!
-                  </h3>
-                  <p className="mb-6 text-gray-600 dark:text-gray-300">
-                    We're working on an amazing demo video to showcase all our
-                    features.
-                  </p>
-                  <Button
-                    onClick={() => setShowDemo(false)}
-                    className="text-white bg-blue-500 hover:bg-blue-600"
+              <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+                {tips.map((category, categoryIndex) => (
+                  <motion.div
+                    key={categoryIndex}
+                    className="p-6 bg-white shadow-lg dark:bg-gray-800 rounded-xl"
+                    whileHover={{ y: -5 }}
+                    transition={{ duration: 0.3 }}
                   >
-                    Close
+                    <h3 className="mb-4 text-lg font-bold text-gray-900 dark:text-white">
+                      {category.title}
+                    </h3>
+                    <ul className="space-y-3">
+                      {category.tips.map((tip, tipIndex) => (
+                        <motion.li
+                          key={tipIndex}
+                          className="flex items-start gap-2"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{
+                            delay: (categoryIndex * 4 + tipIndex) * 0.1,
+                          }}
+                        >
+                          <FaCheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                          <span className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                            {tip}
+                          </span>
+                        </motion.li>
+                      ))}
+                    </ul>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
+          {/* CTA Section */}
+          <motion.div variants={itemVariants} className="text-center">
+            <div className="p-12 text-white shadow-2xl bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 rounded-2xl">
+              <motion.h2
+                className="mb-4 text-4xl font-bold"
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                Ready to Ace Your Next Interview?
+              </motion.h2>
+              <p className="mb-8 text-xl opacity-90">
+                Join thousands of successful candidates who've improved their
+                interview skills with our platform
+              </p>
+
+              <div className="flex flex-col justify-center gap-4 sm:flex-row">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button
+                    size="lg"
+                    className="px-8 py-4 font-semibold text-blue-600 bg-white shadow-lg hover:bg-gray-100 rounded-xl"
+                  >
+                    <FaRocket className="w-5 h-5 mr-2" />
+                    Start Your First Interview
                   </Button>
-                </div>
+                </motion.div>
+
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="px-8 py-4 font-semibold text-white border-2 border-white hover:bg-white/10 rounded-xl"
+                  >
+                    <FaUsers className="w-5 h-5 mr-2" />
+                    Join Community
+                  </Button>
+                </motion.div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Demo Modal */}
+          <AnimatePresence>
+            {showDemo && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+                onClick={() => setShowDemo(false)}
+              >
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.8, opacity: 0 }}
+                  className="w-full max-w-2xl p-8 bg-white dark:bg-gray-800 rounded-2xl"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="text-center">
+                    <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">
+                      Demo Video Coming Soon!
+                    </h3>
+                    <p className="mb-6 text-gray-600 dark:text-gray-300">
+                      We're working on an amazing demo video to showcase all our
+                      features.
+                    </p>
+                    <Button
+                      onClick={() => setShowDemo(false)}
+                      className="text-white bg-blue-500 hover:bg-blue-600"
+                    >
+                      Close
+                    </Button>
+                  </div>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </motion.div>
+      <FloatingActionButton />
+    </>
   );
 }
 
