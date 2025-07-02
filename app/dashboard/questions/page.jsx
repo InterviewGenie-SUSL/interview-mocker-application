@@ -20,8 +20,16 @@ import {
   ChevronRight,
   Zap,
   Trophy,
+  Grid3X3,
+  List,
+  SortAsc,
+  HelpCircle,
+  Lightbulb,
+  CheckCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 function QuestionsPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -275,9 +283,12 @@ function QuestionsPage() {
     >
       <div className="mx-auto max-w-7xl">
         {/* Header */}
-        <motion.div variants={itemVariants} className="mb-12 text-center">
+        <motion.div
+          variants={itemVariants}
+          className="mb-12 text-center space-y-6"
+        >
           <motion.h1
-            className="mb-4 text-5xl font-bold text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text"
+            className="mb-4 text-4xl md:text-5xl font-bold text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text"
             animate={{ backgroundPosition: ["0%", "100%", "0%"] }}
             transition={{ duration: 3, repeat: Infinity }}
           >
@@ -285,10 +296,67 @@ function QuestionsPage() {
           </motion.h1>
           <motion.p
             variants={itemVariants}
-            className="max-w-3xl mx-auto text-xl text-gray-600 dark:text-gray-300"
+            className="max-w-3xl mx-auto text-lg md:text-xl text-gray-600 dark:text-gray-300"
           >
-            Master your interview skills with our comprehensive question bank
+            Master your interview skills with our comprehensive question bank.
+            Practice with real interview questions from top companies.
           </motion.p>
+
+          {/* Quick Stats */}
+          <motion.div
+            variants={itemVariants}
+            className="flex justify-center gap-8 mt-6"
+          >
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-600">
+                {questions.length}
+              </div>
+              <div className="text-sm text-gray-500">Total Questions</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600">
+                {categories.length}
+              </div>
+              <div className="text-sm text-gray-500">Categories</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-purple-600">
+                {bookmarks.length}
+              </div>
+              <div className="text-sm text-gray-500">Bookmarked</div>
+            </div>
+          </motion.div>
+
+          {/* Quick Tips */}
+          <motion.div
+            variants={itemVariants}
+            className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-2xl p-6 border border-yellow-200 dark:border-yellow-800 max-w-4xl mx-auto"
+          >
+            <div className="flex items-start gap-4">
+              <div className="p-2 rounded-full bg-yellow-500">
+                <Lightbulb className="w-5 h-5 text-white" />
+              </div>
+              <div className="text-left">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                  💡 Pro Tips for Effective Practice
+                </h3>
+                <div className="grid md:grid-cols-3 gap-4 text-sm text-gray-600 dark:text-gray-300">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    <span>Start with easy questions to build confidence</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    <span>Practice behavioral questions using STAR method</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    <span>Time yourself to improve response speed</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </motion.div>
 
         {/* Navigation Tabs */}

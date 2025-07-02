@@ -13,9 +13,21 @@ import {
   FaTrophy,
   FaPlay,
   FaCheckCircle,
+  FaQuestionCircle,
+  FaMicrophone,
+  FaCamera,
+  FaDownload,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import {
+  ArrowRight,
+  PlayCircle,
+  CheckCircle,
+  HelpCircle,
+  Sparkles,
+} from "lucide-react";
 
 function HowItWorksPage() {
   const [activeStep, setActiveStep] = useState(0);
@@ -66,56 +78,56 @@ function HowItWorksPage() {
       id: 1,
       title: "Create Your Profile",
       description:
-        "Set up your profile with your target role, experience level, and preferred technologies.",
+        "Set up your profile with your target role, experience level, and preferred technologies. Our AI will personalize your interview experience based on your background.",
       icon: FaUsers,
       color: "from-purple-500 to-purple-600",
       details: [
-        "Choose your target job position",
-        "Select your experience level",
-        "Pick relevant technologies",
-        "Set interview preferences",
+        "Choose your target job position and company type",
+        "Select your experience level (Entry, Mid, Senior)",
+        "Pick relevant technologies and skills",
+        "Set interview preferences and goals",
       ],
     },
     {
       id: 2,
       title: "Start an Interview",
       description:
-        "Launch a personalized mock interview tailored to your profile and goals.",
+        "Launch a personalized mock interview tailored to your profile and goals. Choose from technical, behavioral, or system design interviews.",
       icon: FaVideo,
       color: "from-blue-500 to-blue-600",
       details: [
-        "AI generates relevant questions",
-        "Choose interview type (technical/behavioral)",
-        "Enable camera and microphone",
-        "Real-time environment setup",
+        "AI generates relevant questions for your role",
+        "Choose interview type (technical/behavioral/system design)",
+        "Enable camera and microphone for realistic practice",
+        "Real-time environment setup and calibration",
       ],
     },
     {
       id: 3,
       title: "Answer Questions",
       description:
-        "Respond to AI-generated questions while being recorded for comprehensive analysis.",
+        "Respond to AI-generated questions while being recorded for comprehensive analysis. Practice in a realistic interview environment.",
       icon: FaClipboardCheck,
       color: "from-green-500 to-green-600",
       details: [
-        "Structured interview questions",
-        "Real-time video recording",
-        "Speech-to-text transcription",
-        "Performance tracking",
+        "Structured interview questions based on your profile",
+        "Real-time video and audio recording",
+        "Speech-to-text transcription for analysis",
+        "Live performance tracking and hints",
       ],
     },
     {
       id: 4,
       title: "Get AI Feedback",
       description:
-        "Receive detailed analysis on your performance with actionable improvement suggestions.",
+        "Receive detailed analysis on your performance with actionable improvement suggestions. Track your progress over time.",
       icon: FaChartLine,
       color: "from-orange-500 to-orange-600",
       details: [
-        "Detailed performance metrics",
-        "Body language analysis",
-        "Speech pattern evaluation",
-        "Personalized recommendations",
+        "Detailed performance metrics and scoring",
+        "Body language and presentation analysis",
+        "Speech pattern and communication evaluation",
+        "Personalized recommendations for improvement",
       ],
     },
   ];
@@ -123,60 +135,74 @@ function HowItWorksPage() {
   const features = [
     {
       icon: FaClock,
-      title: "Smart Timer",
+      title: "Smart Timer & Pacing",
       description:
-        "Keep track of your response time with our intelligent timer system that helps you practice giving concise answers.",
+        "Keep track of your response time with our intelligent timer system that helps you practice giving concise, well-paced answers.",
       color: "from-yellow-500 to-orange-500",
     },
     {
       icon: FaCode,
       title: "Code Challenge Mode",
       description:
-        "Practice technical interviews with our integrated code editor, real-time compilation, and automated testing.",
+        "Practice technical interviews with our integrated code editor, real-time compilation, and automated testing for multiple languages.",
       color: "from-green-500 to-blue-500",
     },
     {
       icon: FaBrain,
       title: "AI-Powered Insights",
       description:
-        "Get intelligent feedback on your responses, body language, and communication skills using advanced AI.",
+        "Get intelligent feedback on your responses, body language, communication skills, and technical knowledge using advanced AI.",
       color: "from-purple-500 to-pink-500",
     },
     {
       icon: FaTrophy,
       title: "Progress Tracking",
       description:
-        "Monitor your improvement over time with detailed analytics and performance comparisons.",
+        "Monitor your improvement over time with detailed analytics, performance comparisons, and milestone achievements.",
       color: "from-blue-500 to-indigo-600",
+    },
+    {
+      icon: FaCamera,
+      title: "Video Analysis",
+      description:
+        "Advanced video analysis to evaluate your body language, eye contact, and overall presentation during interviews.",
+      color: "from-red-500 to-pink-500",
+    },
+    {
+      icon: FaDownload,
+      title: "Export Reports",
+      description:
+        "Download detailed performance reports and interview recordings to review your progress and share with mentors.",
+      color: "from-indigo-500 to-purple-500",
     },
   ];
 
   const tips = [
     {
-      title: "Technical Preparation",
+      title: "🎯 Technical Preparation",
       tips: [
         "Enable your camera for better feedback on body language and presentation",
-        "Practice with our code editor for technical interviews",
-        "Review data structures and algorithms fundamentals",
-        "Use the timer feature to improve response speed",
+        "Practice with our code editor for technical interviews before the real thing",
+        "Review data structures and algorithms fundamentals regularly",
+        "Use the timer feature to improve response speed and conciseness",
       ],
     },
     {
-      title: "Communication Skills",
+      title: "🗣️ Communication Skills",
       tips: [
-        "Speak clearly and maintain good pace while answering",
-        "Practice the STAR method for behavioral questions",
-        "Maintain eye contact with the camera",
-        "Use confident body language and posture",
+        "Speak clearly and maintain a steady pace while answering questions",
+        "Practice the STAR method (Situation, Task, Action, Result) for behavioral questions",
+        "Maintain eye contact with the camera to simulate real interview conditions",
+        "Use confident body language and maintain good posture throughout",
       ],
     },
     {
-      title: "Performance Optimization",
+      title: "📈 Performance Optimization",
       tips: [
-        "Review your interview recordings to identify areas for improvement",
-        "Practice with different difficulty levels to gradually improve",
+        "Review your interview recordings to identify specific areas for improvement",
+        "Practice with different difficulty levels to gradually build confidence",
         "Take advantage of AI feedback for targeted skill development",
-        "Set up a professional interview environment",
+        "Set up a professional, well-lit interview environment",
       ],
     },
   ];
@@ -186,22 +212,22 @@ function HowItWorksPage() {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="min-h-screen p-8 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900"
+      className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900"
     >
-      <div className="mx-auto max-w-7xl">
+      <div className="p-6 mx-auto space-y-12 max-w-7xl">
         {/* Hero Section */}
-        <motion.div variants={itemVariants} className="mb-16 text-center">
+        <motion.div variants={itemVariants} className="space-y-6 text-center">
           <motion.div
-            className="inline-flex items-center gap-2 px-4 py-2 mb-6 text-sm font-medium text-blue-700 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300"
+            className="inline-flex items-center gap-2 px-6 py-3 mb-6 text-sm font-medium text-blue-700 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300"
             animate={{ scale: [1, 1.05, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
-            <FaRocket className="w-4 h-4" />
-            Master Your Interview Skills
+            <Sparkles className="w-4 h-4" />
+            Master Your Interview Skills with AI
           </motion.div>
 
           <motion.h1
-            className="mb-6 text-6xl font-bold text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text"
+            className="text-4xl font-bold leading-tight text-transparent md:text-6xl bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text"
             animate={{ backgroundPosition: ["0%", "100%", "0%"] }}
             transition={{ duration: 3, repeat: Infinity }}
           >
@@ -210,36 +236,51 @@ function HowItWorksPage() {
 
           <motion.p
             variants={itemVariants}
-            className="max-w-3xl mx-auto mb-8 text-xl text-gray-600 dark:text-gray-300"
+            className="max-w-3xl mx-auto text-lg leading-relaxed text-gray-600 md:text-xl dark:text-gray-300"
           >
-            Get started with AI-powered mock interviews in four simple steps and
-            transform your interview performance
+            Our AI-powered platform makes interview preparation simple,
+            effective, and personalized. Follow these steps to transform your
+            interview skills and land your dream job.
           </motion.p>
 
+          {/* Quick Stats */}
           <motion.div
             variants={itemVariants}
-            className="flex justify-center gap-4"
+            className="flex justify-center gap-8 mt-8"
           >
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                size="lg"
-                className="px-8 py-4 text-white shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl"
-                onClick={() => setShowDemo(true)}
-              >
-                <FaPlay className="w-5 h-5 mr-2" />
-                Watch Demo
-              </Button>
-            </motion.div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-blue-600">95%</div>
+              <div className="text-sm text-gray-500">Success Rate</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-green-600">10K+</div>
+              <div className="text-sm text-gray-500">Users Helped</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-purple-600">4.9</div>
+              <div className="text-sm text-gray-500">Rating</div>
+            </div>
+          </motion.div>
 
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                variant="outline"
-                size="lg"
-                className="px-8 py-4 text-blue-600 border-2 border-blue-500 hover:bg-blue-50 rounded-xl"
-              >
-                Start Free Trial
+          {/* CTA Buttons */}
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-wrap justify-center gap-4 mt-8"
+          >
+            <Link href="/dashboard">
+              <Button className="px-8 py-3 text-lg text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700">
+                <PlayCircle className="w-5 h-5 mr-2" />
+                Start Your First Interview
               </Button>
-            </motion.div>
+            </Link>
+            <Button
+              variant="outline"
+              className="px-8 py-3 text-lg"
+              onClick={() => setShowDemo(true)}
+            >
+              <FaVideo className="w-5 h-5 mr-2" />
+              Watch Demo
+            </Button>
           </motion.div>
         </motion.div>
 

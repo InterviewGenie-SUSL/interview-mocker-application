@@ -235,12 +235,12 @@ const Dashboard = () => {
     >
       <div className="p-6 mx-auto space-y-8 max-w-7xl">
         {/* Welcome Header */}
-        <motion.div variants={itemVariants} className="space-y-4 text-center">
+        <motion.div variants={itemVariants} className="space-y-6 text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
             <div>
               <Sparkles className="w-8 h-8 text-yellow-500" />
             </div>
-            <h1 className="text-5xl font-bold text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text">
+            <h1 className="text-4xl font-bold text-transparent md:text-5xl bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text">
               Welcome back, {user?.firstName}!
             </h1>
             <div>
@@ -249,11 +249,42 @@ const Dashboard = () => {
           </div>
           <motion.p
             variants={itemVariants}
-            className="max-w-2xl mx-auto text-xl text-gray-600 dark:text-gray-300"
+            className="max-w-2xl mx-auto text-lg text-gray-600 md:text-xl dark:text-gray-300"
           >
             Ready to ace your next interview? Let's practice and build your
-            confidence!
+            confidence with our AI-powered mock interviews!
           </motion.p>
+
+          {/* Quick Action Cards */}
+          {stats.total === 0 && (
+            <motion.div
+              variants={itemVariants}
+              className="p-6 border border-blue-200 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl dark:border-blue-800"
+            >
+              <div className="space-y-4 text-center">
+                <div className="flex items-center justify-center w-16 h-16 mx-auto rounded-full bg-gradient-to-r from-blue-500 to-purple-600">
+                  <PlayCircle className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  Let's get you started!
+                </h3>
+                <p className="max-w-md mx-auto text-gray-600 dark:text-gray-300">
+                  Take your first mock interview to see how our AI-powered
+                  system works. It only takes a few minutes to set up.
+                </p>
+                <div className="flex flex-wrap justify-center gap-3">
+                  <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Start First Interview
+                  </Button>
+                  <Button variant="outline">
+                    <BookOpen className="w-4 h-4 mr-2" />
+                    How It Works
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          )}
         </motion.div>
         {/* User Plan Banner */}
         <motion.div variants={itemVariants}>
