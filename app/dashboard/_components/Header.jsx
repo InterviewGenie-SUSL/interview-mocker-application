@@ -48,7 +48,7 @@ function Header() {
   }, [path]);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between p-4 bg-white shadow-sm dark:bg-gray-800 dark:text-white backdrop-blur-sm">
+    <div className="sticky top-0 left-0 right-0 z-50 flex items-center justify-between p-4 bg-white shadow-sm dark:bg-gray-800 dark:text-white backdrop-blur-lg">
       <Link href="/dashboard">
         <Image src={"/logo-2.svg"} width={160} height={100} alt="logo" />
       </Link>

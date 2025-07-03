@@ -6,6 +6,8 @@ import { Mic } from "lucide-react";
 
 function RecordAnswerSection() {
   const [userAnswer, setUserAnswer] = useState("");
+  const [isClient, setIsClient] = useState(false);
+
   const {
     error,
     interimResult,
@@ -18,12 +20,37 @@ function RecordAnswerSection() {
     useLegacyResults: false,
   });
 
+  // Ensure we're on the client side
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   // Update userAnswer only with the latest transcript, not concatenated
   useEffect(() => {
     if (results && results.length > 0) {
-      setUserAnswer(results.map(r => r.transcript).join(" "));
+      setUserAnswer(results.map((r) => r.transcript).join(" "));
     }
   }, [results]);
+
+  // Don't render anything until we're on the client
+  if (!isClient) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          marginTop: 0,
+          height: "400px",
+          justifyContent: "center",
+          color: "#6b7280",
+          fontSize: "1.1rem",
+        }}
+      >
+        Loading recording interface...
+      </div>
+    );
+  }
 
   return (
     <div
