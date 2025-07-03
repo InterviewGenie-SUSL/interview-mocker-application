@@ -114,7 +114,7 @@ function Interview({ params }) {
           animate={{ opacity: 1 }}
           className="flex flex-col items-center"
         >
-          <div className="w-16 h-16 border-4 border-blue-500 rounded-full border-t-transparent mb-6 animate-spin" />
+          <div className="w-16 h-16 mb-6 border-4 border-blue-500 rounded-full border-t-transparent animate-spin" />
           <span className="text-xl font-semibold text-blue-700 dark:text-blue-300">
             Loading interview...
           </span>
@@ -134,7 +134,7 @@ function Interview({ params }) {
         {/* Header Section */}
         <motion.div variants={itemVariants} className="mb-12 text-center">
           <motion.h1
-            className="mb-4 text-5xl font-bold text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text"
+            className="mt-12 mb-4 text-5xl font-bold text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text"
             animate={{ backgroundPosition: ["0%", "100%", "0%"] }}
             transition={{ duration: 3, repeat: Infinity }}
           >

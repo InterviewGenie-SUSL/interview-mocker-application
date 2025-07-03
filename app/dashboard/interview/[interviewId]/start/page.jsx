@@ -4,8 +4,28 @@ import { MockInterview } from "@/utils/schema";
 import { eq } from "drizzle-orm";
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import dynamic from "next/dynamic";
 import QuestionsSection from "./components/QuestionsSection";
-import RecordAnswerSection from "./components/RecordAnswerSection";
+
+// Dynamically import RecordAnswerSection to avoid SSR issues with speech-to-text
+const RecordAnswerSection = dynamic(
+  () => import("./components/RecordAnswerSection"),
+  {
+    ssr: false,
+    loading: () => (
+      <div style={{ 
+        display: "flex", 
+        justifyContent: "center", 
+        alignItems: "center", 
+        height: "400px",
+        color: "#6b7280",
+        fontSize: "1.1rem"
+      }}>
+        Loading recording interface...
+      </div>
+    ),
+  }
+);
 
 function StartInterview() {
   const params = useParams();
