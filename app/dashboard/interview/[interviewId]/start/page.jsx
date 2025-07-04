@@ -55,6 +55,12 @@ function StartInterview() {
     fetchQuestions();
   }, [params.interviewId]);
 
+  useEffect(() => {
+    if (mockInterviewQuestion && mockInterviewQuestion.length > 0 && typeof window !== "undefined") {
+      localStorage.setItem("mockInterviewQuestion", JSON.stringify(mockInterviewQuestion));
+    }
+  }, [mockInterviewQuestion]);
+
   if (loading) {
     return (
       <div
