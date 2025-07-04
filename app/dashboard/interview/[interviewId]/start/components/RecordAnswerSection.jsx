@@ -3,10 +3,18 @@ import React, { useEffect, useState } from "react";
 import Webcam from "react-webcam";
 import useSpeechToText from "react-hook-speech-to-text";
 import { Mic } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 function RecordAnswerSection() {
   const [userAnswer, setUserAnswer] = useState("");
   const [isClient, setIsClient] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [questionIndex, setQuestionIndex] = useState(0); // 0-4 for 5 questions
+  const [answers, setAnswers] = useState([]); // Store all answers
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const interviewId = searchParams.get("interviewId");
 
   const {
     error,
@@ -31,6 +39,50 @@ function RecordAnswerSection() {
       setUserAnswer(results.map((r) => r.transcript).join(" "));
     }
   }, [results]);
+
+  // Save answer to backend
+  async function saveAnswer(answer) {
+    setIsSaving(true);
+    setSaveSuccess(false);
+    try {
+      let questions = [];
+      if (typeof window !== 'undefined') {
+        const questionsRaw = localStorage.getItem("mockInterviewQuestion");
+        questions = questionsRaw ? JSON.parse(questionsRaw) : [];
+      }
+      const currentQ = questions[questionIndex] || {};
+      const payload = {
+        mockId: interviewId,
+        question: currentQ.question || "",
+        correctAns: currentQ.answer || "",
+        userAns: answer,
+        feedback: "",
+        rating: "",
+        userEmail: "",
+        createdAt: new Date().toISOString(),
+      };
+      console.log("Saving answer payload:", payload);
+      const res = await fetch(`/api/answers`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        setSaveSuccess(true);
+        setAnswers((prev) => {
+          const updated = [...prev];
+          updated[questionIndex] = answer;
+          return updated;
+        });
+      } else {
+        const err = await res.json();
+        alert("Failed to save answer: " + (err.error || "Unknown error"));
+      }
+    } catch (e) {
+      alert("Error saving answer: " + (e.message || e));
+    }
+    setIsSaving(false);
+  }
 
   // Don't render anything until we're on the client
   if (!isClient) {
@@ -117,7 +169,16 @@ function RecordAnswerSection() {
           marginBottom: "32px",
         }}
         type="button"
-        onClick={isRecording ? stopSpeechToText : startSpeechToText}
+        onClick={async () => {
+          if (isRecording) {
+            stopSpeechToText();
+            await saveAnswer(userAnswer);
+          } else {
+            setSaveSuccess(false);
+            startSpeechToText();
+          }
+        }}
+        disabled={isSaving}
       >
         {isRecording ? (
           <>
@@ -125,28 +186,58 @@ function RecordAnswerSection() {
             Recording...
           </>
         ) : (
-          "Record Answer"
+          isSaving ? "Saving..." : "Record Answer"
         )}
       </button>
-
-      <button
-        style={{
-          padding: "12px 36px",
-          background: "#4338ca",
-          color: "#fff",
-          fontWeight: 600,
-          borderRadius: "8px",
-          border: "none",
-          fontSize: "1rem",
-          cursor: "pointer",
-          marginTop: "0",
-          boxShadow: "0 2px 8px rgba(67,56,202,0.08)",
-        }}
-        type="button"
-        onClick={() => alert(userAnswer || "No answer yet.")}
-      >
-        Show User Answer
-      </button>
+      {saveSuccess && (
+        <div style={{ color: "#16a34a", margin: "8px 0" }}>
+          User's answer recorded successfully.
+        </div>
+      )}
+      {/* Next Question button */}
+      {saveSuccess && questionIndex < 4 && (
+        <button
+          style={{
+            marginTop: "24px",
+            padding: "10px 32px",
+            background: "#2563eb",
+            color: "#fff",
+            border: "none",
+            borderRadius: "8px",
+            fontWeight: 600,
+            fontSize: "1rem",
+            cursor: "pointer",
+          }}
+          onClick={() => {
+            setQuestionIndex((i) => i + 1);
+            setUserAnswer("");
+            setSaveSuccess(false);
+          }}
+        >
+          Next Question
+        </button>
+      )}
+      {/* Finish Interview button */}
+      {saveSuccess && questionIndex === 4 && (
+        <button
+          style={{
+            marginTop: "24px",
+            padding: "12px 36px",
+            background: "#059669",
+            color: "#fff",
+            border: "none",
+            borderRadius: "8px",
+            fontWeight: 700,
+            fontSize: "1.1rem",
+            cursor: "pointer",
+          }}
+          onClick={() => {
+            router.push(`/dashboard/interview/${interviewId}/finish`);
+          }}
+        >
+          Finish Interview
+        </button>
+      )}
     </div>
   );
 }
