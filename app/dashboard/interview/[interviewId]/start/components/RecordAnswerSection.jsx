@@ -1,8 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Webcam from "react-webcam";
 import useSpeechToText from "react-hook-speech-to-text";
-import { Mic } from "lucide-react";
+import { Mic, Video, VideoOff, MicOff } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 function RecordAnswerSection() {
@@ -12,6 +12,9 @@ function RecordAnswerSection() {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [questionIndex, setQuestionIndex] = useState(0); // 0-4 for 5 questions
   const [answers, setAnswers] = useState([]); // Store all answers
+  const [isVideoEnabled, setIsVideoEnabled] = useState(true);
+  const [isMicEnabled, setIsMicEnabled] = useState(true);
+  const webcamRef = useRef(null);
   const router = useRouter();
   const searchParams = useSearchParams();
   const interviewId = searchParams.get("interviewId");
@@ -46,7 +49,7 @@ function RecordAnswerSection() {
     setSaveSuccess(false);
     try {
       let questions = [];
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         const questionsRaw = localStorage.getItem("mockInterviewQuestion");
         questions = questionsRaw ? JSON.parse(questionsRaw) : [];
       }
@@ -115,7 +118,7 @@ function RecordAnswerSection() {
     >
       <div
         style={{
-          background: "#111",
+          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
           borderRadius: "16px",
           width: "400px",
           height: "300px",
@@ -124,6 +127,7 @@ function RecordAnswerSection() {
           justifyContent: "center",
           position: "relative",
           marginBottom: "32px",
+          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.2)",
         }}
       >
         <img
@@ -141,7 +145,10 @@ function RecordAnswerSection() {
           }}
         />
         <Webcam
+          ref={webcamRef}
           mirrored={true}
+          audio={isMicEnabled}
+          video={isVideoEnabled}
           style={{
             width: "100%",
             height: "100%",
@@ -149,8 +156,88 @@ function RecordAnswerSection() {
             borderRadius: "16px",
             zIndex: 2,
             background: "transparent",
+            display: isVideoEnabled ? "block" : "none",
           }}
         />
+        {!isVideoEnabled && (
+          <div
+            style={{
+              position: "absolute",
+              left: "50%",
+              top: "50%",
+              transform: "translate(-50%, -50%)",
+              zIndex: 3,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(0, 0, 0, 0.7)",
+              borderRadius: "16px",
+            }}
+          >
+            <VideoOff size={48} color="white" />
+          </div>
+        )}
+      </div>
+
+      {/* Media Control Buttons */}
+      <div
+        style={{
+          display: "flex",
+          gap: "16px",
+          marginBottom: "16px",
+        }}
+      >
+        <button
+          onClick={() => setIsVideoEnabled(!isVideoEnabled)}
+          style={{
+            padding: "12px",
+            border: "2px solid #e5e7eb",
+            borderRadius: "50%",
+            background: isVideoEnabled ? "#ffffff" : "#f3f4f6",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            transition: "all 0.3s ease",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+            width: "48px",
+            height: "48px",
+          }}
+          title={isVideoEnabled ? "Turn off camera" : "Turn on camera"}
+        >
+          {isVideoEnabled ? (
+            <Video size={20} color="#059669" />
+          ) : (
+            <VideoOff size={20} color="#dc2626" />
+          )}
+        </button>
+
+        <button
+          onClick={() => setIsMicEnabled(!isMicEnabled)}
+          style={{
+            padding: "12px",
+            border: "2px solid #e5e7eb",
+            borderRadius: "50%",
+            background: isMicEnabled ? "#ffffff" : "#f3f4f6",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            transition: "all 0.3s ease",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+            width: "48px",
+            height: "48px",
+          }}
+          title={isMicEnabled ? "Turn off microphone" : "Turn on microphone"}
+        >
+          {isMicEnabled ? (
+            <Mic size={20} color="#059669" />
+          ) : (
+            <MicOff size={20} color="#dc2626" />
+          )}
+        </button>
       </div>
       <button
         style={{
@@ -174,19 +261,27 @@ function RecordAnswerSection() {
             stopSpeechToText();
             await saveAnswer(userAnswer);
           } else {
+            if (!isMicEnabled) {
+              alert("Please enable microphone to record your answer");
+              return;
+            }
             setSaveSuccess(false);
             startSpeechToText();
           }
         }}
-        disabled={isSaving}
+        disabled={isSaving || !isMicEnabled}
       >
         {isRecording ? (
           <>
             <Mic color="#d90429" />
             Recording...
           </>
+        ) : isSaving ? (
+          "Saving..."
+        ) : !isMicEnabled ? (
+          "Enable Microphone"
         ) : (
-          isSaving ? "Saving..." : "Record Answer"
+          "Record Answer"
         )}
       </button>
       {saveSuccess && (
