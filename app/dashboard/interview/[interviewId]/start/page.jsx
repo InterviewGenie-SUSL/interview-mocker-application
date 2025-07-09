@@ -95,9 +95,18 @@ function StartInterview() {
           const allQuestions = JSON.parse(result[0].jsonMockResp);
           setTotalQuestions(allQuestions.length);
           // Limit to 5 questions for free users
-          setMockInterviewQuestion(
-            isPro ? allQuestions : allQuestions.slice(0, 5)
-          );
+          const limitedQuestions = isPro
+            ? allQuestions
+            : allQuestions.slice(0, 5);
+          setMockInterviewQuestion(limitedQuestions);
+
+          // Store questions in localStorage for RecordAnswerSection
+          if (typeof window !== "undefined") {
+            localStorage.setItem(
+              "mockInterviewQuestion",
+              JSON.stringify(limitedQuestions)
+            );
+          }
         } else {
           setMockInterviewQuestion([]);
         }
@@ -315,7 +324,11 @@ function StartInterview() {
 
         {/* Right: Webcam Section */}
         <div style={{ flex: "0 0 400px" }}>
-          <RecordAnswerSection />
+          <RecordAnswerSection
+            activeQuestionIndex={activeQuestionIndex}
+            mockInterviewQuestion={mockInterviewQuestion}
+            setActiveQuestionIndex={setActiveQuestionIndex}
+          />
 
           {/* Navigation Controls - Below Record Answer Section */}
           <div className="flex justify-center mt-6">
