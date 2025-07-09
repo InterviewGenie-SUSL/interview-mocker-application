@@ -14,10 +14,31 @@ export async function POST(req) {
       userEmail,
       createdAt,
     } = await req.json();
-    if (!mockId || !question || !userAns) {
-      return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+
+    console.log("Received data:", { mockId, question, userAns, feedback, rating });
+
+    // Validate required fields with specific error messages
+    if (!mockId) {
+      console.error("Missing mockId field");
+      return NextResponse.json({ error: "Missing mockId field" }, { status: 400 });
     }
-    await db.insert(UserAnswer).values({
+    if (!question) {
+      console.error("Missing question field");
+      return NextResponse.json({ error: "Missing question field" }, { status: 400 });
+    }
+    if (!userAns) {
+      console.error("Missing userAns field");
+      return NextResponse.json({ error: "Missing userAns field" }, { status: 400 });
+    }
+
+    // Check if db is properly initialized
+    if (!db) {
+      console.error("Database connection not initialized");
+      return NextResponse.json({ error: "Database connection error" }, { status: 500 });
+    }
+
+    console.log("Attempting to insert into database...");
+    const result = await db.insert(UserAnswer).values({
       mockIdRef: mockId,
       question,
       correctAns,
@@ -27,9 +48,17 @@ export async function POST(req) {
       userEmail,
       createdAt,
     });
-    return NextResponse.json({ success: true });
+
+    console.log("Database insert successful:", result);
+    return NextResponse.json({ success: true, message: "Answer saved successfully" });
   } catch (e) {
-    return NextResponse.json({ error: "Failed to save answer" }, { status: 500 });
+    console.error("API Error:", e);
+    console.error("Error stack:", e.stack);
+    return NextResponse.json({
+      error: "Failed to save answer",
+      details: e.message,
+      stack: process.env.NODE_ENV === 'development' ? e.stack : undefined
+    }, { status: 500 });
   }
 }
 

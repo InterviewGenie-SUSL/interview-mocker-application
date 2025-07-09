@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import Webcam from "react-webcam";
 import {
   Lightbulb,
   Volume2,
@@ -506,6 +505,23 @@ function QuestionsSection({
         50% { opacity: 0.8; }
         100% { opacity: 0; }
       }
+      
+      .audio-level-bar {
+        transition: width 0.15s ease-out;
+      }
+      
+      .speech-detected {
+        animation: fadeInScale 0.3s ease-out;
+      }
+      
+      .recording-pulse {
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+      
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.05); opacity: 0.8; }
+      }
     `;
     document.head.appendChild(style);
 
@@ -518,28 +534,9 @@ function QuestionsSection({
   }, []);
 
   // Use state to track dark mode and update on theme change
-  const [isDark, setIsDark] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentUtterance, setCurrentUtterance] = useState(null);
-  const [isInterviewFinished, setIsInterviewFinished] = useState(false);
-  const [showScore, setShowScore] = useState(false);
-
-  // Enhanced Webcam Features
-  const [webCamEnabled, setWebCamEnabled] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
-  const [webcamTheme, setWebcamTheme] = useState("blue"); // blue, purple, green, red, gold
-  const [webcamSize, setWebcamSize] = useState("medium"); // small, medium, large
-  const [webcamPosition, setWebcamPosition] = useState("topRight"); // topLeft, topRight, bottomLeft, bottomRight
-  const [showWebcamControls, setShowWebcamControls] = useState(false);
-  const [webcamFilter, setWebcamFilter] = useState("none"); // none, sepia, grayscale, blur, vintage
-  const [recordingTime, setRecordingTime] = useState(0);
-  const [screenshots, setScreenshots] = useState([]);
-  const [faceDetected, setFaceDetected] = useState(false);
-  const [eyeTrackingEnabled, setEyeTrackingEnabled] = useState(false);
-  const [webcamBrightness, setWebcamBrightness] = useState(100);
-  const [webcamContrast, setWebcamContrast] = useState(100);
-  const [isWebcamFullscreen, setIsWebcamFullscreen] = useState(false);
-  const [webcamRef, setWebcamRef] = useState(null);
+  const [isDark, setIsDark] = React.useState(false);
+  const [isPlaying, setIsPlaying] = React.useState(false);
+  const [currentUtterance, setCurrentUtterance] = React.useState(null);
 
   useEffect(() => {
     // Check for dark mode from multiple sources
@@ -608,30 +605,6 @@ function QuestionsSection({
     };
   }, []);
 
-  // Recording timer effect
-  useEffect(() => {
-    let interval;
-    if (isRecording) {
-      interval = setInterval(() => {
-        setRecordingTime((prev) => prev + 1);
-      }, 1000);
-    } else {
-      setRecordingTime(0);
-    }
-    return () => clearInterval(interval);
-  }, [isRecording]);
-
-  // Webcam face detection simulation
-  useEffect(() => {
-    if (webCamEnabled && eyeTrackingEnabled) {
-      const interval = setInterval(() => {
-        // Simulate face detection
-        setFaceDetected(Math.random() > 0.3);
-      }, 2000);
-      return () => clearInterval(interval);
-    }
-  }, [webCamEnabled, eyeTrackingEnabled]);
-
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -694,114 +667,13 @@ function QuestionsSection({
     }
   };
 
-  const calculateTotalScore = () => {
-    // This is a placeholder calculation - you can implement actual scoring logic
-    const totalQuestions = mockInterviewQuestion?.length || 0;
-    if (totalQuestions === 0) return 0;
-
-    const completedQuestions = activeQuestionIndex + 1;
-    const completionPercentage = (completedQuestions / totalQuestions) * 100;
-
-    // Simple scoring based on completion
-    const baseScore = completionPercentage;
-
-    return Math.min(100, Math.round(baseScore));
-  };
-
-  const finishInterview = () => {
-    setIsInterviewFinished(true);
-    setShowScore(true);
-  };
-
-  // Enhanced Webcam Functions
-  const toggleWebcam = () => {
-    setWebCamEnabled(!webCamEnabled);
-    if (webCamEnabled) {
-      setIsRecording(false);
-    }
-  };
-
-  const startRecording = () => {
-    if (webCamEnabled) {
-      setIsRecording(true);
-      setRecordingTime(0);
-    }
-  };
-
-  const stopRecording = () => {
-    setIsRecording(false);
-    setRecordingTime(0);
-  };
-
-  const takeScreenshot = () => {
-    if (webcamRef && webcamRef.getScreenshot) {
-      const screenshot = webcamRef.getScreenshot();
-      if (screenshot) {
-        setScreenshots((prev) => [
-          ...prev,
-          {
-            id: Date.now(),
-            image: screenshot,
-            timestamp: new Date().toLocaleTimeString(),
-          },
-        ]);
-
-        // Show flash effect
-        const flashElement = document.createElement("div");
-        flashElement.className = "screenshot-flash";
-        document.querySelector(".webcam-container").appendChild(flashElement);
-        setTimeout(() => {
-          flashElement.remove();
-        }, 300);
-      }
-    }
-  };
-
-  const downloadScreenshot = (screenshot) => {
-    const link = document.createElement("a");
-    link.download = `interview-screenshot-${screenshot.id}.png`;
-    link.href = screenshot.image;
-    link.click();
-  };
-
-  const changeWebcamTheme = (theme) => {
-    setWebcamTheme(theme);
-  };
-
-  const changeWebcamSize = (size) => {
-    setWebcamSize(size);
-  };
-
-  const changeWebcamPosition = (position) => {
-    setWebcamPosition(position);
-  };
-
-  const toggleWebcamFullscreen = () => {
-    setIsWebcamFullscreen(!isWebcamFullscreen);
-  };
-
-  const applyWebcamFilter = (filter) => {
-    setWebcamFilter(filter);
-  };
-
-  const getWebcamThemeColors = () => {
-    const themes = {
-      blue: { primary: "#3b82f6", secondary: "#1d4ed8", accent: "#dbeafe" },
-      purple: { primary: "#8b5cf6", secondary: "#7c3aed", accent: "#ede9fe" },
-      green: { primary: "#10b981", secondary: "#059669", accent: "#d1fae5" },
-      red: { primary: "#ef4444", secondary: "#dc2626", accent: "#fee2e2" },
-      gold: { primary: "#f59e0b", secondary: "#d97706", accent: "#fef3c7" },
-    };
-    return themes[webcamTheme] || themes.blue;
-  };
-
   return (
     <div className="min-h-screen p-2 rounded-3xl bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 sm:p-4 md:p-8 sm:rounded-3xl">
       {/* Floating Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute w-32 h-32 rounded-full sm:w-48 sm:h-48 md:w-64 md:h-64 top-1/4 left-1/4 bg-gradient-to-r from-blue-400 to-purple-400 opacity-10 blur-3xl animate-pulse"></div>
-        <div className="absolute w-48 h-48 delay-1000 rounded-full bottom-1/4 right-1/4 sm:w-64 sm:h-64 md:w-96 md:h-96 bg-gradient-to-r from-purple-400 to-pink-400 opacity-10 blur-3xl animate-pulse"></div>
-        <div className="absolute w-24 h-24 rounded-full sm:w-32 sm:h-32 md:w-48 md:h-48 top-1/2 left-1/2 bg-gradient-to-r from-cyan-400 to-blue-400 opacity-10 blur-3xl animate-pulse delay-2000"></div>
+        <div className="absolute w-32 h-32 rounded-full sm:w-48 sm:h-48 md:w-64 md:h-64 top-1/4 left-1/4 bg-gradient-to-r from-blue-200 to-purple-200 opacity-10 blur-3xl animate-pulse"></div>
+        <div className="absolute w-48 h-48 delay-1000 rounded-full bottom-1/4 right-1/4 sm:w-64 sm:h-64 md:w-96 md:h-96 bg-gradient-to-r from-purple-200 to-pink-200 opacity-10 blur-3xl animate-pulse"></div>
+        <div className="absolute w-24 h-24 rounded-full sm:w-32 sm:h-32 md:w-48 md:h-48 top-1/2 left-1/2 bg-gradient-to-r from-cyan-200 to-blue-200 opacity-10 blur-3xl animate-pulse delay-2000"></div>
       </div>
 
       {/* Main Container */}
@@ -934,40 +806,6 @@ function QuestionsSection({
           </div>
         </div>
 
-        {/* Score Display */}
-        {showScore && (
-          <div className="p-4 mb-4 text-white shadow-2xl sm:p-6 sm:mb-6 md:p-8 floating-card glass-morphism rounded-2xl sm:rounded-3xl bg-gradient-to-br from-green-500 to-emerald-600">
-            <div className="text-center">
-              <div className="inline-block mb-3 sm:mb-4 bounce-icon">
-                <div className="flex items-center justify-center w-16 h-16 mx-auto rounded-full sm:w-20 sm:h-20 bg-white/20">
-                  <Award className="w-8 h-8 sm:w-10 sm:h-10" />
-                </div>
-              </div>
-              <h2 className="mb-2 text-2xl font-bold sm:text-3xl">
-                🎉 Interview Complete!
-              </h2>
-              <div className="mb-3 text-4xl font-bold sm:mb-4 sm:text-5xl md:text-6xl">
-                {calculateTotalScore()}%
-              </div>
-              <p className="text-lg sm:text-xl opacity-90">Total Score</p>
-              <div className="flex flex-col justify-center gap-3 mt-4 sm:flex-row sm:gap-4 sm:mt-6">
-                <div className="p-3 sm:p-4 bg-white/20 rounded-xl sm:rounded-2xl">
-                  <TrendingUp className="w-5 h-5 mx-auto mb-1 sm:w-6 sm:h-6 sm:mb-2" />
-                  <p className="text-xs sm:text-sm">Great Performance</p>
-                </div>
-                <div className="p-3 sm:p-4 bg-white/20 rounded-xl sm:rounded-2xl">
-                  <Zap className="w-5 h-5 mx-auto mb-1 sm:w-6 sm:h-6 sm:mb-2" />
-                  <p className="text-xs sm:text-sm">Time Efficient</p>
-                </div>
-                <div className="p-3 sm:p-4 bg-white/20 rounded-xl sm:rounded-2xl">
-                  <Target className="w-5 h-5 mx-auto mb-1 sm:w-6 sm:h-6 sm:mb-2" />
-                  <p className="text-xs sm:text-sm">All Questions</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Tips Section */}
         <div className="p-3 mb-4 sm:p-4 sm:mb-6 md:p-6 floating-card glass-morphism rounded-2xl sm:rounded-3xl bg-white/80 dark:bg-gray-800/80">
           <div className="flex items-center gap-3 mb-3 sm:gap-4 sm:mb-4">
@@ -1003,150 +841,6 @@ function QuestionsSection({
             </div>
           </div>
         </div>
-
-        {/* Screenshots Gallery */}
-        {screenshots.length > 0 && (
-          <div className="p-3 mb-4 sm:p-4 sm:mb-6 md:p-6 floating-card glass-morphism rounded-2xl sm:rounded-3xl bg-white/80 dark:bg-gray-800/80">
-            <div className="flex items-center gap-3 mb-3 sm:gap-4 sm:mb-4">
-              <div className="flex items-center justify-center w-8 h-8 text-white rounded-lg sm:w-10 sm:h-10 bg-gradient-to-br from-cyan-500 to-blue-600 sm:rounded-xl">
-                <Camera className="w-4 h-4 sm:w-5 sm:h-5" />
-              </div>
-              <h2 className="text-base font-semibold text-gray-800 sm:text-lg dark:text-white">
-                Screenshots ({screenshots.length})
-              </h2>
-            </div>
-            <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
-              {screenshots.map((screenshot) => (
-                <div key={screenshot.id} className="relative group">
-                  <img
-                    src={screenshot.image}
-                    alt={`Screenshot ${screenshot.id}`}
-                    className="object-cover w-full h-20 rounded-lg sm:h-24"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center transition-opacity duration-300 rounded-lg opacity-0 bg-black/50 group-hover:opacity-100">
-                    <button
-                      onClick={() => downloadScreenshot(screenshot)}
-                      className="p-1.5 sm:p-2 transition-colors duration-300 rounded-full bg-white/20 hover:bg-white/30"
-                    >
-                      <Download className="w-3 h-3 text-white sm:w-4 sm:h-4" />
-                    </button>
-                  </div>
-                  <div className="absolute px-1.5 py-0.5 sm:px-2 sm:py-1 text-xs text-white rounded bottom-1 left-1 bg-black/50">
-                    {screenshot.timestamp}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Floating Webcam */}
-        {webCamEnabled && (
-          <div
-            className={`webcam-container theme-${webcamTheme} size-${webcamSize} position-${webcamPosition} ${
-              isWebcamFullscreen ? "fullscreen" : ""
-            }`}
-          >
-            <Webcam
-              ref={setWebcamRef}
-              audio={false}
-              height="100%"
-              width="100%"
-              screenshotFormat="image/png"
-              videoConstraints={{
-                width: 1280,
-                height: 720,
-                facingMode: "user",
-              }}
-              className={`webcam-video ${
-                webcamFilter !== "none" ? `filter-${webcamFilter}` : ""
-              }`}
-              style={{
-                filter: `brightness(${webcamBrightness}%) contrast(${webcamContrast}%)`,
-              }}
-            />
-
-            {/* Recording Indicator */}
-            {isRecording && (
-              <div className="recording-indicator">
-                <div className="recording-dot"></div>
-                REC {Math.floor(recordingTime / 60)}:
-                {(recordingTime % 60).toString().padStart(2, "0")}
-              </div>
-            )}
-
-            {/* Face Detection Overlay */}
-            {faceDetected && eyeTrackingEnabled && (
-              <div className="face-detection-overlay">
-                <div
-                  className="face-box"
-                  style={{
-                    top: "20%",
-                    left: "25%",
-                    width: "50%",
-                    height: "60%",
-                  }}
-                >
-                  <div className="absolute left-0 text-xs font-medium text-green-400 -top-6">
-                    Face Detected
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Webcam Status */}
-            <div className="webcam-status">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                LIVE
-              </div>
-            </div>
-
-            {/* Webcam Controls */}
-            <div className="webcam-controls">
-              <button
-                onClick={takeScreenshot}
-                className="p-2 transition-colors duration-300 rounded-full bg-white/20 hover:bg-white/30"
-                title="Take Screenshot"
-              >
-                <Camera className="w-4 h-4 text-white" />
-              </button>
-              <button
-                onClick={isRecording ? stopRecording : startRecording}
-                className={`p-2 rounded-full transition-colors duration-300 ${
-                  isRecording
-                    ? "bg-red-500/80 hover:bg-red-500"
-                    : "bg-white/20 hover:bg-white/30"
-                }`}
-                title={isRecording ? "Stop Recording" : "Start Recording"}
-              >
-                {isRecording ? (
-                  <Pause className="w-4 h-4 text-white" />
-                ) : (
-                  <Play className="w-4 h-4 text-white" />
-                )}
-              </button>
-              <button
-                onClick={toggleWebcamFullscreen}
-                className="p-2 transition-colors duration-300 rounded-full bg-white/20 hover:bg-white/30"
-                title="Toggle Fullscreen"
-              >
-                {isWebcamFullscreen ? (
-                  <Minimize className="w-4 h-4 text-white" />
-                ) : (
-                  <Maximize className="w-4 h-4 text-white" />
-                )}
-              </button>
-              <button
-                onClick={() => setShowWebcamControls(!showWebcamControls)}
-                className="p-2 transition-colors duration-300 rounded-full bg-white/20 hover:bg-white/30"
-                title="Settings"
-              >
-                <Settings className="w-4 h-4 text-white" />
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

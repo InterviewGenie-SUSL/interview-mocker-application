@@ -2,7 +2,6 @@
 import React from "react";
 import Header from "./_components/Header";
 import PageTransition from "../_components/PageTransition";
-import PageWrapper from "../_components/PageWrapper";
 import { AnimatePresence } from "framer-motion";
 
 function DashboardLayout({ children }) {
@@ -12,9 +11,7 @@ function DashboardLayout({ children }) {
 
       <div className="mx-5 md:mx-20 lg:mx-36">
         <AnimatePresence mode="wait">
-          <PageWrapper>
-            <PageTransition>{children}</PageTransition>
-          </PageWrapper>
+          <PageTransition>{children}</PageTransition>
         </AnimatePresence>
       </div>
     </div>

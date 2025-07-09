@@ -8,33 +8,34 @@ const PageWrapper = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    // Reduced artificial delay from 300ms to 100ms for faster navigation
     setIsLoading(true);
-    const timer = setTimeout(() => setIsLoading(false), 300);
+    const timer = setTimeout(() => setIsLoading(false), 100);
     return () => clearTimeout(timer);
   }, [pathname]);
 
   const pageVariants = {
     initial: {
       opacity: 0,
-      x: 20,
-      scale: 0.98,
+      y: 10,
+      scale: 0.99,
     },
     in: {
       opacity: 1,
-      x: 0,
+      y: 0,
       scale: 1,
     },
     out: {
       opacity: 0,
-      x: -20,
-      scale: 0.98,
+      y: -10,
+      scale: 0.99,
     },
   };
 
   const pageTransition = {
     type: "tween",
-    ease: "anticipate",
-    duration: 0.4,
+    ease: "easeOut", // Changed from "anticipate" for smoother animation
+    duration: 0.2, // Reduced from 0.4 for faster transitions
   };
 
   const loadingVariants = {
@@ -42,7 +43,7 @@ const PageWrapper = ({ children }) => {
     visible: {
       opacity: 1,
       transition: {
-        duration: 0.2,
+        duration: 0.1, // Reduced from 0.2
       },
     },
   };
@@ -53,14 +54,14 @@ const PageWrapper = ({ children }) => {
         variants={loadingVariants}
         initial="hidden"
         animate="visible"
-        className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900"
+        className="min-h-[200px] flex items-center justify-center" // Reduced min-height for faster loading appearance
       >
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4 animate-spin" />
+          <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full mx-auto mb-2 animate-spin" />
           <motion.p
             animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="text-gray-600 dark:text-gray-300 font-medium"
+            transition={{ duration: 1, repeat: Infinity }} // Reduced from 1.5
+            className="text-gray-600 dark:text-gray-300 text-sm"
           >
             Loading...
           </motion.p>
