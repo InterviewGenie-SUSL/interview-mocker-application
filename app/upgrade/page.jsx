@@ -28,9 +28,11 @@ const UpgradePage = () => {
       description: "Perfect for getting started",
       features: [
         "5 mock interviews per month",
+        "5 questions per interview",
         "Basic AI feedback",
         "Standard question bank",
         "Email support",
+        "Basic performance tracking",
       ],
       buttonText: "Current Plan",
       buttonVariant: "outline",
@@ -43,12 +45,15 @@ const UpgradePage = () => {
       description: "Best for serious job seekers",
       features: [
         "Unlimited mock interviews",
-        "Advanced AI feedback",
+        "Unlimited questions per interview",
+        "Advanced AI feedback with detailed analysis",
         "Industry-specific questions",
-        "Performance analytics",
+        "Performance analytics & insights",
         "Video recording & playback",
         "Priority support",
         "Custom interview scenarios",
+        "Export interview reports",
+        "Advanced speech recognition",
       ],
       buttonText: "Upgrade to Pro",
       buttonVariant: "default",
@@ -239,6 +244,123 @@ const UpgradePage = () => {
                 </p>
               </motion.div>
             ))}
+          </div>
+        </motion.div>
+
+        {/* Feature Comparison Table */}
+        <motion.div variants={itemVariants} className="mt-16">
+          <h2 className="mb-8 text-3xl font-bold text-center">
+            Feature Comparison
+          </h2>
+          <div className="overflow-hidden bg-white rounded-2xl shadow-xl dark:bg-gray-800">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50 dark:bg-gray-700">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Feature
+                    </th>
+                    <th className="px-6 py-4 text-center text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Free
+                    </th>
+                    <th className="px-6 py-4 text-center text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      <span className="inline-flex items-center gap-1">
+                        Pro <Crown className="w-4 h-4 text-yellow-500" />
+                      </span>
+                    </th>
+                    <th className="px-6 py-4 text-center text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Enterprise
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
+                  {[
+                    {
+                      feature: "Questions per interview",
+                      free: "5",
+                      pro: "Unlimited",
+                      enterprise: "Unlimited",
+                    },
+                    {
+                      feature: "Mock interviews per month",
+                      free: "5",
+                      pro: "Unlimited",
+                      enterprise: "Unlimited",
+                    },
+                    {
+                      feature: "AI feedback",
+                      free: "Basic",
+                      pro: "Advanced",
+                      enterprise: "Advanced",
+                    },
+                    {
+                      feature: "Video recording",
+                      free: "✗",
+                      pro: "✓",
+                      enterprise: "✓",
+                    },
+                    {
+                      feature: "Performance analytics",
+                      free: "Basic",
+                      pro: "Advanced",
+                      enterprise: "Advanced",
+                    },
+                    {
+                      feature: "Custom scenarios",
+                      free: "✗",
+                      pro: "✓",
+                      enterprise: "✓",
+                    },
+                    {
+                      feature: "Export reports",
+                      free: "✗",
+                      pro: "✓",
+                      enterprise: "✓",
+                    },
+                    {
+                      feature: "Priority support",
+                      free: "✗",
+                      pro: "✓",
+                      enterprise: "✓",
+                    },
+                    {
+                      feature: "Team management",
+                      free: "✗",
+                      pro: "✗",
+                      enterprise: "✓",
+                    },
+                    {
+                      feature: "API access",
+                      free: "✗",
+                      pro: "✗",
+                      enterprise: "✓",
+                    },
+                  ].map((row, index) => (
+                    <tr
+                      key={index}
+                      className={
+                        index % 2 === 0
+                          ? "bg-white dark:bg-gray-800"
+                          : "bg-gray-50 dark:bg-gray-700"
+                      }
+                    >
+                      <td className="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                        {row.feature}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-center text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                        {row.free}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-center text-blue-600 dark:text-blue-400 whitespace-nowrap font-medium">
+                        {row.pro}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-center text-purple-600 dark:text-purple-400 whitespace-nowrap font-medium">
+                        {row.enterprise}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </motion.div>
       </div>
