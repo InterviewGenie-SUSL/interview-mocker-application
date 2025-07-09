@@ -348,7 +348,7 @@ function StartInterview() {
                 style={{
                   padding: "12px 24px",
                   border: "none",
-                  borderRadius: "16px",
+                  borderRadius: "25px",
                   background:
                     activeQuestionIndex === 0
                       ? "linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%)"
@@ -390,14 +390,15 @@ function StartInterview() {
               (mockInterviewQuestion?.length || 0) - 1 ? (
                 <button
                   onClick={() => {
-                    // Add finish interview logic here
-                    alert("Interview Finished!");
+                    router.push(
+                      `/dashboard/interview/${params.interviewId}/finish`
+                    );
                   }}
                   className="flex items-center gap-3 px-6 py-3 font-semibold text-white transition-all duration-300 hover-lift rounded-2xl bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
                   style={{
                     padding: "12px 24px",
                     border: "none",
-                    borderRadius: "16px",
+                    borderRadius: "25px",
                     background:
                       "linear-gradient(135deg, #10b981 0%, #059669 100%)",
                     color: "#ffffff",
@@ -451,7 +452,7 @@ function StartInterview() {
                   style={{
                     padding: "12px 24px",
                     border: "none",
-                    borderRadius: "16px",
+                    borderRadius: "25px",
                     background:
                       activeQuestionIndex ===
                       (mockInterviewQuestion?.length || 0) - 1

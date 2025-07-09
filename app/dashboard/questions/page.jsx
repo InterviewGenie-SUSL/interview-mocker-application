@@ -910,7 +910,7 @@ function QuestionsPage() {
 
                             <motion.button
                               onClick={() => handleStartPractice(question.id)}
-                              className="flex items-center gap-2 px-4 py-2 text-white transition-colors duration-300 bg-blue-500 rounded-lg hover:bg-blue-600"
+                              className="flex items-center gap-2 px-4 py-2 text-white transition-colors duration-300 bg-blue-500 rounded-3xl hover:bg-blue-600"
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
                             >
