@@ -18,7 +18,15 @@ const FloatingActionButton = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
 
   const actions = [
-   
+    {
+      icon: Plus,
+      label: "New Interview",
+      color: "from-blue-500 to-indigo-500",
+      onClick: () => {
+        setShowAddDialog(true);
+        setIsOpen(false);
+      },
+    },
     {
       icon: Zap,
       label: "Questions",
@@ -147,11 +155,9 @@ const FloatingActionButton = () => {
         </AnimatePresence>
       </div>
 
-      {/* Add Interview Dialog */}
+      {/* AddNewInterview Dialog */}
       {showAddDialog && (
-        <div className="hidden">
-          <AddNewInterview />
-        </div>
+        <AddNewInterview onClose={() => setShowAddDialog(false)} />
       )}
     </>
   );
