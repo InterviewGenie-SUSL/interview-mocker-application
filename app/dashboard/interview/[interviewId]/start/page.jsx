@@ -61,18 +61,10 @@ function StartInterview() {
     }
   }, [mockInterviewQuestion, interviewStartTime]);
 
-  // Track question timing
+  // Track question timing only when active question changes
   useEffect(() => {
-    if (currentQuestionStartTime) {
-      const questionTime = Date.now() - currentQuestionStartTime;
-      setQuestionTimes((prev) => {
-        const newTimes = [...prev];
-        newTimes[activeQuestionIndex] = questionTime;
-        return newTimes;
-      });
-      setCurrentQuestionStartTime(Date.now());
-    }
-  }, [activeQuestionIndex, currentQuestionStartTime]);
+    setCurrentQuestionStartTime(Date.now());
+  }, [activeQuestionIndex]);
 
   const formatTime = (milliseconds) => {
     const seconds = Math.floor(milliseconds / 1000);
@@ -131,6 +123,11 @@ function StartInterview() {
       );
     }
   }, [mockInterviewQuestion]);
+
+  useEffect(() => {
+    // When the active question changes, set the start time for the new question
+    setCurrentQuestionStartTime(Date.now());
+  }, [activeQuestionIndex]);
 
   if (loading) {
     return (
@@ -390,8 +387,8 @@ function StartInterview() {
               (mockInterviewQuestion?.length || 0) - 1 ? (
                 <button
                   onClick={() => {
-                    // Add finish interview logic here
-                    alert("Interview Finished!");
+                    // Navigate to finish page
+                    router.push(`/dashboard/interview/${params.interviewId}/finish`);
                   }}
                   className="flex items-center gap-3 px-6 py-3 font-semibold text-white transition-all duration-300 hover-lift rounded-2xl bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
                   style={{
