@@ -119,98 +119,41 @@ function RecordAnswerSection({
         return;
       }
 
-      // Generate dummy feedback and rating immediately
-      const excellentFeedbacks = [
-        "Outstanding answer! You demonstrated exceptional technical knowledge and articulated your thoughts with remarkable clarity. Your structured approach and real-world insights show deep expertise.",
-        "Brilliant response! Your comprehensive understanding and excellent communication skills really shine through. You've covered all the key aspects with impressive detail.",
-        "Exceptional work! Your answer shows both theoretical knowledge and practical experience. The way you explained complex concepts was clear and engaging.",
-        "Superb answer! You've demonstrated mastery of the subject matter with excellent examples and clear reasoning. Your communication style is professional and confident.",
-      ];
+      // Generate feedback using AI
+      console.log("Getting AI feedback for answer...");
 
-      const goodFeedbacks = [
-        "Great answer! You demonstrated strong technical knowledge and clear communication skills. Your explanation was well-structured and easy to follow.",
-        "Good job! You covered the key points effectively. Consider adding more specific examples to strengthen your response next time.",
-        "Solid answer! You showed good understanding of the concept. Try to be more concise while maintaining the depth of your explanation.",
-        "Well done! You articulated your thoughts clearly and provided relevant details. This shows strong preparation and knowledge.",
-        "Nice work! Your answer demonstrates practical experience and theoretical understanding. Consider adding more real-world examples.",
-      ];
+      let feedback = "Feedback not available";
+      let rating = "5";
 
-      const fairFeedbacks = [
-        "Good effort! You covered the main points well. Focus on being more specific with examples to make your answers even stronger.",
-        "Fair response! You have the right foundation. Try to elaborate more on your points and provide concrete examples to enhance your answer.",
-        "Decent answer! You understand the basics well. Work on providing more detailed explanations and real-world applications.",
-        "Good attempt! Your knowledge is solid. Consider structuring your response more clearly and adding specific examples to improve impact.",
-      ];
+      try {
+        // Call the feedback API to get AI-generated feedback
+        const feedbackResponse = await fetch("/api/feedback", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userAnswer: answer.trim(),
+            correctAnswer: currentQ.answer || "No reference answer available",
+          }),
+        });
 
-      const needsImprovementFeedbacks = [
-        "Your answer shows some understanding, but could benefit from more detail and structure. Try to elaborate on your main points with specific examples.",
-        "You're on the right track, but your response needs more depth. Focus on providing comprehensive explanations and relevant examples.",
-        "Good foundation, but your answer could be stronger. Work on developing your points more thoroughly and backing them up with examples.",
-        "Your basic understanding is evident, but try to expand your answers with more detail and practical examples to demonstrate deeper knowledge.",
-      ];
-
-      let feedback, rating;
-      const answerLength = answer.trim().length;
-      const wordCount = answer.trim().split(/\s+/).length;
-
-      // Determine feedback based on answer characteristics
-      if (answerLength < 30) {
-        // Very short answers
+        if (feedbackResponse.ok) {
+          const feedbackData = await feedbackResponse.json();
+          feedback = feedbackData.feedback || "No feedback generated";
+          rating = feedbackData.rating || "5";
+          console.log("AI feedback received:", { feedback, rating });
+        } else {
+          console.warn("Feedback API failed, using default values");
+        }
+      } catch (feedbackError) {
+        console.error("Error getting feedback:", feedbackError);
         feedback =
-          needsImprovementFeedbacks[
-            Math.floor(Math.random() * needsImprovementFeedbacks.length)
-          ];
-        rating = Math.random() > 0.5 ? "4" : "5";
-      } else if (answerLength < 80) {
-        // Short answers
-        feedback =
-          fairFeedbacks[Math.floor(Math.random() * fairFeedbacks.length)];
-        rating = Math.random() > 0.5 ? "6" : "7";
-      } else if (answerLength < 200) {
-        // Good length answers
-        feedback =
-          goodFeedbacks[Math.floor(Math.random() * goodFeedbacks.length)];
-        rating = Math.random() > 0.3 ? "8" : "7";
-      } else {
-        // Comprehensive answers
-        feedback =
-          excellentFeedbacks[
-            Math.floor(Math.random() * excellentFeedbacks.length)
-          ];
-        rating = Math.random() > 0.7 ? "9" : "8";
+          "Unable to generate feedback at this time. Please try again.";
+        rating = "5";
       }
 
-      // Add some randomness for realism
-      if (Math.random() > 0.9) {
-        // 10% chance to boost score by 1
-        rating = Math.min(10, parseInt(rating) + 1).toString();
-      }
-
-      console.log("Generated dummy feedback:", {
-        answerLength,
-        wordCount,
-        feedback: feedback.substring(0, 50) + "...",
-        rating,
-      });
-
-      const payload = {
-        mockId: interviewId,
-        question: currentQ.question || "No question available",
-        correctAns: currentQ.answer || "No answer available",
-        userAns: answer.trim(),
-        feedback: feedback,
-        rating: rating,
-        userEmail: "",
-        createdAt: new Date().toISOString(),
-      };
-
-      // Simulate a short delay for realism (like processing time)
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Immediately show success and update answers state with dummy data
-      setSaveSuccess(true);
-
-      // Create the answer object
+      // Prepare the answer object
       const answerObject = {
         mockId: interviewId,
         question: currentQ.question || "No question available",
@@ -218,18 +161,39 @@ function RecordAnswerSection({
         userAns: answer.trim(),
         feedback: feedback,
         rating: rating,
-        userEmail: "",
+        userEmail: "", // TODO: Get from auth context if available
         createdAt: new Date().toISOString(),
       };
 
-      // Update local state
+      // Save to database via API
+      console.log("Saving answer to database...");
+      const response = await fetch("/api/answers", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(answerObject),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to save answer");
+      }
+
+      const result = await response.json();
+      console.log("Answer saved successfully:", result);
+
+      // Show success and update local state
+      setSaveSuccess(true);
+
+      // Update local state for immediate UI update
       setAnswers((prev) => {
         const updated = [...prev];
         updated[activeQuestionIndex] = { answer, feedback, rating };
         return updated;
       });
 
-      // Store in localStorage for the finish page
+      // Store in localStorage as backup for the finish page
       const existingAnswers = JSON.parse(
         localStorage.getItem(`interview_${interviewId}_answers`) || "[]"
       );
@@ -242,9 +206,9 @@ function RecordAnswerSection({
       // Clear the answer input for next question
       setUserAnswer("");
 
-      console.log("Answer saved with dummy feedback:", {
+      console.log("Answer processed successfully:", {
         answer: answer.substring(0, 50) + "...",
-        feedback,
+        feedback: feedback.substring(0, 50) + "...",
         rating,
       });
     } catch (e) {
@@ -463,7 +427,7 @@ function RecordAnswerSection({
             >
               ⚡
             </div>
-            Analyzing & Generating Feedback...
+            Getting AI Feedback...
           </>
         ) : !isMicEnabled ? (
           "Enable Microphone"

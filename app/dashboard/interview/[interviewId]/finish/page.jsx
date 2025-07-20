@@ -2,51 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 
-// Generate dummy interview data
-function generateDummyAnswers() {
-  const dummyQuestions = [
-    "Tell me about yourself and your background.",
-    "What are your greatest strengths?",
-    "Where do you see yourself in 5 years?",
-    "Why do you want to work for this company?",
-    "Describe a challenging project you worked on.",
-  ];
-
-  const dummyUserAnswers = [
-    "I am a passionate software developer with 3 years of experience in full-stack development. I have worked with technologies like React, Node.js, and Python. I enjoy solving complex problems and creating user-friendly applications.",
-    "My greatest strengths are problem-solving and attention to detail. I have a strong analytical mindset and can break down complex issues into manageable parts. I'm also a good team player and communicate effectively.",
-    "In 5 years, I see myself as a senior developer leading a team of talented engineers. I want to mentor junior developers and contribute to innovative projects that make a real impact on users' lives.",
-    "I'm impressed by your company's commitment to innovation and employee growth. Your recent projects in AI and machine learning align perfectly with my interests, and I believe I can contribute significantly to your team.",
-    "I led the development of an e-commerce platform that had to handle high traffic during peak sales. We implemented load balancing and optimized database queries, resulting in 40% faster page load times.",
-  ];
-
-  const dummyModelAnswers = [
-    "A strong self-introduction should highlight your relevant experience, key skills, and what makes you unique. Focus on achievements that relate to the role you're applying for.",
-    "Identify 2-3 core strengths that are relevant to the position. Provide specific examples of how these strengths have helped you succeed in previous roles or projects.",
-    "Show ambition while being realistic. Mention specific skills you want to develop and how this role fits into your career progression. Demonstrate long-term thinking.",
-    "Research the company thoroughly. Mention specific projects, values, or initiatives that resonate with you. Explain how your skills align with their needs and goals.",
-    "Use the STAR method (Situation, Task, Action, Result). Choose a project that demonstrates problem-solving, leadership, or technical skills relevant to the position.",
-  ];
-
-  const dummyFeedbacks = [
-    "Excellent answer! You provided a clear and concise overview of your background with specific technical details. Your passion for development comes through strongly.",
-    "Great response! You identified relevant strengths and provided good context. Consider adding more specific examples of how these strengths led to measurable outcomes.",
-    "Good answer showing ambition and forward thinking. You demonstrated understanding of career progression and how this role fits your goals.",
-    "Solid response showing you've researched the company. Your enthusiasm is evident and you made good connections between your skills and their needs.",
-    "Outstanding example! You used a structured approach and provided specific metrics. This demonstrates both technical skills and business impact awareness.",
-  ];
-
-  const dummyRatings = [8, 7, 8, 7, 9];
-
-  return dummyQuestions.map((question, index) => ({
-    question,
-    userAns: dummyUserAnswers[index],
-    correctAns: dummyModelAnswers[index],
-    feedback: dummyFeedbacks[index],
-    rating: dummyRatings[index].toString(),
-  }));
-}
-
 export default function FinishInterviewPage() {
   const router = useRouter();
   const params = useParams();
@@ -104,74 +59,98 @@ export default function FinishInterviewPage() {
   useEffect(() => {
     if (!mockId) {
       console.error("No mockId found");
+      setLoading(false);
       return;
     }
 
     console.log("Fetching data for mockId:", mockId);
 
-    // Simulate loading delay for realism
-    setTimeout(() => {
+    async function loadInterviewData() {
       try {
-        // First check localStorage for recorded answers
-        const storageKey = `interview_${mockId}_answers`;
-        console.log("Checking localStorage key:", storageKey);
+        // First try to get data from the API (database)
+        console.log("Fetching answers from database...");
+        const response = await fetch(`/api/answers?mockId=${mockId}`);
+        let answersToUse = [];
 
-        const storedAnswers = JSON.parse(
-          localStorage.getItem(storageKey) || "[]"
-        );
+        if (response.ok) {
+          const dbAnswers = await response.json();
+          console.log("Database answers:", dbAnswers);
 
-        console.log("Stored answers:", storedAnswers);
+          if (dbAnswers && dbAnswers.length > 0) {
+            // Convert database format to component format
+            answersToUse = dbAnswers.map((answer) => ({
+              question: answer.question,
+              userAns: answer.userAns,
+              correctAns: answer.correctAns,
+              feedback: answer.feedback,
+              rating: answer.rating,
+            }));
+            console.log("Using database answers:", answersToUse.length);
+          }
+        }
 
-        let answersToUse;
-        if (storedAnswers.length > 0) {
-          // Use actual recorded answers
-          answersToUse = storedAnswers.filter(Boolean); // Remove any null/undefined entries
-          console.log("Using recorded answers:", answersToUse.length);
-        } else {
-          // Fall back to dummy data if no answers recorded
-          answersToUse = generateDummyAnswers();
-          console.log("Using dummy answers:", answersToUse.length);
+        // If no database answers, try localStorage as fallback
+        if (answersToUse.length === 0) {
+          const storageKey = `interview_${mockId}_answers`;
+          console.log("Checking localStorage key:", storageKey);
+
+          const storedAnswers = JSON.parse(
+            localStorage.getItem(storageKey) || "[]"
+          );
+
+          console.log("Stored answers:", storedAnswers);
+
+          if (storedAnswers.length > 0) {
+            // Use actual recorded answers from localStorage
+            answersToUse = storedAnswers.filter(Boolean).map((answer) => ({
+              question: answer.question,
+              userAns: answer.userAns,
+              correctAns: answer.correctAns,
+              feedback: answer.feedback,
+              rating: answer.rating,
+            }));
+            console.log("Using localStorage answers:", answersToUse.length);
+          }
+        }
+
+        // If still no answers, show empty state
+        if (answersToUse.length === 0) {
+          console.log("No answers found for this interview");
+          setUserAnswers([]);
+          setOverallScore(0);
+          setLoading(false);
+          return;
         }
 
         setUserAnswers(answersToUse);
 
         // Calculate overall score
-        if (answersToUse.length > 0) {
-          const totalScore = answersToUse.reduce((sum, answer) => {
-            const rating = parseInt(answer.rating) || 0;
-            return sum + rating;
-          }, 0);
-          const avgScore =
-            Math.round((totalScore / answersToUse.length) * 10) / 10;
-          setOverallScore(avgScore);
-          console.log("Calculated overall score:", avgScore);
-
-          // Initialize all questions as collapsed by default
-          const initialExpanded = {};
-          answersToUse.forEach((_, index) => {
-            initialExpanded[index] = false;
-          });
-          setExpandedQuestions(initialExpanded);
-        }
-
-        setLoading(false);
-      } catch (error) {
-        console.error("Error processing interview data:", error);
-        // Fallback to dummy data on any error
-        const dummyData = generateDummyAnswers();
-        setUserAnswers(dummyData);
-        setOverallScore(7.8); // Default score
+        const totalScore = answersToUse.reduce((sum, answer) => {
+          const rating = parseInt(answer.rating) || 0;
+          return sum + rating;
+        }, 0);
+        const avgScore =
+          Math.round((totalScore / answersToUse.length) * 10) / 10;
+        setOverallScore(avgScore);
+        console.log("Calculated overall score:", avgScore);
 
         // Initialize all questions as collapsed by default
         const initialExpanded = {};
-        dummyData.forEach((_, index) => {
+        answersToUse.forEach((_, index) => {
           initialExpanded[index] = false;
         });
         setExpandedQuestions(initialExpanded);
 
         setLoading(false);
+      } catch (error) {
+        console.error("Error loading interview data:", error);
+        setUserAnswers([]);
+        setOverallScore(0);
+        setLoading(false);
       }
-    }, 1500);
+    }
+
+    loadInterviewData();
   }, [mockId]);
 
   const getScoreColor = (score) => {
@@ -222,9 +201,78 @@ export default function FinishInterviewPage() {
             animation: "spin 1s linear infinite",
           }}
         ></div>
-        <div>Analyzing your interview performance...</div>
+        <div>Loading your interview results...</div>
         <div style={{ fontSize: "0.9rem", opacity: "0.7" }}>
-          Generating feedback and calculating scores
+          Fetching answers and feedback
+        </div>
+      </div>
+    );
+  }
+
+  // Show empty state if no answers found
+  if (!userAnswers || userAnswers.length === 0) {
+    return (
+      <div
+        style={{
+          maxWidth: "600px",
+          margin: "40px auto",
+          padding: "24px",
+          fontFamily: "system-ui, -apple-system, sans-serif",
+          textAlign: "center",
+        }}
+      >
+        <div
+          style={{
+            padding: "48px 32px",
+            backgroundColor: "#f9fafb",
+            borderRadius: "16px",
+            border: "2px solid #e5e7eb",
+          }}
+        >
+          <div style={{ fontSize: "4rem", marginBottom: "24px" }}>📝</div>
+          <h1
+            style={{
+              fontSize: "2rem",
+              fontWeight: "600",
+              marginBottom: "16px",
+              color: "#1f2937",
+            }}
+          >
+            No Interview Data Found
+          </h1>
+          <p
+            style={{
+              fontSize: "1.1rem",
+              color: "#6b7280",
+              marginBottom: "32px",
+              lineHeight: "1.6",
+            }}
+          >
+            It looks like no answers were recorded for this interview session.
+            Please complete an interview first to see your results here.
+          </p>
+          <button
+            onClick={() => router.push("/dashboard")}
+            style={{
+              padding: "12px 24px",
+              backgroundColor: "#3b82f6",
+              color: "white",
+              border: "none",
+              borderRadius: "8px",
+              fontSize: "1rem",
+              fontWeight: "500",
+              cursor: "pointer",
+              transition: "background-color 0.2s ease",
+            }}
+            onMouseOver={(e) => {
+              e.target.style.backgroundColor = "#2563eb";
+            }}
+            onMouseOut={(e) => {
+              e.target.style.backgroundColor = "#3b82f6";
+            }}
+          >
+            Return to Dashboard
+          </button>
         </div>
       </div>
     );

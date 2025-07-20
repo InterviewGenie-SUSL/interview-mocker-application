@@ -61,18 +61,19 @@ function StartInterview() {
     }
   }, [mockInterviewQuestion, interviewStartTime]);
 
-  // Track question timing
+  // Track question timing when moving to next question
   useEffect(() => {
-    if (currentQuestionStartTime) {
+    if (currentQuestionStartTime && activeQuestionIndex > 0) {
       const questionTime = Date.now() - currentQuestionStartTime;
       setQuestionTimes((prev) => {
         const newTimes = [...prev];
-        newTimes[activeQuestionIndex] = questionTime;
+        newTimes[activeQuestionIndex - 1] = questionTime; // Store time for previous question
         return newTimes;
       });
-      setCurrentQuestionStartTime(Date.now());
     }
-  }, [activeQuestionIndex, currentQuestionStartTime]);
+    // Set start time for current question
+    setCurrentQuestionStartTime(Date.now());
+  }, [activeQuestionIndex]);
 
   const formatTime = (milliseconds) => {
     const seconds = Math.floor(milliseconds / 1000);
