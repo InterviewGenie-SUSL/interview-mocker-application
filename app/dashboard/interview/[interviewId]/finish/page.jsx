@@ -2,9 +2,25 @@
 import React, { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 
+async function fetchQuestions(mockId) {
+  const res = await fetch(`/api/interview-questions?mockId=${mockId}`);
+  if (!res.ok) return [];
+  return res.json();
+}
+
 async function fetchUserAnswers(mockId) {
   const res = await fetch(`/api/answers?mockId=${mockId}`);
   if (!res.ok) return [];
+  return res.json();
+}
+
+async function fetchFeedback(userAnswer, correctAnswer) {
+  const res = await fetch(`/api/feedback`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userAnswer, correctAnswer })
+  });
+  if (!res.ok) return { feedback: "No feedback generated.", rating: "1" };
   return res.json();
 }
 
@@ -12,23 +28,47 @@ export default function FinishInterviewPage() {
   const router = useRouter();
   const params = useParams();
   const mockId = params.interviewId || params.id;
-  const [userAnswers, setUserAnswers] = useState([]);
+  const [mergedAnswers, setMergedAnswers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [overallScore, setOverallScore] = useState(0);
 
   useEffect(() => {
     if (!mockId) return;
     (async () => {
-      const answers = await fetchUserAnswers(mockId);
-      setUserAnswers(answers);
+      // Fetch all questions and user answers
+      const [questions, answers] = await Promise.all([
+        fetchQuestions(mockId),
+        fetchUserAnswers(mockId)
+      ]);
+
+      // Merge questions with answers
+      const merged = await Promise.all(
+        questions.map(async (q, idx) => {
+          const answerObj = answers.find(a => a.question === q.question);
+          if (answerObj) {
+            return answerObj;
+          } else {
+            // No answer, generate feedback for empty answer
+            const feedbackData = await fetchFeedback("", q.answer);
+            return {
+              question: q.question,
+              correctAns: q.answer,
+              userAns: "empty answer",
+              feedback: feedbackData.feedback,
+              rating: feedbackData.rating
+            };
+          }
+        })
+      );
+      setMergedAnswers(merged);
 
       // Calculate overall score
-      if (answers.length > 0) {
-        const totalScore = answers.reduce((sum, answer) => {
+      if (merged.length > 0) {
+        const totalScore = merged.reduce((sum, answer) => {
           const rating = parseInt(answer.rating) || 0;
           return sum + rating;
         }, 0);
-        const avgScore = Math.round((totalScore / answers.length) * 10) / 10;
+        const avgScore = Math.round((totalScore / merged.length) * 10) / 10;
         setOverallScore(avgScore);
       }
 
@@ -145,7 +185,7 @@ export default function FinishInterviewPage() {
         Detailed Results
       </h2>
 
-      {userAnswers.map((a, i) => (
+      {mergedAnswers.map((a, i) => (
         <div
           key={i}
           style={{
@@ -310,7 +350,7 @@ export default function FinishInterviewPage() {
           <div
             style={{ fontSize: "2rem", fontWeight: "700", color: "#1e40af" }}
           >
-            {userAnswers.length}
+            {mergedAnswers.length}
           </div>
           <div style={{ color: "#6b7280" }}>Questions Answered</div>
         </div>
@@ -326,7 +366,7 @@ export default function FinishInterviewPage() {
           <div
             style={{ fontSize: "2rem", fontWeight: "700", color: "#16a34a" }}
           >
-            {userAnswers.filter((a) => parseInt(a.rating) >= 7).length}
+            {mergedAnswers.filter((a) => parseInt(a.rating) >= 7).length}
           </div>
           <div style={{ color: "#6b7280" }}>Strong Answers</div>
         </div>
@@ -349,6 +389,26 @@ export default function FinishInterviewPage() {
       </div>
 
       <div style={{ textAlign: "center" }}>
+        <button
+          onClick={() => router.push(`/dashboard/interview/feedback?interviewId=${mockId}`)}
+          style={{
+            padding: "16px 32px",
+            background: "linear-gradient(135deg, #16a34a 0%, #22d3ee 100%)",
+            color: "#fff",
+            border: "none",
+            borderRadius: "12px",
+            fontWeight: "600",
+            fontSize: "1.1rem",
+            cursor: "pointer",
+            boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
+            marginRight: "16px",
+            transition: "transform 0.2s ease",
+          }}
+          onMouseOver={(e) => (e.target.style.transform = "translateY(-2px)")}
+          onMouseOut={(e) => (e.target.style.transform = "translateY(0px)")}
+        >
+          View Feedback
+        </button>
         <button
           onClick={() => router.push("/dashboard")}
           style={{
