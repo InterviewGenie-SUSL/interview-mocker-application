@@ -72,6 +72,8 @@ function StartInterview() {
       });
     }
     // Set start time for current question
+  // Track question timing only when active question changes
+  useEffect(() => {
     setCurrentQuestionStartTime(Date.now());
   }, [activeQuestionIndex]);
 
@@ -132,6 +134,11 @@ function StartInterview() {
       );
     }
   }, [mockInterviewQuestion]);
+
+  useEffect(() => {
+    // When the active question changes, set the start time for the new question
+    setCurrentQuestionStartTime(Date.now());
+  }, [activeQuestionIndex]);
 
   if (loading) {
     return (
@@ -394,6 +401,8 @@ function StartInterview() {
                     router.push(
                       `/dashboard/interview/${params.interviewId}/finish`
                     );
+                    // Navigate to finish page
+                    router.push(`/dashboard/interview/${params.interviewId}/finish`);
                   }}
                   className="flex items-center gap-3 px-6 py-3 font-semibold text-white transition-all duration-300 hover-lift rounded-2xl bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
                   style={{
