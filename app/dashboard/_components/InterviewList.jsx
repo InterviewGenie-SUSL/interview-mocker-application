@@ -16,6 +16,7 @@ import {
   BookOpen,
   Eye,
   MoreVertical,
+  MessageSquare,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -56,10 +57,10 @@ const InterviewCard = ({ interview, index, onDelete }) => {
     <motion.div
       variants={cardVariants}
       whileHover="hover"
-      className="group relative overflow-hidden rounded-2xl bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-all duration-500"
+      className="relative overflow-hidden transition-all duration-500 bg-white border border-gray-200 shadow-lg group rounded-2xl dark:bg-gray-800 dark:border-gray-700 hover:shadow-2xl"
     >
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className="absolute inset-0 transition-opacity duration-500 opacity-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-indigo-500/5 group-hover:opacity-100" />
 
       {/* Content */}
       <div className="relative p-6">
@@ -67,12 +68,12 @@ const InterviewCard = ({ interview, index, onDelete }) => {
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
             <motion.h3
-              className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors duration-300 line-clamp-2"
+              className="text-xl font-bold text-gray-900 transition-colors duration-300 dark:text-white group-hover:text-blue-600 line-clamp-2"
               whileHover={{ scale: 1.02 }}
             >
               {interview.jobPosition}
             </motion.h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
+            <p className="mt-1 text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
               {interview.jobDesc}
             </p>
           </div>
@@ -83,7 +84,7 @@ const InterviewCard = ({ interview, index, onDelete }) => {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={() => setShowOptions(!showOptions)}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+              className="p-2 transition-colors duration-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <MoreVertical className="w-4 h-4 text-gray-400" />
             </motion.button>
@@ -94,20 +95,20 @@ const InterviewCard = ({ interview, index, onDelete }) => {
                   initial={{ opacity: 0, scale: 0.8, y: -10 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.8, y: -10 }}
-                  className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-10"
+                  className="absolute right-0 z-10 w-48 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl top-full dark:bg-gray-800 dark:border-gray-700"
                 >
                   <div className="p-2">
-                    <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors">
+                    <button className="flex items-center w-full gap-2 px-3 py-2 text-sm text-gray-700 transition-colors rounded-md dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                       <Eye className="w-4 h-4" />
                       View Details
                     </button>
-                    <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors">
+                    <button className="flex items-center w-full gap-2 px-3 py-2 text-sm text-gray-700 transition-colors rounded-md dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                       <Edit3 className="w-4 h-4" />
                       Edit
                     </button>
                     <button
                       onClick={() => onDelete(interview.mockId)}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors"
+                      className="flex items-center w-full gap-2 px-3 py-2 text-sm text-red-600 transition-colors rounded-md hover:bg-red-50 dark:hover:bg-red-900/20"
                     >
                       <Trash2 className="w-4 h-4" />
                       Delete
@@ -128,19 +129,17 @@ const InterviewCard = ({ interview, index, onDelete }) => {
           <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
             <Calendar className="w-4 h-4" />
             <span>
-              {
-                (() => {
-                  // Safely format date, fallback to '-'
-                  try {
-                    if (!interview.createdAt) return "-";
-                    const date = new Date(interview.createdAt);
-                    if (isNaN(date.getTime())) return "-";
-                    return format(date, "MMM dd");
-                  } catch {
-                    return "-";
-                  }
-                })()
-              }
+              {(() => {
+                // Safely format date, fallback to '-'
+                try {
+                  if (!interview.createdAt) return "-";
+                  const date = new Date(interview.createdAt);
+                  if (isNaN(date.getTime())) return "-";
+                  return format(date, "MMM dd");
+                } catch {
+                  return "-";
+                }
+              })()}
             </span>
           </div>
           <div className="flex items-center gap-2 text-sm text-green-600">
@@ -155,13 +154,13 @@ const InterviewCard = ({ interview, index, onDelete }) => {
 
         {/* Progress Bar */}
         <div className="mb-6">
-          <div className="flex items-center justify-between text-sm mb-2">
+          <div className="flex items-center justify-between mb-2 text-sm">
             <span className="text-gray-600 dark:text-gray-400">Progress</span>
-            <span className="text-green-600 font-medium">Completed</span>
+            <span className="font-medium text-green-600">Completed</span>
           </div>
-          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+          <div className="w-full h-2 bg-gray-200 rounded-full dark:bg-gray-700">
             <motion.div
-              className="bg-gradient-to-r from-green-500 to-green-600 h-2 rounded-full"
+              className="h-2 rounded-full bg-gradient-to-r from-green-500 to-green-600"
               initial={{ width: 0 }}
               animate={{ width: "100%" }}
               transition={{ duration: 1, delay: index * 0.1 + 0.5 }}
@@ -172,32 +171,38 @@ const InterviewCard = ({ interview, index, onDelete }) => {
         {/* Action Buttons */}
         <div className="flex gap-3">
           <Link
-            href={`/dashboard/interview/${interview.mockId}`}
+            href={`/dashboard/interview/${interview.mockId}/start`}
             className="flex-1"
           >
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="flex items-center justify-center w-full gap-2 px-4 py-3 font-medium text-white transition-all duration-300 shadow-lg bg-gradient-to-r from-green-600 to-green-700 rounded-3xl hover:from-green-700 hover:to-green-800 hover:shadow-xl"
             >
               <PlayCircle className="w-4 h-4" />
-              <span>Retake</span>
+              <span>Start</span>
             </motion.button>
           </Link>
 
-          <motion.button
-            whileHover={{ scale: 1.05, rotate: 5 }}
-            whileTap={{ scale: 0.95 }}
-            className="p-3 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 hover:border-blue-300 dark:hover:border-blue-600"
+          <Link
+            href={`/dashboard/interview/${interview.mockId}/feedback`}
+            className="flex-1"
           >
-            <TrendingUp className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-          </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="flex items-center justify-center w-full gap-2 px-4 py-3 font-medium text-white transition-all duration-300 shadow-lg bg-gradient-to-r from-blue-600 to-blue-700 rounded-3xl hover:from-blue-700 hover:to-blue-800 hover:shadow-xl"
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span>Feedback</span>
+            </motion.button>
+          </Link>
         </div>
       </div>
 
       {/* Floating badge */}
       <motion.div
-        className="absolute top-4 right-4 px-3 py-1 bg-gradient-to-r from-green-500 to-green-600 text-white text-xs font-bold rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        className="absolute px-3 py-1 text-xs font-bold text-white transition-opacity duration-300 rounded-full opacity-0 top-4 right-4 bg-gradient-to-r from-green-500 to-green-600 group-hover:opacity-100"
         initial={{ scale: 0, rotate: -10 }}
         animate={{ scale: 1, rotate: 0 }}
         transition={{ delay: index * 0.1 + 0.8 }}
@@ -227,7 +232,7 @@ const InterviewList = ({ interviews, onDelete }) => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center py-16"
+        className="py-16 text-center"
       >
         <motion.div
           animate={{
@@ -235,14 +240,14 @@ const InterviewList = ({ interviews, onDelete }) => {
             rotate: [0, 5, -5, 0],
           }}
           transition={{ duration: 4, repeat: Infinity }}
-          className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 rounded-full flex items-center justify-center"
+          className="flex items-center justify-center w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30"
         >
           <BookOpen className="w-12 h-12 text-blue-600" />
         </motion.div>
-        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+        <h3 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
           No interviews yet
         </h3>
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
+        <p className="mb-6 text-gray-600 dark:text-gray-400">
           Create your first interview to get started!
         </p>
       </motion.div>
@@ -254,7 +259,7 @@ const InterviewList = ({ interviews, onDelete }) => {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
     >
       {interviews.map((interview, index) => (
         <InterviewCard
