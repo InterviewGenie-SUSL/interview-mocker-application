@@ -20,8 +20,11 @@ import { useUser } from "@clerk/nextjs";
 import moment from "moment";
 import { useRouter } from "next/navigation";
 
-function AddNewInterview() {
-  const [openDialog, setOpenDialog] = useState(false);
+function AddNewInterview({ openDialog: externalOpenDialog, setOpenDialog: externalSetOpenDialog }) {
+  const [internalOpenDialog, setInternalOpenDialog] = useState(false);
+  const openDialog = typeof externalOpenDialog === "boolean" ? externalOpenDialog : internalOpenDialog;
+  const setOpenDialog = externalSetOpenDialog || setInternalOpenDialog;
+
   const [jobPosition, setJobPosition] = useState("");
   const [jobDescription, setJobDescription] = useState("");
   const [jobExperience, setJobExperience] = useState("");
