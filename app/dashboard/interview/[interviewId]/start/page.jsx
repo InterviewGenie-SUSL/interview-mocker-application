@@ -61,6 +61,17 @@ function StartInterview() {
     }
   }, [mockInterviewQuestion, interviewStartTime]);
 
+  // Track question timing when moving to next question
+  useEffect(() => {
+    if (currentQuestionStartTime && activeQuestionIndex > 0) {
+      const questionTime = Date.now() - currentQuestionStartTime;
+      setQuestionTimes((prev) => {
+        const newTimes = [...prev];
+        newTimes[activeQuestionIndex - 1] = questionTime; // Store time for previous question
+        return newTimes;
+      });
+    }
+    // Set start time for current question
   // Track question timing only when active question changes
   useEffect(() => {
     setCurrentQuestionStartTime(Date.now());
@@ -345,7 +356,7 @@ function StartInterview() {
                 style={{
                   padding: "12px 24px",
                   border: "none",
-                  borderRadius: "16px",
+                  borderRadius: "25px",
                   background:
                     activeQuestionIndex === 0
                       ? "linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%)"
@@ -387,6 +398,9 @@ function StartInterview() {
               (mockInterviewQuestion?.length || 0) - 1 ? (
                 <button
                   onClick={() => {
+                    router.push(
+                      `/dashboard/interview/${params.interviewId}/finish`
+                    );
                     // Navigate to finish page
                     router.push(`/dashboard/interview/${params.interviewId}/finish`);
                   }}
@@ -394,7 +408,7 @@ function StartInterview() {
                   style={{
                     padding: "12px 24px",
                     border: "none",
-                    borderRadius: "16px",
+                    borderRadius: "25px",
                     background:
                       "linear-gradient(135deg, #10b981 0%, #059669 100%)",
                     color: "#ffffff",
@@ -448,7 +462,7 @@ function StartInterview() {
                   style={{
                     padding: "12px 24px",
                     border: "none",
-                    borderRadius: "16px",
+                    borderRadius: "25px",
                     background:
                       activeQuestionIndex ===
                       (mockInterviewQuestion?.length || 0) - 1

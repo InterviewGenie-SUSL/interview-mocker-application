@@ -31,66 +31,123 @@ export default function FinishInterviewPage() {
   const [mergedAnswers, setMergedAnswers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [overallScore, setOverallScore] = useState(0);
+  const [expandedQuestions, setExpandedQuestions] = useState({});
+
+  // CSS Animation for loading spinner and dropdown icon
+  useEffect(() => {
+    const style = document.createElement("style");
+    style.textContent = `
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      .dropdown-icon {
+        transition: all 0.3s ease;
+        transform: rotate(0deg);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background-color: rgba(107, 114, 128, 0.1);
+      }
+      .dropdown-icon.expanded {
+        transform: rotate(180deg);
+        background-color: rgba(59, 130, 246, 0.2);
+      }
+      .dropdown-icon:hover {
+        background-color: rgba(59, 130, 246, 0.3);
+        transform: scale(1.1);
+      }
+      .dropdown-icon.expanded:hover {
+        background-color: rgba(59, 130, 246, 0.3);
+        transform: rotate(180deg) scale(1.1);
+      }
+      .question-content {
+        transition: all 0.3s ease;
+        overflow: hidden;
+      }
+    `;
+    document.head.appendChild(style);
+
+    return () => {
+      if (document.head.contains(style)) {
+        document.head.removeChild(style);
+      }
+    };
+  }, []);
 
   useEffect(() => {
-    if (!mockId) return;
-    (async () => {
-      // Fetch all questions and user answers
-      const [questions, answers] = await Promise.all([
-        fetchQuestions(mockId),
-        fetchUserAnswers(mockId)
-      ]);
-
-      // Merge questions with answers
-      const merged = await Promise.all(
-        questions.map(async (q, idx) => {
-          const answerObj = answers.find(a => a.question === q.question);
-          if (answerObj) {
-            return answerObj;
-          } else {
-            // No answer, generate feedback for empty answer
-            const feedbackData = await fetchFeedback("", q.answer);
-            return {
-              question: q.question,
-              correctAns: q.answer,
-              userAns: "empty answer",
-              feedback: feedbackData.feedback,
-              rating: feedbackData.rating
-            };
-          }
-        })
-      );
-      setMergedAnswers(merged);
-
-      // Calculate overall score
-      if (merged.length > 0) {
-        const totalScore = merged.reduce((sum, answer) => {
-          const rating = parseInt(answer.rating) || 0;
-          return sum + rating;
-        }, 0);
-        const avgScore = Math.round((totalScore / merged.length) * 10) / 10;
-        setOverallScore(avgScore);
-      }
-
+    if (!mockId) {
+      console.error("No mockId found");
       setLoading(false);
-    })();
+      return;
+    }
+
+    async function loadInterviewData() {
+      try {
+        // Fetch questions and user answers
+        const [questions, answers] = await Promise.all([
+          fetchQuestions(mockId),
+          fetchUserAnswers(mockId)
+        ]);
+
+        // Merge questions with user answers
+        const merged = await Promise.all(
+          questions.map(async (q, idx) => {
+            const answerObj = answers.find(a => a.question === q.question);
+            if (answerObj) {
+              return answerObj;
+            } else {
+              // If no user answer, generate feedback for empty answer
+              const feedbackData = await fetchFeedback("", q.answer);
+              return {
+                question: q.question,
+                correctAns: q.answer,
+                userAns: "empty answer",
+                feedback: feedbackData.feedback,
+                rating: feedbackData.rating
+              };
+            }
+          })
+        );
+
+        setMergedAnswers(merged);
+
+        // Calculate overall score
+        if (merged.length > 0) {
+          const totalScore = merged.reduce((sum, answer) => {
+            const rating = parseInt(answer.rating) || 0;
+            return sum + rating;
+          }, 0);
+          const avgScore = Math.round((totalScore / merged.length) * 10) / 10;
+          setOverallScore(avgScore);
+          console.log("Calculated overall score:", avgScore);
+
+          // Initialize all questions as collapsed by default
+          const initialExpanded = {};
+          merged.forEach((_, index) => {
+            initialExpanded[index] = false;
+          });
+          setExpandedQuestions(initialExpanded);
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error loading interview data:", error);
+        setLoading(false);
+      }
+    }
+
+    loadInterviewData();
   }, [mockId]);
 
-  const getScoreColor = (score) => {
-    if (score >= 8) return "#16a34a"; // Green
-    if (score >= 6) return "#ea580c"; // Orange
-    if (score >= 4) return "#dc2626"; // Red
-    return "#6b7280"; // Gray
-  };
-
-  const getOverallFeedback = (score) => {
-    if (score >= 8)
-      return "Excellent performance! You demonstrated strong knowledge and communication skills.";
-    if (score >= 6)
-      return "Good job! You showed solid understanding with room for improvement in some areas.";
-    if (score >= 4)
-      return "Fair performance. Focus on providing more detailed and specific answers.";
-    return "Keep practicing! Consider reviewing the topics and providing more comprehensive responses.";
+  const toggleQuestion = (index) => {
+    setExpandedQuestions((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
   };
 
   if (loading) {
@@ -98,14 +155,29 @@ export default function FinishInterviewPage() {
       <div
         style={{
           display: "flex",
+          flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
           minHeight: "400px",
           fontSize: "1.2rem",
           color: "#6b7280",
+          gap: "16px",
         }}
       >
-        Loading results...
+        <div
+          style={{
+            width: "40px",
+            height: "40px",
+            border: "4px solid #e5e7eb",
+            borderTopColor: "#3b82f6",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+          }}
+        ></div>
+        <div>Loading your interview results...</div>
+        <div style={{ fontSize: "0.9rem", opacity: "0.7" }}>
+          Fetching answers and feedback
+        </div>
       </div>
     );
   }
@@ -119,316 +191,7 @@ export default function FinishInterviewPage() {
         fontFamily: "system-ui, -apple-system, sans-serif",
       }}
     >
-      {/* Header */}
-      <div
-        style={{
-          textAlign: "center",
-          marginBottom: "40px",
-          padding: "32px",
-          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-          borderRadius: "16px",
-          color: "white",
-          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        <h1
-          style={{
-            fontSize: "2.5rem",
-            fontWeight: "700",
-            marginBottom: "16px",
-            margin: "0 0 16px 0",
-          }}
-        >
-          🎉 Interview Complete!
-        </h1>
-        <div
-          style={{
-            fontSize: "3rem",
-            fontWeight: "800",
-            marginBottom: "8px",
-            color: "#fff",
-          }}
-        >
-          {overallScore}/10
-        </div>
-        <div
-          style={{
-            fontSize: "1.2rem",
-            opacity: "0.9",
-            marginBottom: "16px",
-          }}
-        >
-          Overall Score
-        </div>
-        <div
-          style={{
-            fontSize: "1.1rem",
-            backgroundColor: "rgba(255, 255, 255, 0.1)",
-            padding: "16px",
-            borderRadius: "8px",
-            marginTop: "16px",
-          }}
-        >
-          {getOverallFeedback(overallScore)}
-        </div>
-      </div>
-
-      {/* Individual Questions */}
-      <h2
-        style={{
-          fontSize: "1.8rem",
-          fontWeight: "600",
-          marginBottom: "24px",
-          color: "#1f2937",
-        }}
-      >
-        Detailed Results
-      </h2>
-
-      {mergedAnswers.map((a, i) => (
-        <div
-          key={i}
-          style={{
-            marginBottom: "32px",
-            padding: "24px",
-            border: "1px solid #e5e7eb",
-            borderRadius: "12px",
-            backgroundColor: "#ffffff",
-            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "16px",
-            }}
-          >
-            <div
-              style={{
-                fontSize: "1.2rem",
-                fontWeight: "600",
-                color: "#1f2937",
-              }}
-            >
-              Question {i + 1}
-            </div>
-            <div
-              style={{
-                fontSize: "1.5rem",
-                fontWeight: "700",
-                color: getScoreColor(parseInt(a.rating) || 0),
-                backgroundColor: "#f9fafb",
-                padding: "8px 16px",
-                borderRadius: "8px",
-                border: `2px solid ${getScoreColor(parseInt(a.rating) || 0)}`,
-              }}
-            >
-              {a.rating || "N/A"}/10
-            </div>
-          </div>
-
-          <div style={{ marginBottom: "12px" }}>
-            <div
-              style={{
-                fontWeight: "600",
-                color: "#374151",
-                marginBottom: "8px",
-              }}
-            >
-              Question:
-            </div>
-            <div
-              style={{
-                color: "#6b7280",
-                lineHeight: "1.6",
-              }}
-            >
-              {a.question}
-            </div>
-          </div>
-
-          <div style={{ marginBottom: "12px" }}>
-            <div
-              style={{
-                fontWeight: "600",
-                color: "#374151",
-                marginBottom: "8px",
-              }}
-            >
-              Your Answer:
-            </div>
-            <div
-              style={{
-                color: "#6b7280",
-                lineHeight: "1.6",
-                backgroundColor: "#f9fafb",
-                padding: "12px",
-                borderRadius: "8px",
-                border: "1px solid #e5e7eb",
-              }}
-            >
-              {a.userAns || "No answer provided"}
-            </div>
-          </div>
-
-          <div style={{ marginBottom: "12px" }}>
-            <div
-              style={{
-                fontWeight: "600",
-                color: "#374151",
-                marginBottom: "8px",
-              }}
-            >
-              Model Answer:
-            </div>
-            <div
-              style={{
-                color: "#6b7280",
-                lineHeight: "1.6",
-                backgroundColor: "#f0f9ff",
-                padding: "12px",
-                borderRadius: "8px",
-                border: "1px solid #e0f2fe",
-              }}
-            >
-              {a.correctAns}
-            </div>
-          </div>
-
-          <div
-            style={{
-              backgroundColor: "#f0fdf4",
-              padding: "16px",
-              borderRadius: "8px",
-              border: "1px solid #dcfce7",
-            }}
-          >
-            <div
-              style={{
-                fontWeight: "600",
-                color: "#166534",
-                marginBottom: "8px",
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-              }}
-            >
-              💡 Feedback:
-            </div>
-            <div
-              style={{
-                color: "#166534",
-                lineHeight: "1.6",
-              }}
-            >
-              {a.feedback || "No feedback available"}
-            </div>
-          </div>
-        </div>
-      ))}
-
-      {/* Summary Stats */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-          gap: "16px",
-          marginBottom: "32px",
-        }}
-      >
-        <div
-          style={{
-            padding: "20px",
-            backgroundColor: "#f0f9ff",
-            borderRadius: "12px",
-            textAlign: "center",
-            border: "1px solid #e0f2fe",
-          }}
-        >
-          <div
-            style={{ fontSize: "2rem", fontWeight: "700", color: "#1e40af" }}
-          >
-            {mergedAnswers.length}
-          </div>
-          <div style={{ color: "#6b7280" }}>Questions Answered</div>
-        </div>
-        <div
-          style={{
-            padding: "20px",
-            backgroundColor: "#f0fdf4",
-            borderRadius: "12px",
-            textAlign: "center",
-            border: "1px solid #dcfce7",
-          }}
-        >
-          <div
-            style={{ fontSize: "2rem", fontWeight: "700", color: "#16a34a" }}
-          >
-            {mergedAnswers.filter((a) => parseInt(a.rating) >= 7).length}
-          </div>
-          <div style={{ color: "#6b7280" }}>Strong Answers</div>
-        </div>
-        <div
-          style={{
-            padding: "20px",
-            backgroundColor: "#fef3c7",
-            borderRadius: "12px",
-            textAlign: "center",
-            border: "1px solid #fde68a",
-          }}
-        >
-          <div
-            style={{ fontSize: "2rem", fontWeight: "700", color: "#d97706" }}
-          >
-            {Math.round(overallScore * 10)}%
-          </div>
-          <div style={{ color: "#6b7280" }}>Overall Performance</div>
-        </div>
-      </div>
-
-      <div style={{ textAlign: "center" }}>
-        <button
-          onClick={() => router.push(`/dashboard/interview/feedback?interviewId=${mockId}`)}
-          style={{
-            padding: "16px 32px",
-            background: "linear-gradient(135deg, #16a34a 0%, #22d3ee 100%)",
-            color: "#fff",
-            border: "none",
-            borderRadius: "12px",
-            fontWeight: "600",
-            fontSize: "1.1rem",
-            cursor: "pointer",
-            boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
-            marginRight: "16px",
-            transition: "transform 0.2s ease",
-          }}
-          onMouseOver={(e) => (e.target.style.transform = "translateY(-2px)")}
-          onMouseOut={(e) => (e.target.style.transform = "translateY(0px)")}
-        >
-          View Feedback
-        </button>
-        <button
-          onClick={() => router.push("/dashboard")}
-          style={{
-            padding: "16px 32px",
-            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-            color: "#fff",
-            border: "none",
-            borderRadius: "12px",
-            fontWeight: "600",
-            fontSize: "1.1rem",
-            cursor: "pointer",
-            boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
-            transition: "transform 0.2s ease",
-          }}
-          onMouseOver={(e) => (e.target.style.transform = "translateY(-2px)")}
-          onMouseOut={(e) => (e.target.style.transform = "translateY(0px)")}
-        >
-          Back to Dashboard
-        </button>
-      </div>
+      {/* Content for displaying interview results */}
     </div>
   );
 }

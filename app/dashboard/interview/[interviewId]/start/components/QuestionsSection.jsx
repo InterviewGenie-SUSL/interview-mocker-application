@@ -669,13 +669,6 @@ function QuestionsSection({
 
   return (
     <div className="min-h-screen p-2 rounded-3xl bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 sm:p-4 md:p-8 sm:rounded-3xl">
-      {/* Floating Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute w-32 h-32 rounded-full sm:w-48 sm:h-48 md:w-64 md:h-64 top-1/4 left-1/4 bg-gradient-to-r from-blue-200 to-purple-200 opacity-10 blur-3xl animate-pulse"></div>
-        <div className="absolute w-48 h-48 delay-1000 rounded-full bottom-1/4 right-1/4 sm:w-64 sm:h-64 md:w-96 md:h-96 bg-gradient-to-r from-purple-200 to-pink-200 opacity-10 blur-3xl animate-pulse"></div>
-        <div className="absolute w-24 h-24 rounded-full sm:w-32 sm:h-32 md:w-48 md:h-48 top-1/2 left-1/2 bg-gradient-to-r from-cyan-200 to-blue-200 opacity-10 blur-3xl animate-pulse delay-2000"></div>
-      </div>
-
       {/* Main Container */}
       <div className="relative max-w-6xl mx-auto rounded-none sm:rounded-3xl">
         {/* Header Section */}
