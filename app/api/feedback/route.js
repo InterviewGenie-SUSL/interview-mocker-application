@@ -1,4 +1,9 @@
 import { NextResponse } from "next/server";
+import {
+  GoogleGenerativeAI,
+  HarmCategory,
+  HarmBlockThreshold,
+} from "@google/generative-ai";
 
 export async function POST(req) {
   try {
@@ -12,8 +17,8 @@ export async function POST(req) {
       });
     }
 
-    // Check if API key is configured
-    const apiKey = process.env.OPENAI_API_KEY;
+    // Check if Gemini API key is configured
+    const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
     if (!apiKey) {
       // Fallback to basic scoring without AI
       const basicScore = generateBasicScore(userAnswer, correctAnswer);
@@ -23,6 +28,39 @@ export async function POST(req) {
         rating: basicScore.toString()
       });
     }
+
+    // Initialize Gemini AI
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+    });
+
+    const generationConfig = {
+      temperature: 0.7,
+      topP: 0.95,
+      topK: 64,
+      maxOutputTokens: 200,
+      responseMimeType: "text/plain",
+    };
+
+    const safetySettings = [
+      {
+        category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+      },
+      {
+        category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+      },
+      {
+        category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+      },
+      {
+        category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+      }
+    ];
 
     const prompt = `You are an expert interviewer. Compare the user's answer to the correct answer and provide:
 1. A constructive feedback (2-3 sentences)
@@ -35,24 +73,13 @@ Please respond in this exact format:
 FEEDBACK: [Your feedback here]
 SCORE: [Number from 1-10]`;
 
-    const openaiRes = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        messages: [
-          { role: "system", content: "You are an expert interviewer giving feedback and scores." },
-          { role: "user", content: prompt },
-        ],
-        max_tokens: 150,
-      }),
+    const result = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      generationConfig,
+      safetySettings,
     });
 
-    const data = await openaiRes.json();
-    const response = data.choices?.[0]?.message?.content || "No feedback generated.";
+    const response = result.response.text() || "No feedback generated.";
 
     // Parse the response to extract feedback and score
     const feedbackMatch = response.match(/FEEDBACK:\s*(.+?)(?=SCORE:|$)/s);
