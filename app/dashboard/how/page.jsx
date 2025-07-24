@@ -17,10 +17,13 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import FloatingActionButton from "../_components/FloatingActionButton";
+import AddNewInterview from "../_components/AddNewInterview";
 
 function HowItWorksPage() {
   const [activeStep, setActiveStep] = useState(0);
   const [showDemo, setShowDemo] = useState(false);
+  const [showAddInterview, setShowAddInterview] = useState(false);
+  const [showCommunity, setShowCommunity] = useState(false);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -244,6 +247,7 @@ function HowItWorksPage() {
                   variant="outline"
                   size="lg"
                   className="px-8 py-4 text-blue-600 border-2 border-blue-500 hover:bg-blue-50 rounded-xl"
+                  onClick={() => setShowAddInterview(true)}
                 >
                   Start Free Trial
                 </Button>
@@ -460,7 +464,7 @@ function HowItWorksPage() {
                 >
                   <Button
                     size="lg"
-                    className="px-8 py-4 font-semibold text-blue-600 bg-white shadow-lg hover:bg-gray-100 rounded-xl"
+                    className="px-8 py-4 font-semibold text-blue-600 bg-white shadow-lg hover:bg-gray-100 rounded-xl bg-gray-100"
                   >
                     <FaRocket className="w-5 h-5 mr-2" />
                     Start Your First Interview
@@ -474,7 +478,8 @@ function HowItWorksPage() {
                   <Button
                     variant="outline"
                     size="lg"
-                    className="px-8 py-4 font-semibold text-white border-2 border-white hover:bg-white/10 rounded-xl"
+                    className="px-8 py-4 font-semibold text-black border-2 border-white/10 hover:bg-white/10 rounded-xl dark:text-white bg-white/10 dark:bg-transparent"
+                    onClick={() => setShowCommunity(true)}
                   >
                     <FaUsers className="w-5 h-5 mr-2" />
                     Join Community
@@ -519,7 +524,41 @@ function HowItWorksPage() {
                 </motion.div>
               </motion.div>
             )}
+            {showCommunity && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+                onClick={() => setShowCommunity(false)}
+              >
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.8, opacity: 0 }}
+                  className="w-full max-w-2xl p-8 bg-white dark:bg-gray-800 rounded-2xl"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="text-center">
+                    <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">
+                      Community Coming Soon!
+                    </h3>
+                    <p className="mb-6 text-gray-600 dark:text-gray-300">
+                      We're building a vibrant community for interview practice and networking. Stay tuned!
+                    </p>
+                    <Button
+                      onClick={() => setShowCommunity(false)}
+                      className="text-white bg-blue-500 hover:bg-blue-600"
+                    >
+                      Close
+                    </Button>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
           </AnimatePresence>
+
+          <AddNewInterview openDialog={showAddInterview} setOpenDialog={setShowAddInterview} />
         </div>
       </motion.div>
       <FloatingActionButton />

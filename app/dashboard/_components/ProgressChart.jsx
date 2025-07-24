@@ -58,11 +58,21 @@ const ProgressChart = ({ interviews = [] }) => {
   };
 
   const [showProMsg, setShowProMsg] = React.useState("");
+  const [showProPopup, setShowProPopup] = React.useState(false);
+
   // Handler for PRO badge click
   const handleProClick = (e) => {
     e.stopPropagation();
-    setShowProMsg("Upgrade to Pro to activate this feature!");
-    setTimeout(() => setShowProMsg(""), 2500);
+    setShowProPopup(true);
+  };
+
+  const handleUpgrade = () => {
+    setShowProPopup(false);
+    window.location.href = "/dashboard/upgrade";
+  };
+
+  const handleCancel = () => {
+    setShowProPopup(false);
   };
 
   return (
@@ -72,6 +82,32 @@ const ProgressChart = ({ interviews = [] }) => {
       animate="visible"
       className="space-y-6"
     >
+      {/* Popup Modal for PRO Upgrade */}
+      {showProPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-8 w-full max-w-sm border border-yellow-400 flex flex-col items-center animate-fade-in">
+            <BadgeCheck className="w-8 h-8 text-yellow-500 mb-2" />
+            <div className="text-lg font-semibold text-gray-900 dark:text-white mb-4 text-center">
+              Upgrade to Pro to activate this feature!
+            </div>
+            <div className="flex gap-4 w-full mt-2">
+              <button
+                className="flex-1 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold hover:from-blue-600 hover:to-purple-700 transition-colors"
+                onClick={handleUpgrade}
+              >
+                Upgrade
+              </button>
+              <button
+                className="flex-1 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-bold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                onClick={handleCancel}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Skill Breakdown */}
         <motion.div
