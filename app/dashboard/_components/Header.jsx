@@ -2,59 +2,101 @@
 import { UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import React from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
 import Link from "next/link";
 import { ThemeToggle } from "./ThemeToggle";
 
+// Reusable navigation item component - memoized to prevent unnecessary re-renders
+const NavItem = React.memo(({ href, isActive, children }) => (
+  <Link href={href} prefetch={true}>
+    <li
+      className={`relative transition-all duration-300 ease-in-out cursor-pointer p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 px-4 py-2 z-10
+        ${isActive ? "text-blue-700 dark:text-blue-300 font-bold" : ""}
+      `}
+    >
+      {children}
+    </li>
+  </Link>
+));
+
+NavItem.displayName = "NavItem";
+
 function Header() {
   const path = usePathname();
+  const [indicatorStyle, setIndicatorStyle] = useState({ opacity: 0 });
+  const navRef = useRef(null);
+
+  // Memoize navigation items to prevent recreation on every render
+  const navigationItems = useMemo(
+    () => [
+      { href: "/dashboard", label: "Dashboard" },
+      { href: "/dashboard/questions", label: "Questions" },
+      { href: "/dashboard/upgrade", label: "Upgrade" },
+      { href: "/dashboard/how", label: "How it Works?" },
+    ],
+    []
+  );
+
+  // Memoize active index calculation
+  const activeIndex = useMemo(
+    () => navigationItems.findIndex((item) => item.href === path),
+    [navigationItems, path]
+  );
+
+  // Optimized indicator position calculation with requestAnimationFrame
+  const updateIndicatorPosition = useCallback(() => {
+    if (activeIndex !== -1 && navRef.current) {
+      // Use requestAnimationFrame to ensure DOM is ready
+      requestAnimationFrame(() => {
+        const activeItem = navRef.current?.children[activeIndex];
+        if (activeItem) {
+          setIndicatorStyle({
+            left: activeItem.offsetLeft,
+            width: activeItem.offsetWidth,
+            opacity: 1,
+          });
+        }
+      });
+    } else {
+      setIndicatorStyle((prev) => ({ ...prev, opacity: 0 }));
+    }
+  }, [activeIndex]);
+
+  useEffect(() => {
+    updateIndicatorPosition();
+  }, [updateIndicatorPosition]);
 
   return (
-    <div className="flex items-center justify-between p-4 shadow-sm bg-secondary dark:bg-gray-800 dark:text-white">
-      <Link href="/dashboard">
-        <Image src={"/logo-2.svg"} width={160} height={100} alt="logo" />
+    <div className="sticky top-0 left-0 right-0 z-50 flex items-center justify-between p-4 bg-white shadow-sm dark:bg-gray-800 dark:text-white backdrop-blur-lg">
+      <Link href="/dashboard" prefetch={true}>
+        <Image src="/logo-2.svg" width={160} height={100} alt="logo" priority />
       </Link>
 
-      <ul className="hidden gap-6 md:flex">
-        <Link href="/dashboard">
-          <li
-            className={`transition-all duration-300 transform hover:scale-105 cursor-pointer hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-purple-400 hover:to-blue-600 hover:bg-gray-200 dark:hover:bg-gray-700 hover:animate-pulse
-            ${path === "/dashboard" && "text-blue-700 font-bold"}
-          `}
-          >
-            Dashboard
-          </li>
-        </Link>
-        <Link href="/dashboard/questions">
-          <li
-            className={`transition-all duration-300 transform hover:scale-105 cursor-pointer hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-purple-400 hover:to-blue-600 hover:bg-gray-200 dark:hover:bg-gray-700 hover:animate-pulse
-            ${path === "/dashboard/questions" && "text-blue-700 font-bold"}
-          `}
-          >
-            Questions
-          </li>
-        </Link>
-        <Link href="/dashboard/upgrade">
-          <li
-            className={`transition-all duration-300 transform hover:scale-105 cursor-pointer hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-purple-500 hover:to-blue-600 hover:bg-gray-200 dark:hover:bg-gray-700 hover:animate-pulse
-            ${path === "/dashboard/upgrade" && "text-blue-700 font-bold"}
-          `}
-          >
-            Upgrade
-          </li>
-        </Link>
-        <Link href="/dashboard/how">
-          <li
-            className={`transition-all duration-300 transform hover:scale-105 cursor-pointer hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-purple-500 hover:to-blue-600 hover:bg-gray-200 dark:hover:bg-gray-700 hover:animate-pulse
-            ${path === "/dashboard/how" && "text-blue-700 font-bold"}
-          `}
-          >
-            How it Works?
-          </li>
-        </Link>
-      </ul>
+      <div className="relative hidden md:block">
+        <div
+          className="absolute top-0 h-full transition-all duration-300 ease-out bg-blue-100 rounded-full dark:bg-blue-900/30"
+          style={indicatorStyle}
+        />
+        <ul ref={navRef} className="relative flex gap-6">
+          {navigationItems.map((item) => (
+            <NavItem
+              key={item.href}
+              href={item.href}
+              isActive={path === item.href}
+            >
+              {item.label}
+            </NavItem>
+          ))}
+        </ul>
+      </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 p-2 transition-colors duration-200 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
         <ThemeToggle />
         <UserButton />
       </div>

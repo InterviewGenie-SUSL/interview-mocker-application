@@ -1,127 +1,194 @@
 "use client";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Webcam from "react-webcam";
 import useSpeechToText from "react-hook-speech-to-text";
-import { Mic } from "lucide-react";
+import { Mic, StopCircle } from "lucide-react";
+import { toast } from "sonner";
+import { chatSession } from "@/utils/GeminiAIModal";
+import { db } from "@/utils/db";
+import { UserAnswer } from "@/utils/schema";
+import { useUser } from "@clerk/nextjs";
+import moment from "moment";
 
-function RecordAnswerSection() {
+const RecordAnswerSection = ({
+  mockInterviewQuestion,
+  activeQuestionIndex,
+  interviewData,
+  setActiveQuestionIndex,
+}) => {
   const [userAnswer, setUserAnswer] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [answers, setAnswers] = useState([]);
+  const { user } = useUser();
   const {
     error,
-    interimResult,
     isRecording,
     results,
     startSpeechToText,
     stopSpeechToText,
-  } = useSpeechToText({
-    continuous: true,
-    useLegacyResults: false,
-  });
+    setResults,
+  } = useSpeechToText({ continuous: true, useLegacyResults: false });
 
-  // Update userAnswer only with the latest transcript, not concatenated
+  // Update transcript into userAnswer
   useEffect(() => {
-    if (results && results.length > 0) {
-      setUserAnswer(results.map(r => r.transcript).join(" "));
-    }
+    results.forEach((result) =>
+      setUserAnswer((prev) => prev + result.transcript)
+    );
   }, [results]);
 
+  // Reset state when question changes
+  useEffect(() => {
+    setUserAnswer("");
+    setSaveSuccess(false);
+  }, [activeQuestionIndex]);
+
+  const UpdateUserAnswer = async () => {
+    setLoading(true);
+
+    try {
+      const question = mockInterviewQuestion[activeQuestionIndex]?.question;
+      const correctAns =
+        mockInterviewQuestion[activeQuestionIndex]?.answer || "";
+
+      const feedbackPrompt = `Question: ${question}, User Answer: ${userAnswer}, Based on the question and answer, give a rating and feedback (3–5 lines max) in JSON format with fields 'rating' and 'feedback'.`;
+
+      const result = await chatSession.sendMessage(feedbackPrompt);
+      const raw = result.response.text().replace(/```json|```/g, "");
+      const feedback = JSON.parse(raw);
+
+      const response = await db.insert(UserAnswer).values({
+        mockIdRef: interviewData?.mockId,
+        question,
+        correctAns,
+        userAns: userAnswer,
+        feedback: feedback.feedback,
+        rating: feedback.rating,
+        userEmail: user?.primaryEmailAddress?.emailAddress,
+        createdAt: moment().format("DD-MM-YYYY"),
+      });
+
+      if (response) {
+        toast("Answer saved successfully");
+        setSaveSuccess(true);
+        setAnswers((prev) => {
+          const updated = [...prev];
+          updated[activeQuestionIndex] = {
+            answer: userAnswer,
+            feedback: feedback.feedback,
+            rating: feedback.rating,
+          };
+          return updated;
+        });
+        setUserAnswer("");
+        setResults([]);
+      }
+    } catch (e) {
+      console.error("Save error:", e);
+      toast("Error saving answer");
+    }
+
+    setLoading(false);
+  };
+
+  const StartStopRecording = async () => {
+    if (isRecording) {
+      stopSpeechToText();
+      setTimeout(() => {
+        if (userAnswer.length > 5) {
+          UpdateUserAnswer();
+        } else {
+          toast("No valid answer detected");
+        }
+      }, 500);
+    } else {
+      setUserAnswer("");
+      setSaveSuccess(false);
+      startSpeechToText();
+    }
+  };
+
+  if (error) return <p>Web Speech API is not available in this browser 🤷‍</p>;
+
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        marginTop: 0,
-      }}
-    >
-      <div
-        style={{
-          background: "#111",
-          borderRadius: "16px",
-          width: "400px",
-          height: "300px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          position: "relative",
-          marginBottom: "32px",
-        }}
-      >
-        <img
-          src="/webcam.png"
-          alt="Webcam"
-          width={180}
-          height={180}
-          style={{
-            position: "absolute",
-            left: "50%",
-            top: "50%",
-            transform: "translate(-50%, -50%)",
-            zIndex: 1,
-            opacity: 0.8,
-          }}
-        />
-        <Webcam
-          mirrored={true}
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            borderRadius: "16px",
-            zIndex: 2,
-            background: "transparent",
-          }}
+    <div className="flex justify-center items-center flex-col">
+      <div className="flex flex-col my-20 justify-center items-center bg-black rounded-lg p-5 relative">
+        <Image
+          src={"/webcam.png"}
+          width={200}
+          height={200}
+          className="absolute"
+          alt="webcam"
+          priority
         />
       </div>
-      <button
-        style={{
-          padding: "10px 32px",
-          border: "1px solid #bbb",
-          borderRadius: "8px",
-          background: isRecording ? "#f3f4f6" : "#fff",
-          color: isRecording ? "#d90429" : "#222",
-          fontSize: "1rem",
-          cursor: "pointer",
-          fontWeight: 500,
-          boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
-          marginBottom: "32px",
-        }}
-        type="button"
-        onClick={isRecording ? stopSpeechToText : startSpeechToText}
+
+      <Button
+        disabled={loading}
+        variant="outline"
+        className="my-4"
+        onClick={StartStopRecording}
       >
         {isRecording ? (
-          <>
-            <Mic color="#d90429" />
-            Recording...
-          </>
+          <span className="text-red-600 flex gap-2 items-center animate-pulse">
+            <StopCircle /> Stop Recording...
+          </span>
         ) : (
-          "Record Answer"
+          <span className="text-primary flex gap-2 items-center">
+            <Mic /> Record Answer
+          </span>
         )}
-      </button>
+      </Button>
 
-      <button
-        style={{
-          padding: "12px 36px",
-          background: "#4338ca",
-          color: "#fff",
-          fontWeight: 600,
-          borderRadius: "8px",
-          border: "none",
-          fontSize: "1rem",
-          cursor: "pointer",
-          marginTop: "0",
-          boxShadow: "0 2px 8px rgba(67,56,202,0.08)",
-        }}
-        type="button"
-        onClick={() => alert(userAnswer || "No answer yet.")}
-      >
-        Show User Answer
-      </button>
+      {/* Transcript */}
+      {userAnswer && (
+        <div className="bg-gray-100 border border-gray-300 rounded-lg p-4 w-full max-w-xl my-4">
+          <div className="font-semibold text-gray-700 mb-1">Transcribed Answer:</div>
+          <div className="text-sm text-gray-600 italic">{userAnswer}</div>
+        </div>
+      )}
+
+      {/* Feedback and Rating */}
+      {saveSuccess && answers[activeQuestionIndex] && (
+        <div className="bg-green-50 border border-green-400 rounded-xl p-5 my-4 max-w-xl w-full shadow-md">
+          <div className="flex justify-between mb-3">
+            <h3 className="font-bold text-green-800">🎯 AI Feedback</h3>
+            <div className="text-lg font-bold text-green-700">
+              {answers[activeQuestionIndex].rating}/10
+            </div>
+          </div>
+          <p className="text-gray-700 italic">{answers[activeQuestionIndex].feedback}</p>
+        </div>
+      )}
+
+      {/* Navigation Buttons */}
+      {saveSuccess && activeQuestionIndex < mockInterviewQuestion.length - 1 && (
+        <Button
+          className="mt-6 bg-blue-600 text-white rounded-full px-6 py-2"
+          onClick={() => {
+            setActiveQuestionIndex(activeQuestionIndex + 1);
+            setUserAnswer("");
+            setSaveSuccess(false);
+          }}
+        >
+          Next Question
+        </Button>
+      )}
+
+      {saveSuccess && activeQuestionIndex === mockInterviewQuestion.length - 1 && (
+        <Button
+          className="mt-6 bg-green-600 text-white rounded-full px-6 py-2"
+          onClick={() =>
+            window.location.href = `/dashboard/interview/${interviewData?.mockId}/finish`
+          }
+        >
+          Finish Interview
+        </Button>
+      )}
     </div>
   );
-}
+};
 
 export default RecordAnswerSection;

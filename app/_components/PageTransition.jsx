@@ -4,25 +4,22 @@ import { motion } from "framer-motion";
 const pageVariants = {
   initial: {
     opacity: 0,
-    x: 50,
-    y: 20,
+    y: 10,
   },
   in: {
     opacity: 1,
-    x: 0,
     y: 0,
   },
   out: {
     opacity: 0,
-    x: -50,
-    y: 20,
+    y: -10,
   },
 };
 
 const pageTransition = {
   type: "tween",
-  ease: "anticipate",
-  duration: 0.5,
+  ease: "easeOut", // Changed from "anticipate" for smoother performance
+  duration: 0.2, // Reduced from 0.5 for faster transitions
 };
 
 const PageTransition = ({ children, className = "" }) => {
