@@ -17,10 +17,12 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import FloatingActionButton from "../_components/FloatingActionButton";
+import AddNewInterview from "../_components/AddNewInterview";
 
 function HowItWorksPage() {
   const [activeStep, setActiveStep] = useState(0);
   const [showDemo, setShowDemo] = useState(false);
+  const [showInterviewModal, setShowInterviewModal] = useState(false);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -244,6 +246,7 @@ function HowItWorksPage() {
                   variant="outline"
                   size="lg"
                   className="px-8 py-4 text-blue-600 border-2 border-blue-500 hover:bg-blue-50 rounded-xl"
+                  onClick={() => setShowInterviewModal(true)}
                 >
                   Start Free Trial
                 </Button>
@@ -521,6 +524,9 @@ function HowItWorksPage() {
               </motion.div>
             )}
           </AnimatePresence>
+
+          {/* AddNewInterview Modal */}
+          <AddNewInterview open={showInterviewModal} setOpen={setShowInterviewModal} />
         </div>
       </motion.div>
       <FloatingActionButton />
