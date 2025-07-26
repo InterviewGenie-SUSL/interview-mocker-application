@@ -245,7 +245,7 @@ function HowItWorksPage() {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="px-8 py-4 text-blue-600 border-2 border-blue-500 hover:bg-blue-50 rounded-xl"
+                  className="px-8 py-4 text-white-600 border-2 border-blue-500 hover:bg-blue-50 rounded-xl"
                   onClick={() => setShowInterviewModal(true)}
                 >
                   Start Free Trial
@@ -464,6 +464,7 @@ function HowItWorksPage() {
                   <Button
                     size="lg"
                     className="px-8 py-4 font-semibold text-blue-600 bg-white shadow-lg hover:bg-gray-100 rounded-xl"
+                    onClick={() => setShowInterviewModal(true)}
                   >
                     <FaRocket className="w-5 h-5 mr-2" />
                     Start Your First Interview
@@ -526,7 +527,9 @@ function HowItWorksPage() {
           </AnimatePresence>
 
           {/* AddNewInterview Modal */}
-          <AddNewInterview open={showInterviewModal} setOpen={setShowInterviewModal} />
+          {showInterviewModal && (
+            <AddNewInterview open={showInterviewModal} setOpen={setShowInterviewModal} />
+          )}
         </div>
       </motion.div>
       <FloatingActionButton />
