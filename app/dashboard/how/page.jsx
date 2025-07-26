@@ -22,8 +22,10 @@ import AddNewInterview from "../_components/AddNewInterview";
 function HowItWorksPage() {
   const [activeStep, setActiveStep] = useState(0);
   const [showDemo, setShowDemo] = useState(false);
+
   const [showAddInterview, setShowAddInterview] = useState(false);
   const [showCommunity, setShowCommunity] = useState(false);
+
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -246,8 +248,10 @@ function HowItWorksPage() {
                 <Button
                   variant="outline"
                   size="lg"
+
                   className="px-8 py-4 text-blue-600 border-2 border-blue-500 hover:bg-blue-50 rounded-xl"
                   onClick={() => setShowAddInterview(true)}
+
                 >
                   Start Free Trial
                 </Button>
@@ -464,7 +468,9 @@ function HowItWorksPage() {
                 >
                   <Button
                     size="lg"
+
                     className="px-8 py-4 font-semibold text-blue-600 bg-white shadow-lg hover:bg-gray-100 rounded-xl bg-gray-100"
+
                   >
                     <FaRocket className="w-5 h-5 mr-2" />
                     Start Your First Interview
@@ -478,8 +484,10 @@ function HowItWorksPage() {
                   <Button
                     variant="outline"
                     size="lg"
+
                     className="px-8 py-4 font-semibold text-black border-2 border-white/10 hover:bg-white/10 rounded-xl dark:text-white bg-white/10 dark:bg-transparent"
                     onClick={() => setShowCommunity(true)}
+
                   >
                     <FaUsers className="w-5 h-5 mr-2" />
                     Join Community
@@ -508,11 +516,11 @@ function HowItWorksPage() {
                 >
                   <div className="text-center">
                     <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">
-                      Demo Video Coming Soon!
+                      Community Coming Soon!
                     </h3>
                     <p className="mb-6 text-gray-600 dark:text-gray-300">
-                      We're working on an amazing demo video to showcase all our
-                      features.
+                      We're building an amazing community experience. Stay tuned
+                      for updates and join us soon!
                     </p>
                     <Button
                       onClick={() => setShowDemo(false)}
@@ -558,7 +566,9 @@ function HowItWorksPage() {
             )}
           </AnimatePresence>
 
+
           <AddNewInterview openDialog={showAddInterview} setOpenDialog={setShowAddInterview} />
+
         </div>
       </motion.div>
       <FloatingActionButton />

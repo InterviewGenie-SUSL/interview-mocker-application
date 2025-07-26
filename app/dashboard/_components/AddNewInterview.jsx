@@ -20,10 +20,12 @@ import { useUser } from "@clerk/nextjs";
 import moment from "moment";
 import { useRouter } from "next/navigation";
 
+
 function AddNewInterview({ openDialog: externalOpenDialog, setOpenDialog: externalSetOpenDialog }) {
   const [internalOpenDialog, setInternalOpenDialog] = useState(false);
   const openDialog = typeof externalOpenDialog === "boolean" ? externalOpenDialog : internalOpenDialog;
   const setOpenDialog = externalSetOpenDialog || setInternalOpenDialog;
+
 
   const [jobPosition, setJobPosition] = useState("");
   const [jobDescription, setJobDescription] = useState("");
@@ -32,6 +34,16 @@ function AddNewInterview({ openDialog: externalOpenDialog, setOpenDialog: extern
   const [jsonResponse, setJsonResponse] = useState([]);
   const { user } = useUser();
   const router = useRouter();
+
+  // Sync dialog state with parent
+  React.useEffect(() => {
+    setOpenDialog(open);
+  }, [open]);
+
+  const handleDialogChange = (val) => {
+    setOpenDialog(val);
+    setOpen(val);
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -123,7 +135,7 @@ function AddNewInterview({ openDialog: externalOpenDialog, setOpenDialog: extern
             })
             .returning({ mockId: MockInterview.mockId });
           setLoading(false);
-          router.push(`dashboard/interview/${res[0]?.mockId}`);
+          router.push(`/dashboard/interview/${res[0]?.mockId}`);
         } catch (parseError) {
           console.error("JSON parsing error:", parseError, jsonResponsePart);
           alert(
@@ -185,7 +197,7 @@ function AddNewInterview({ openDialog: externalOpenDialog, setOpenDialog: extern
         </div>
       </motion.div>
 
-      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+      <Dialog open={openDialog} onOpenChange={handleDialogChange}>
         <DialogContent className="max-w-3xl">
           <DialogHeader className="pb-4 space-y-3 text-center">
             <motion.div
