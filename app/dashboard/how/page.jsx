@@ -474,7 +474,8 @@ function HowItWorksPage() {
                   <Button
                     variant="outline"
                     size="lg"
-                    className="px-8 py-4 font-semibold text-white border-2 border-white hover:bg-white/10 rounded-xl"
+                    className="px-8 py-4 font-semibold border-2  text-white-600 bg-white/10 hover:bg-blue-50 hover:text-blue-700 dark:text-white dark:border-white dark:hover:bg-blue-50 dark:hover:text-blue-700 rounded-xl"
+                    onClick={() => setShowDemo(true)}
                   >
                     <FaUsers className="w-5 h-5 mr-2" />
                     Join Community
@@ -503,11 +504,11 @@ function HowItWorksPage() {
                 >
                   <div className="text-center">
                     <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">
-                      Demo Video Coming Soon!
+                      Community Coming Soon!
                     </h3>
                     <p className="mb-6 text-gray-600 dark:text-gray-300">
-                      We're working on an amazing demo video to showcase all our
-                      features.
+                      We're building an amazing community experience. Stay tuned
+                      for updates and join us soon!
                     </p>
                     <Button
                       onClick={() => setShowDemo(false)}
