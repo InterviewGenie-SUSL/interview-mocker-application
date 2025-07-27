@@ -246,7 +246,7 @@ function HowItWorksPage() {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="px-8 py-4 text-blue-600 border-2 border-blue-500 hover:bg-blue-50 rounded-xl"
+                  className="px-8 py-4 text-blue-600 border-2 border-blue-500 hover:bg-blue-50 rounded-xl dark:text-white dark:border-blue-600 bg-white/10 dark:bg-white/10 dark:hover:bg-blue-50 dark:hover:text-black"
                   onClick={() => setShowAddInterview(true)}
                 >
                   Start Free Trial
@@ -465,6 +465,7 @@ function HowItWorksPage() {
                   <Button
                     size="lg"
                     className="px-8 py-4 font-semibold text-blue-600 bg-white shadow-lg hover:bg-gray-100 rounded-xl bg-gray-100"
+                    onClick={() => setShowAddInterview(true)}
                   >
                     <FaRocket className="w-5 h-5 mr-2" />
                     Start Your First Interview
@@ -478,7 +479,7 @@ function HowItWorksPage() {
                   <Button
                     variant="outline"
                     size="lg"
-                    className="px-8 py-4 font-semibold text-black border-2 border-white/10 hover:bg-white/10 rounded-xl dark:text-white bg-white/10 dark:bg-transparent"
+                    className="px-8 py-4 font-semibold text-white border-2 border-white hover:bg-blue-50 rounded-xl dark:text-white dark:border-white bg-white/10 dark:bg-white/10 dark:hover:bg-blue-50 dark:hover:text-black"
                     onClick={() => setShowCommunity(true)}
                   >
                     <FaUsers className="w-5 h-5 mr-2" />
@@ -558,7 +559,9 @@ function HowItWorksPage() {
             )}
           </AnimatePresence>
 
-          <AddNewInterview openDialog={showAddInterview} setOpenDialog={setShowAddInterview} />
+          <div style={{ display: showAddInterview ? undefined : 'none' }}>
+            <AddNewInterview openDialog={showAddInterview} setOpenDialog={setShowAddInterview} />
+          </div>
         </div>
       </motion.div>
       <FloatingActionButton />
