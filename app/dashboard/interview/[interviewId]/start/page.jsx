@@ -71,7 +71,9 @@ function StartInterview() {
         return newTimes;
       });
     }
-    // Set start time for current question
+  }, [activeQuestionIndex]);
+
+  // Set start time for current question
   // Track question timing only when active question changes
   useEffect(() => {
     setCurrentQuestionStartTime(Date.now());
