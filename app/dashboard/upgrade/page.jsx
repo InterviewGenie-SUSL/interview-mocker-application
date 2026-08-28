@@ -12,7 +12,7 @@ const {
   FaRocket = () => null,
   FaStar = () => null,
   FaUsers = () => null,
-  FaShield = () => null,
+  FaLock = () => null,
   FaHeadset = () => null,
   FaChartLine = () => null,
 } = FaIcons;
@@ -376,7 +376,7 @@ function UpgradePage() {
                       "Get detailed insights into your performance with advanced AI analysis",
                   },
                   {
-                    icon: FaShield,
+                    icon: FaLock, // This was already correct
                     title: "Secure & Private",
                     description:
                       "Your data is encrypted and secure. We never share your information",
